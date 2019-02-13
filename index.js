@@ -16,6 +16,8 @@ app.use((err, req, res, next) => {
     res.status(500).send("Error!");
 });
 
+require('./routes/user')(app);
+
 const port = 3000;
 app.listen(port, () => {
     console.log(`Listening... Port: ${port}`);
