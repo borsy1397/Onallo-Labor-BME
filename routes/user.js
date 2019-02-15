@@ -1,17 +1,5 @@
 module.exports = app => {
 
-    app.post('/user/login', (req, res, next) => {
-
-    });
-
-    app.post('/user/logout', (req, res, next) => {
-
-    });
-
-    app.post('/user/signup', (req, res, next) => {
-
-    });
-
     /**
      * Get all users
      */

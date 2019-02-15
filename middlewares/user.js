@@ -25,3 +25,15 @@ module.exports.updateUserMW = (req, res, next) => {
 module.exports.getAllUsersMW = (req, res, next) => {
 
 };
+
+module.exports.getUserMW = (req, res, next) => {
+
+};
+
+
+/**
+ * Amik kellhetnek:
+ * 
+ * addUserToGame
+ * removeUserFromGame?
+ */

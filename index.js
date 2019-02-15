@@ -7,16 +7,14 @@ const app = express();
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.get('/', (req, res, next) => {
-    res.send('Tic-Tac-Toe Game');
-});
-
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send("Error!");
 });
 
+require('./routes/general')(app);
 require('./routes/user')(app);
+
 
 const port = 3000;
 app.listen(port, () => {
