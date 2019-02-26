@@ -9,9 +9,8 @@ module.exports = app => {
     );
 
     app.post('/logout', authorizationMW, (req, res, next) => {
-        console.log("siker");
-        return res.status(200).json({
-            message: "fasza"
+        res.status(200).json({
+            message: "fassssza"
         })
     });
 
