@@ -9,8 +9,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^3.0.4",
+    "body-parser": "^1.18.3",
+    "email-validator": "^2.0.4",
     "express": "^4.16.4",
+    "jsonwebtoken": "^8.5.0",
     "mongoose": "^5.4.14",
+    "socket.io": "^2.2.0",
     "swagger-ui-express": "^4.0.2"
   },
   "devDependencies": {

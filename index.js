@@ -1,9 +1,22 @@
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./assets/swagger_v1.json');
+const bodyParser = require('body-parser');
+
 
 
 const app = express();
+const http = require('http').Server(app);
+
+const io = require('socket.io')(http);
+
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// io.on('connection', function (socket) {
+//     console.log('a user connected');
+// });
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
@@ -17,6 +30,6 @@ require('./routes/user')(app);
 
 
 const port = 3000;
-app.listen(port, () => {
+http.listen(port, () => {
     console.log(`Listening... Port: ${port}`);
 });

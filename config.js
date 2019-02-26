@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 const key = require('./assets/secret').secretKeys;
 
-mongoose.connect(`mongodb+srv://ahhwwyeeaa:<${key.mongoDBPass}>@tic-tac-toe-5bmvk.mongodb.net/test?retryWrites=true`, {
-    useNewUrlParser: true
+mongoose.connect(`mongodb+srv://ahhwwyeeaa:${key.mongoDBPass}@tic-tac-toe-5bmvk.mongodb.net/test?retryWrites=true`, {
+    useNewUrlParser: true,
+    useCreateIndex: true
 });
 
-module.export.mongoose = mongoose;
+module.exports.mongoose = mongoose;
