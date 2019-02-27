@@ -1,11 +1,50 @@
 const User = require('../models/User');
+const RefreshToken = require('../models/RefreshToken');
 const secretKeys = require('../assets/secret').secretKeys;
 const jwt = require('jsonwebtoken');
+const randToken = require('rand-token');
 const emailValidator = require('email-validator');
 const bcrypt = require('bcrypt');
 
+module.exports.refreshTokenMW = (req, res, next) => {
+  const userData = {
+    username: req.body.username,
+    refreshToken: req.body.refreshToken
+  }
+
+  RefreshToken.findOne({ token: userData.refreshToken })
+    .exec()
+    .then(refToken => {
+      if (refToken) {
+        if (refToken.username === userData.username) {
+
+          const token = jwt.sign({ username: userData.username }, secretKeys.tokenSecret, { expiresIn: "1m" }); //EXPIRE
+                                          // userid??
+          return res.status(200).json({
+            message: "Access token refresh is successful. itt az uj access tokened",
+            token: token
+          });
+        }
+        return res.status(409).json({
+          message: "Nem a userhez tartozo refresh token"
+        });
+      } else {
+        return res.status(401).json({
+          message: "Invalid refresh token22"
+        });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({
+        error: err,
+        message: "Error token serach"
+      });
+    });
+}
+
 module.exports.authorizationMW = (req, res, next) => {
-  if(req.headers.authorization) {
+  if (req.headers.authorization) {
     const token = req.headers.authorization.split(" ")[1];
     jwt.verify(token, secretKeys.tokenSecret, (err, decoded) => {
       if (err) {
@@ -13,7 +52,7 @@ module.exports.authorizationMW = (req, res, next) => {
           message: "Invalid token1"
         })
       }
-  
+
       req.userData = decoded;
       next();
 
@@ -49,11 +88,35 @@ module.exports.loginMW = (req, res, next) => {
         }
 
         if (result) {
-          const token = jwt.sign({ username: user.username }, secretKeys.tokenSecret, {expiresIn: "1h"}); // EXPIREEEEEEEEE
-                                      // userid??
+          const token = jwt.sign({ username: user.username }, secretKeys.tokenSecret, { expiresIn: "1m" }); // EXPIREEEEEEEEE
+          // userid??
+          const refreshToken = randToken.uid(256);
+
+          const refreshTokenDB = new RefreshToken({
+            token: refreshToken,
+            username: user.username,
+          });
+
+          refreshTokenDB
+            .save()
+            .then(result => {
+              console.log(result);
+              res.status(201).json({
+                message: "RefreshToken created"
+              });
+            })
+            .catch(err => {
+              console.log(err);
+              res.status(500).json({
+                error: err,
+                message: "There is a refresh token yet this id"
+              });
+            });
+
           return res.status(200).json({
             message: "Auth successful",
-            token: token
+            token: token,
+            refreshToken: refreshToken //ES6-tol nem kell kiirni a propertyt? olvashatosag
           });
         }
 
