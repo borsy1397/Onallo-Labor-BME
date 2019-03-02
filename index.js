@@ -25,8 +25,10 @@ app.use((err, req, res, next) => {
     res.status(500).send("Error!");
 });
 
-require('./routes/general')(app);
+
 require('./routes/user')(app);
+require('./routes/general')(app);
+
 
 
 const port = 3000;

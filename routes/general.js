@@ -1,7 +1,6 @@
-const signUpUserMW = require('../middlewares/user').signupMW;
-const loginMW = require('../middlewares/user').loginMW;
-const authorizationMW = require('../middlewares/user').authorizationMW;
-const refreshTokenMW = require('../middlewares/user').refreshTokenMW;
+const signUpUserMW = require('../middlewares/general').signupMW;
+const loginMW = require('../middlewares/general').loginMW;
+const refreshTokenMW = require('../middlewares/general').refreshTokenMW;
 module.exports = app => {
     
 
@@ -13,11 +12,11 @@ module.exports = app => {
         refreshTokenMW
     );
 
-    app.post('/logout', authorizationMW, (req, res, next) => {
-        res.status(200).json({
-            message: "fassssza"
-        })
-    });
+    // app.post('/logout', authorizationMW, (req, res, next) => {
+    //     res.status(200).json({
+    //         message: "fassssza"
+    //     })
+    // });
 
     app.post('/signup',
         signUpUserMW

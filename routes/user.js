@@ -1,3 +1,5 @@
+const authorizationMW = require('../middlewares/general').authorizationMW;
+const getUserMW = require('../middlewares/user').getUserMW;
 
 
 module.exports = app => {
@@ -5,19 +7,18 @@ module.exports = app => {
     /**
      * Get all users
      */
-    app.get('/user/all', (req, res, next) => {
+    app.get('/user/all', );
 
-    });
 
-    app.get('/user/:username', (req, res, next) => {
+    /**
+     * Profile
+     */
+    app.get('/user',
+        authorizationMW,
+        getUserMW
+    );
 
-    });
+    app.put('/user', );
 
-    app.put('/user', (req, res, next) => {
-
-    });
-
-    app.delete('/user', (req, res, next) => {
-
-    });
+    app.delete('/user', );
 };
