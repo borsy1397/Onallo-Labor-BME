@@ -1,0 +1,17 @@
+<div class="loginmodal-container">
+  <h1>Login to Your Account</h1><br>
+  <form (ngSubmit)="onSubmit()">
+    <input type="text" name="username" id="username" required placeholder="Username" autocomplete="off" [(ngModel)]="user.username">
+    <input type="password" name="pass" id="password" required placeholder="Password" autocomplete="off" [(ngModel)]="user.password">
+    <input type="submit" name="login" class="login loginmodal-submit" value="Login">
+  </form>
+  <div [hidden]="correct" class="alert alert-danger text-center">
+    {{errorMessage}}
+  </div>
+  <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+    <p>Successful login!</p>
+  </ngx-spinner>
+  <div class="login-help">
+    <a [routerLink]="routerLinkSignUp">Sign up</a>
+  </div>
+</div>

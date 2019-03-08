@@ -48,11 +48,11 @@ module.exports.authorizationMW = (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     jwt.verify(token, secretKeys.tokenSecret, (err, decoded) => {
       if (err) {
-        return res.status(404).json({
-          message: "Invalid token"
+        return res.status(401).json({
+          message: "Invalid or expired token. Unauthorized"
         })
       }
-      
+
       req.userData = decoded;
       console.log(req.userData);
       next();
@@ -76,51 +76,50 @@ module.exports.loginMW = (req, res, next) => {
     .exec()
     .then(user => {
       if (!user) {
-        console.log(user)
-        return res.status(401).json({
-          message: "A felhasznalonev vagy jelszo nem megfelelo13"
+        return res.status(400).json({
+          message: "You have entered an invalid username or password1"
         });
-      }
+      } else {
+        bcrypt.compare(data.password, user.password, (err, result) => {
+          if (err) {
+            return res.status(400).json({
+              message: "You have entered an invalid username or password2"
+            });
+          }
 
-      bcrypt.compare(data.password, user.password, (err, result) => {
-        if (err) {
-          return res.status(401).json({
-            message: "A felhasznalonev vagy jelszo nem megfelelo12"
-          });
-        }
+          if (result) {
+            const token = jwt.sign({ username: user.username }, secretKeys.tokenSecret, { expiresIn: "1m" }); // EXPIREEEEEEEEE
+            // userid??
+            const refreshToken = randToken.uid(256);
 
-        if (result) {
-          const token = jwt.sign({ username: user.username }, secretKeys.tokenSecret, { expiresIn: "30m" }); // EXPIREEEEEEEEE
-          // userid??
-          const refreshToken = randToken.uid(256);
-
-          const refreshTokenDB = new RefreshToken({
-            token: refreshToken,
-            username: user.username,
-          });
-
-          refreshTokenDB
-            .save()
-            .then(result => {})
-            .catch(err => {
-              console.log(err);
-              res.status(500).json({
-                error: err,
-                message: "There is a refresh token yet this id"
-              });
+            const refreshTokenDB = new RefreshToken({
+              token: refreshToken,
+              username: user.username,
             });
 
-          return res.status(200).json({
-            message: "Auth successful",
-            token: token,
-            refreshToken: refreshToken //ES6-tol nem kell kiirni a propertyt? olvashatosag
-          });
-        } else {
-            return res.status(401).json({
-                message: "A felhasznalonev vagy jelszo nem megfelelo2"
+            refreshTokenDB
+              .save()
+              .then(result => { })
+              .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                  error: err,
+                  message: "There is a refresh token yet this id"
+                });
               });
-        }
-      });
+
+            return res.status(200).json({
+              message: "Authentication is successful",
+              token: token,
+              refreshToken: refreshToken //ES6-tol nem kell kiirni a propertyt? olvashatosag
+            });
+          } else {
+            return res.status(400).json({
+              message: "You have entered an invalid username or password3"
+            });
+          }
+        });
+      }
     })
     .catch(err => {
       console.log(err);
@@ -130,25 +129,49 @@ module.exports.loginMW = (req, res, next) => {
     });
 };
 
+/**
+ * Email cimre kene kuldeni megerosito emailt.
+ */
+
 module.exports.signupMW = (req, res, next) => {
   const userData = {
     email: req.body.email,
     username: req.body.username,
-    password: req.body.password
+    password: req.body.password,
+    passwordRe: req.body.passwordRe
   };
 
   if (!emailValidator.validate(userData.email)) {
-    return res.status(400).json({
-      message: "Wrong email format"
+    return res.status(406).json({
+      message: "Please enter a valid email address."
     });
   }
+
+  if (userData.username.length < 4) {
+    return res.status(406).json({
+      message: "Username is too short. Minimum length is 4 characters"
+    });
+  }
+
+  if (userData.password.length < 8) {
+    return res.status(406).json({
+      message: "Password is too short. Minimum length is 8 characters"
+    });
+  }
+
+  if (userData.password !== userData.passwordRe) {
+    return res.status(406).json({
+      message: "The password and confirmation password do not match."
+    });
+  }
+
 
   User.findOne({ email: userData.email })
     .exec()
     .then(user => {
       if (user) {
         return res.status(409).json({
-          message: "Email exists. Choose another one"
+          message: "This email already exists."
         });
       } else {
         bcrypt.hash(userData.password, 10, (err, hash) => {
@@ -177,7 +200,7 @@ module.exports.signupMW = (req, res, next) => {
                 console.log(err);
                 res.status(500).json({
                   error: err,
-                  message: "There is a user with this username"
+                  message: "This username already exists. Choose another one!"
                 });
               });
           }

@@ -1,0 +1,51 @@
+<div class="loginmodal-container">
+  <h1>Sign up</h1><br>
+  <form (ngSubmit)="onSubmit()">
+
+    <input type="text" name="email" id="email" required placeholder="Email" autocomplete="off"
+      pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" [(ngModel)]="newUser.email">
+    <!-- <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+          <div *ngIf="email.errors.required">
+            Email is required.
+          </div>
+          <div *ngIf="email.errors && email.errors.pattern">
+            Email is invalid
+          </div>
+        </div> -->
+    <input type="text" name="username" id="username" required placeholder="Username" autocomplete="off" minlength="4"
+      [(ngModel)]="newUser.username">
+    <!-- <div *ngIf="username.invalid && (username.dirty || username.touched)" class="alert alert-danger">
+          <div *ngIf="username.errors.required">
+            Username is required.
+          </div>
+          <div *ngIf="username.errors.minlength">
+            Username must be at least 4 characters long.
+          </div>
+        </div> -->
+    <input type="password" name="password" id="password" required placeholder="Password" autocomplete="off"
+      minlength="8" [(ngModel)]="newUser.password">
+    <!-- <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
+          <div *ngIf="password.errors.required">
+            Password is required.
+          </div>
+          <div *ngIf="password.errors.minlength">
+            Password must be at least 4 characters long.
+          </div>
+        </div> -->
+
+        <!-- [disabled]="!signUpForm.form.valid" -->
+    <input type="password" name="passwordRe" id="passwordRe" required placeholder="Confirmation password"
+      autocomplete="off" [(ngModel)]="newUser.passwordRe" minlength="8">
+    <input type="submit" name="signUp" class="login loginmodal-submit" value="Sign up">
+  </form>
+  <div [hidden]="correct" class="alert alert-danger text-center">
+    {{errorMessage}}
+  </div>
+  <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
+    <p>Thank you for your registration!</p>
+    <p>Please login!</p>
+  </ngx-spinner>
+  <div class="login-help">
+    <a [routerLink]="routerLinkLogin">Login</a>
+  </div>
+</div>
