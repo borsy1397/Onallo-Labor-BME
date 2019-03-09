@@ -1,7 +1,22 @@
-<p>HEADER</p>
-<p>MENU</p>
-<div class="container">
-    <button>start a game</button>
-    <router-outlet></router-outlet>
+<div class="full-page text-center">
+    <header>
+        <div class="container">
+            <a href="">Profile</a>
+            <a href="">Rank</a>
+            <a href="">Games</a>
+            <a href="">Logout</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <router-outlet></router-outlet>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <h5>Copyright</h5>
+        </div>
+    </footer>
 </div>
-<p>FOOTER</p>

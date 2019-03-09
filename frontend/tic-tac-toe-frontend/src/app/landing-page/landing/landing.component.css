@@ -1,0 +1,22 @@
+body, html {
+    height: 100%;
+}
+
+.full-page {
+    background-image: linear-gradient(#EFEFBB, #D4D3DD);
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+h1 {
+    font-size: 600%;
+    padding-top: 50px;
+}
+
+button {
+    width: 150px;
+    font-weight: bold;
+    margin: 50px;
+}

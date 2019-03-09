@@ -14,10 +14,12 @@ export class MainComponent implements OnInit {
 
   ngOnInit() {
 
-    if(!this.authService.checkAuth()){
-      this.router.navigate(['/login']);
-    }
+    //if(!this.authService.checkAuth()){
+    //  this.router.navigate(['/login']);
+    //}
     
+    this.authService.checkAuth() // eleg csak ennyi
+
     // ezt innen nyilvan ki kell szedni
     this.userService.getUser().subscribe(res => {
       console.log("Angular home path, van token, ervenyes, es a szerver vissza kuldi a /user routera a cuccot");

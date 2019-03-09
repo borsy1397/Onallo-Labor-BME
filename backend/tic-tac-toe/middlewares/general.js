@@ -18,7 +18,7 @@ module.exports.refreshTokenMW = (req, res, next) => {
       if (refToken) {
         if (refToken.username === userData.username) {
 
-          const token = jwt.sign({ username: userData.username }, secretKeys.tokenSecret, { expiresIn: "1m" }); //EXPIRE
+          const token = jwt.sign({ username: userData.username }, secretKeys.tokenSecret, { expiresIn: "30m" }); //EXPIRE
           // userid??
           return res.status(200).json({
             message: "Access token refresh is successful. itt az uj access tokened",
@@ -88,7 +88,7 @@ module.exports.loginMW = (req, res, next) => {
           }
 
           if (result) {
-            const token = jwt.sign({ username: user.username }, secretKeys.tokenSecret, { expiresIn: "1m" }); // EXPIREEEEEEEEE
+            const token = jwt.sign({ username: user.username }, secretKeys.tokenSecret, { expiresIn: "30m" }); // EXPIREEEEEEEEE
             // userid??
             const refreshToken = randToken.uid(256);
 

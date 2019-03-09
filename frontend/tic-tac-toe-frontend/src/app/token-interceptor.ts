@@ -3,7 +3,6 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpClient } from
 import { tap, share, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from "rxjs";
-import { createTokenForExternalReference } from '@angular/compiler/src/identifiers';
 import { Router } from '@angular/router';
 
 @Injectable()
@@ -28,8 +27,15 @@ export class TokenInterceptor implements HttpInterceptor {
         console.log("Lejart, vagy invalid token");
         localStorage.clear();
         this.router.navigate(['/login']);
+    }
+  }));
+  }
+}
 
-        const refreshData = {
+
+
+
+        /*const refreshData = {
           refreshToken: localStorage.getItem('refreshToken'),
           username: "username1"
         }
@@ -65,6 +71,12 @@ export class TokenInterceptor implements HttpInterceptor {
         //localStorage.clear();
         //this.router.navigate(['/login']);
       }
+
+
+
+    
+
+
 
 
 
@@ -113,10 +125,6 @@ export class TokenInterceptor implements HttpInterceptor {
         localStorage.clear();
       }
 */
-
-    }));
-  }
-}
 
       // 401 authorization???
       /**

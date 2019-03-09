@@ -13,6 +13,8 @@ export class LandingComponent implements OnInit {
   routerLinkLogin = "/login";
   routerLinkSignUp = "/signup";
 
+  submitted = false;
+
   constructor(
     private authService: AuthService,
     private router: Router
@@ -21,6 +23,13 @@ export class LandingComponent implements OnInit {
   ngOnInit() {
     if (this.authService.checkAuth()) {
       this.router.navigate(['/home']); 
+    }
+  }
+
+  
+  hiddenButtons(){
+    if(!this.submitted){
+      this.submitted = true;
     }
   }
 
