@@ -57,6 +57,7 @@ module.exports.authorizationMW = (req, res, next) => {
       console.log(req.userData);
       next();
 
+
       // uj token kell?
     });
   } else {

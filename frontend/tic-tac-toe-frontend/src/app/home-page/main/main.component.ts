@@ -12,6 +12,8 @@ export class MainComponent implements OnInit {
 
   constructor(private userService: UserService, private authService: AuthService, private router: Router) { }
 
+  routerLinkGames = "/home/games";
+
   ngOnInit() {
 
     //if(!this.authService.checkAuth()){
@@ -30,6 +32,11 @@ export class MainComponent implements OnInit {
       console.log(err);
       console.log("Angular home path, /user routera  a backend hibat ir, mert nincs vagy nem jo a token");
     });
+
+    //this.socket = io('http://localhost:3000/jatek');
+
+
+
   }
 
 }

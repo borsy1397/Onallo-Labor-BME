@@ -82,7 +82,6 @@ export class LoginComponent implements OnInit {
       localStorage.setItem('refreshToken', res.refreshToken);
 
       this.correct = true;
-      console.log(res);
 
       this.spinner.show();
       setTimeout(() => {

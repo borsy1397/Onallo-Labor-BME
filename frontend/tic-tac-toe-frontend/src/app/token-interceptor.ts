@@ -18,6 +18,9 @@ export class TokenInterceptor implements HttpInterceptor {
       headers: req.headers.set('Authorization', `Bearer ${token}`)
     });
 
+    /**
+     * Ezzel valami kezdeni, hogy ne ketszer kuldje el, vagy mi
+     */
     return next.handle(authReq).pipe(tap(event => {
       console.log("Nincs hiba a tokennel - interceptor");
       console.log(event);

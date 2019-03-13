@@ -1,21 +1,19 @@
 const User = require('../models/User');
-// module.exports.logoutMW = (req, res, next) => {
-//     // kell ez? token...
+
+// module.exports.deleteUserMW = (req, res, next) => {
+
 // };
 
-module.exports.deleteUserMW = (req, res, next) => {
+// module.exports.updateUserMW = (req, res, next) => {
 
-};
+// };
 
-module.exports.updateUserMW = (req, res, next) => {
+// module.exports.getAllUsersMW = (req, res, next) => {
 
-};
-
-module.exports.getAllUsersMW = (req, res, next) => {
-
-};
+// };
 
 module.exports.getUserMW = (req, res, next) => {
+
     User.findOne({ username: req.userData.username})
     .exec()
     .then(user => {
@@ -37,11 +35,3 @@ module.exports.getUserMW = (req, res, next) => {
       });
     });
 };
-
-
-/**
- * Amik kellhetnek:
- *
- * addUserToGame
- * removeUserFromGame?
- */
