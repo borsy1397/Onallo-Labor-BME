@@ -3,7 +3,7 @@ import { GameService } from 'src/app/services/game/game.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { Router } from '@angular/router';
 
-import * as io from 'socket.io-client';
+
 
 @Component({
   selector: 'app-game',
@@ -14,19 +14,37 @@ export class GameComponent implements OnInit {
 
   constructor(private gameService: GameService, private authService: AuthService, private router: Router) { }
 
+  private totalRooms = <Number> 0;
+	private emptyRooms = <Array<number>> [];
+	private roomNumber = <Number> 0;
 
-  socket = null;
+  user = {
+    username: localStorage.getItem('username')
+  }
+
 
   ngOnInit() {
 
     this.authService.checkAuth() // eleg csak ennyi
-    this.socket = io('http://localhost:3000');
+
+    this.gameService.connect();
+
+    // HTTP call to get Empty rooms and total room numbers
+		this.gameService.getRoomStats().then(response => {
+			this.totalRooms = response['totalRoomCount'];
+			this.emptyRooms = response['emptyRooms'];
+		});
+
+		// Socket evenet will total available rooms to play.
+		this.gameService.getRoomsAvailable().subscribe(response => {
+			this.totalRooms = response['totalRoomCount'];
+			this.emptyRooms = response['emptyRooms'];
+		});
 
   }
-
-  socketClick() {
-    this.socket.emit('create-room', {
-      my: 'data'
+  createRoom() {
+    this.gameService.createNewRoom(this.user).subscribe((response) => {
+      this.roomNumber = response.roomNumber;
     });
   }
 

@@ -80,6 +80,7 @@ export class LoginComponent implements OnInit {
 
       localStorage.setItem('token', res.token);
       localStorage.setItem('refreshToken', res.refreshToken);
+      localStorage.setItem('username', res.username)
 
       this.correct = true;
 

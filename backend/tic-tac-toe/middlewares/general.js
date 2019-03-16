@@ -112,7 +112,8 @@ module.exports.loginMW = (req, res, next) => {
             return res.status(200).json({
               message: "Authentication is successful",
               token: token,
-              refreshToken: refreshToken //ES6-tol nem kell kiirni a propertyt? olvashatosag
+              refreshToken: refreshToken, //ES6-tol nem kell kiirni a propertyt? olvashatosag
+              username: data.username
             });
           } else {
             return res.status(400).json({
