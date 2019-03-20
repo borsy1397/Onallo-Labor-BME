@@ -53,4 +53,39 @@ export class GameService {
 		});
 		return observable;
 	}
+
+	joinNewRoom(roomNumber): any {
+		this.socket.emit('join-room', {
+			'roomNumber': roomNumber,
+			'username': localStorage.getItem('username')
+		});
+	}
+
+	startGame(): any {
+		const observable = new Observable(observer => {
+			this.socket.on('start-game', (data) => {
+				observer.next(
+					data
+				);
+			});
+			return () => {
+				this.socket.disconnect();
+			};
+		});
+		return observable;
+	}
+
+	playerLeft(): any {
+		const observable = new Observable(observer => {
+			this.socket.on('room-disconnect', (data) => {
+				observer.next(
+					data
+				);
+			});
+			return () => {
+				this.socket.disconnect();
+			};
+		});
+		return observable;
+	}
 }

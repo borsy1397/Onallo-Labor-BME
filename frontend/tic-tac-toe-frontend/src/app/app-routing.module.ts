@@ -9,6 +9,7 @@ import { RanktableComponent } from './home-page/ranktable/ranktable.component';
 import { ProfileComponent } from './home-page/profile/profile.component';
 import { GameComponent } from './home-page/game/game.component';
 import { AuthGuard } from './auth.guard';
+import { PlayComponent } from './home-page/play/play.component';
 
 const appRoutes: Routes = [
   {
@@ -18,7 +19,8 @@ const appRoutes: Routes = [
     children: [
       { path: 'games', component: GameComponent },
       { path: 'profile', component: ProfileComponent },
-      { path: 'ranktable', component: RanktableComponent }
+      { path: 'ranktable', component: RanktableComponent },
+      { path: 'play', component: PlayComponent}
     ]
   },
   { path: '',

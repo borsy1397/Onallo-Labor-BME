@@ -16,7 +16,8 @@ export class GameComponent implements OnInit {
 
   private totalRooms = <Number> 0;
 	private emptyRooms = <Array<number>> [];
-	private roomNumber = <Number> 0;
+  private roomNumber = <Number> 0;
+  private enemy = null;
 
   user = {
     username: localStorage.getItem('username')
@@ -39,13 +40,30 @@ export class GameComponent implements OnInit {
 		this.gameService.getRoomsAvailable().subscribe(response => {
 			this.totalRooms = response['totalRoomCount'];
 			this.emptyRooms = response['emptyRooms'];
+    });
+    
+    this.gameService.startGame().subscribe((response) => {
+      this.roomNumber = response['roomNumber'];
+      this.enemy = response['ellenfel'];
+      this.router.navigate(['/home/play']);
+    });
+    
+    		// Socket event to check if any player left the room, if yes then reload the page.
+		this.gameService.playerLeft().subscribe((response) => {
+      alert('Player Left, You are the winner');
 		});
 
   }
+
+
   createRoom() {
     this.gameService.createNewRoom(this.user).subscribe((response) => {
       this.roomNumber = response.roomNumber;
     });
   }
+
+  joinRoom(roomNumber) {
+		this.gameService.joinNewRoom(roomNumber);
+	}
 
 }

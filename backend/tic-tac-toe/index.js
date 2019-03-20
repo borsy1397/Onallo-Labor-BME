@@ -2,7 +2,7 @@ const express = require('express');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./assets/swagger_v1.json');
 const bodyParser = require('body-parser');
-const bluebird = require('bluebird');
+//const bluebird = require('bluebird');
 
 const app = express();
 const http = require('http').Server(app);
@@ -29,7 +29,7 @@ require('./routes/general')(app);
 
 
 
-const redis = require('redis');
+/*const redis = require('redis');
 const redisDB = redis.createClient();
 bluebird.promisifyAll(redisDB);
 
@@ -41,7 +41,7 @@ redisDB.set("usersInGame", JSON.stringify({
 redisDB.set("allRooms", JSON.stringify({
     emptyRooms: [],
     fullRooms: []
-}));
+}));*/
 
 
 // de ezt az egeszet nem lehetne abba rakni, hogy amikor kapcsolodik, megkapja???
@@ -62,6 +62,11 @@ app.get('/getGames', (request,response) => {
 
 io.on('connection', socket => {
     console.log("Connected......s..");
+
+    Promise.all(['totalRoomCount', 'usersInGame', 'allRooms'].map(key => redisDB.getAsync(key))).then(values => {
+        let usersInGame = JSON.parse(values[1])['users'];
+        console.log(usersInGame);
+    });
     /**
      * Szoval: tokent majd itt kell vizsgalni, hogy ervenyes e: jwt.verify()....
      */
@@ -69,7 +74,6 @@ io.on('connection', socket => {
     socket.on('create-room', data => {
         //databan at kellene adni majd a usernamet
         Promise.all(['totalRoomCount', 'usersInGame', 'allRooms'].map(key => redisDB.getAsync(key))).then(values => {
-            console.log(Object.keys(socket.rooms));
             const allRooms = JSON.parse(values[2]);
             let usersInGame = JSON.parse(values[1])['users'];
             let totalRoomCount = values[0];
@@ -78,7 +82,7 @@ io.on('connection', socket => {
 
             // majd azt kell megcsinalni, hogy ne a totalRoomCount legyen, hanem pl. a username legyen az azonosito
 
-            const _userInGame = usersInGame.includes(data.username);
+            const _userInGame = usersInGame.includes(socket.id);
 
             if (!_userInGame) {
                 let isIncludes = emptyRooms.includes(totalRoomCount);
@@ -92,14 +96,12 @@ io.on('connection', socket => {
                         fullRooms: fullRooms
                     }));
 
-                    usersInGame.push(data.username);
+                    usersInGame.push(socket.id);
                     redisDB.set("usersInGame", JSON.stringify({
                         users: usersInGame
                     }));
 
-                    console.log(emptyRooms);
-                    console.log(fullRooms);
-                    console.log(usersInGame);
+                    console.log('Create room! Jelenleg jatekban levok ' + usersInGame);
 
                     // Ha uj jatekot csinalnak, akkor emitelni kell, hogy uj jatek jott letre 
                     io.emit('rooms-available', {
@@ -116,7 +118,6 @@ io.on('connection', socket => {
                     });
                 }
             }
-            console.log(Object.keys(socket.rooms));
 
 
 
@@ -202,7 +203,7 @@ io.on('connection', socket => {
             let fullRooms = allRooms['fullRooms'];
             let emptyRooms = allRooms['emptyRooms'];
 
-            const _userInGame = usersInGame.includes(data.username);
+            const _userInGame = usersInGame.includes(socket.id);
 
             if (!_userInGame) {
                 let indexPos = emptyRooms.indexOf(roomNumber);
@@ -210,10 +211,13 @@ io.on('connection', socket => {
                     emptyRooms.splice(indexPos, 1);
                     fullRooms.push(roomNumber);
 
-                    usersInGame.push(data.username);
+                    usersInGame.push(socket.id);
+                    console.log('Join room! Jelenleg jatekban levok: ' + usersInGame);
                     redisDB.set("usersInGame", JSON.stringify({
                         users: usersInGame
                     }));
+
+                    console.log('Create room! Jelenleg jatekban levok ' + usersInGame);
 
                     /* User Joining socket room */
                     socket.join("room-" + roomNumber);
@@ -224,34 +228,30 @@ io.on('connection', socket => {
 
                     /* Getting the room number from socket */
                     // Most ez tenyleg kell? felesleges szerintem
-                    const currentRoom = (Object.keys(IO.sockets.adapter.sids[socket.id]).filter(item => item != socket.id)[0]).split('-')[1];
-                    IO.emit('rooms-available', {
-                        //'totalRoomCount': totalRoomCount,
+                    const currentRoom = (Object.keys(io.sockets.adapter.sids[socket.id]).filter(item => item != socket.id)[0]).split('-')[1];
+                    io.emit('rooms-available', {
+                        'totalRoomCount': totalRoomCount,
                         'fullRooms': fullRooms,
                         'emptyRooms': emptyRooms
                     });
 
 
-                    IO.sockets.in("room-" + roomNumber).emit('start-game', {
+                    io.sockets.in("room-" + roomNumber).emit('start-game', {
                         'ellenfel': data.username,
-                        //'totalRoomCount': totalRoomCount,
-                        //'fullRooms': fullRooms,
-                        //'emptyRooms': emptyRooms,
+                        'totalRoomCount': totalRoomCount,
+                        'fullRooms': fullRooms,
+                        'emptyRooms': emptyRooms,
                         'roomNumber': currentRoom
                     });
                 }
             }
-
-
-
-
         });
     });
 
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
+    socket.on('disconnecting', () => {
+        console.log('User disconnected');
         const rooms = Object.keys(socket.rooms);
-        console.log(rooms);
+        console.log('Disconnectingnel! Socket.rooms: ' + rooms);
         const roomNumber = (rooms[1] !== undefined && rooms[1] !== null) ? (rooms[1]).split('-')[1] : null;
         if (rooms !== null) {
             Promise.all(['totalRoomCount', 'usersInGame', 'allRooms'].map(key => redisDB.getAsync(key))).then(values => {
@@ -261,16 +261,28 @@ io.on('connection', socket => {
                 let fullRooms = allRooms['fullRooms'];
                 let emptyRooms = allRooms['emptyRooms'];
 
-                /*usersInGame.push(data.username);
+                let usersInGamePos = usersInGame.indexOf(parseInt(socket.id));
+                usersInGame.splice(usersInGamePos, 1);
                 redisDB.set("usersInGame", JSON.stringify({
                     users: usersInGame
-                }));*/
+                }));
+
+                /**
+                 * 
+                 * TOROLNI A JATEKOT!!!! totalroomcountnal n
+                 * EMITELNI elkuldeni a total room countot
+                 * 
+                 * todo: page refreshnel felismerni, hogy ez ugyanaz
+                 * 
+                 */
 
                 let fullRoomsPos = fullRooms.indexOf(parseInt(roomNumber));
                 if (fullRoomsPos > -1) {
                     fullRooms.splice(fullRoomsPos, 1);
+
+
                 }
-                if (totalRoomCount > 1) {
+                if (totalRoomCount > 0) {
                     totalRoomCount--;
                 } else {
                     totalRoomCount = 1;
@@ -280,6 +292,8 @@ io.on('connection', socket => {
                     emptyRooms: emptyRooms,
                     fullRooms: fullRooms
                 }));
+                console.log('Disconnection........ SocketID:' + socket.id);
+                console.log('Jatekban levok: ' + usersInGame);
                 io.sockets.in("room-" + roomNumber).emit('room-disconnect', { id: socket.id });
             });
         }

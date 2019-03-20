@@ -54,7 +54,6 @@ module.exports.authorizationMW = (req, res, next) => {
       }
 
       req.userData = decoded;
-      console.log(req.userData);
       next();
 
 

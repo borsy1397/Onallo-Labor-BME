@@ -17,6 +17,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { ProfileComponent } from './home-page/profile/profile.component';
 import { RanktableComponent } from './home-page/ranktable/ranktable.component';
 import { GameComponent } from './home-page/game/game.component';
+import { PlayComponent } from './home-page/play/play.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { GameComponent } from './home-page/game/game.component';
     MainComponent,
     ProfileComponent,
     RanktableComponent,
-    GameComponent
+    GameComponent,
+    PlayComponent
   ],
   imports: [
     BrowserModule,
