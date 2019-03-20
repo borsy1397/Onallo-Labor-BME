@@ -14,10 +14,10 @@ export class GameComponent implements OnInit {
 
   constructor(private gameService: GameService, private authService: AuthService, private router: Router) { }
 
-  private totalRooms = <Number> 0;
-	private emptyRooms = <Array<number>> [];
-  private roomNumber = <Number> 0;
-  private enemy = null;
+  totalRooms = <Number> 0;
+	emptyRooms = <Array<number>> [];
+  roomName: string;
+  enemy = null;
 
   user = {
     username: localStorage.getItem('username')
@@ -43,7 +43,7 @@ export class GameComponent implements OnInit {
     });
     
     this.gameService.startGame().subscribe((response) => {
-      this.roomNumber = response['roomNumber'];
+      this.roomName = response['roomName'];
       this.enemy = response['ellenfel'];
       this.router.navigate(['/home/play']);
     });
@@ -58,12 +58,12 @@ export class GameComponent implements OnInit {
 
   createRoom() {
     this.gameService.createNewRoom(this.user).subscribe((response) => {
-      this.roomNumber = response.roomNumber;
+      this.roomName = response.roomName;
     });
   }
 
-  joinRoom(roomNumber) {
-		this.gameService.joinNewRoom(roomNumber);
+  joinRoom(roomName) {
+		this.gameService.joinNewRoom(roomName);
 	}
 
 }

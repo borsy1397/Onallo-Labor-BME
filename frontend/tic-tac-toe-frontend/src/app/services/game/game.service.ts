@@ -54,9 +54,9 @@ export class GameService {
 		return observable;
 	}
 
-	joinNewRoom(roomNumber): any {
+	joinNewRoom(roomName): any {
 		this.socket.emit('join-room', {
-			'roomNumber': roomNumber,
+			'roomName': roomName,
 			'username': localStorage.getItem('username')
 		});
 	}

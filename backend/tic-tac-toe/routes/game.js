@@ -9,15 +9,4 @@ module.exports = (app) => {
     //     authorizationMW,
     //     getGamesMW
     // );
-
-    // app.post('/create',
-    //     authorizationMW,
-    //     createRoomMW
-    // );
-    
-    // app.post('/game',
-    //     authorizationMW,
-    //     joinRoomMW
-    // );
-
 }

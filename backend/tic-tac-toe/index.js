@@ -2,11 +2,11 @@ const express = require('express');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./assets/swagger_v1.json');
 const bodyParser = require('body-parser');
-//const bluebird = require('bluebird');
 
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
+const redisDB = require('./utils/redis');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -27,24 +27,6 @@ require('./routes/game')(app);
 require('./routes/user')(app);
 require('./routes/general')(app);
 
-
-
-/*const redis = require('redis');
-const redisDB = redis.createClient();
-bluebird.promisifyAll(redisDB);
-
-redisDB.set("totalRoomCount", 0);
-redisDB.set("usersInGame", JSON.stringify({
-    users: []
-    // ide lehet majd olyat, hogy aki online, kapcsolodott, de meg nem jatszik jatekban?
-}));
-redisDB.set("allRooms", JSON.stringify({
-    emptyRooms: [],
-    fullRooms: []
-}));*/
-
-
-// de ezt az egeszet nem lehetne abba rakni, hogy amikor kapcsolodik, megkapja???
 app.get('/getGames', (request,response) => {
     Promise.all(['totalRoomCount','allRooms'].map(key => redisDB.getAsync(key))).then(values => {
         const totalRoomCount = values[0];
@@ -59,14 +41,22 @@ app.get('/getGames', (request,response) => {
 
 
 
-
 io.on('connection', socket => {
-    console.log("Connected......s..");
+    console.log("Connected...... " + socket.id);
 
-    Promise.all(['totalRoomCount', 'usersInGame', 'allRooms'].map(key => redisDB.getAsync(key))).then(values => {
-        let usersInGame = JSON.parse(values[1])['users'];
-        console.log(usersInGame);
-    });
+    /*Promise.all(['totalRoomCount', 'usersInGame', 'allRooms'].map(key => redisDB.getAsync(key))).then(values => {
+        const allRooms = JSON.parse(values[2]);
+        let totalRoomCount = values[0];
+        let fullRooms = allRooms['fullRooms'];
+        let emptyRooms = allRooms['emptyRooms'];
+
+        io.emit('rooms-available', {
+            'totalRoomCount': totalRoomCount,
+            'fullRooms': fullRooms,
+            'emptyRooms': emptyRooms
+        });
+    });*/
+
     /**
      * Szoval: tokent majd itt kell vizsgalni, hogy ervenyes e: jwt.verify()....
      */
@@ -85,18 +75,21 @@ io.on('connection', socket => {
             const _userInGame = usersInGame.includes(socket.id);
 
             if (!_userInGame) {
-                let isIncludes = emptyRooms.includes(totalRoomCount);
+                let isIncludes = emptyRooms.includes(data.username);
                 if (!isIncludes) {
                     totalRoomCount++;
-                    emptyRooms.push(totalRoomCount);
-                    socket.join("room-" + totalRoomCount);
+
+                    emptyRooms.push(data.username);
+
+                    socket.join("room-" + data.username);
+
+                    usersInGame.push(socket.id);
+
                     redisDB.set("totalRoomCount", totalRoomCount);
                     redisDB.set("allRooms", JSON.stringify({
                         emptyRooms: emptyRooms,
                         fullRooms: fullRooms
                     }));
-
-                    usersInGame.push(socket.id);
                     redisDB.set("usersInGame", JSON.stringify({
                         users: usersInGame
                     }));
@@ -110,92 +103,23 @@ io.on('connection', socket => {
                         'emptyRooms': emptyRooms
                     });
 
-                    io.sockets.in("room-" + totalRoomCount).emit('new-room', {
+                    io.sockets.in("room-" + data.username).emit('new-room', {
+                        'roomName': data.username, // en irtam
                         'totalRoomCount': totalRoomCount,
                         'fullRooms': fullRooms,
                         'emptyRooms': emptyRooms,
-                        'roomNumber': totalRoomCount
+                        //'roomNumber': totalRoomCount
                     });
                 }
             }
 
-
-
-            // Rooms in Socket.IO don't need to be created, one is created when a socket joins it. 
-            // // They are joined on the server side, so you would have to instruct the server using the client. // //
-
-            /**
-             * socket.on('create', function (room) {
-                socket.join(room);
-                });
-
-                In the example above, a room is created with a name specified in variable room.
-                You don't need to store this room object anywhere, because it's already part of the io object.
-                You can then treat the room like its own socket instance.
-                io.sockets.in(room).emit('event', data);
-             */
-
-            // io.sockets.emit --> This will emit the event to ALL the connected clients
-            // (event the socket that might have fired this event).
-            // pl: io.sockets.emit('broadcast',{ description: clients + ' clients connected!'});
-
-            // f we want to send an event to everyone, but the client that caused it, we can use the socket.broadcast.emit.
-
-
-            // One thing to keep in mind while using rooms is that they can only be joined on the server side.
-            // https://www.tutorialspoint.com/socket.io/socket.io_rooms.htm
-
-            // Message − When the server sends a message using the send function.
-
-            // DEBUG=* node app.js
-            // localStorage.debug = 'socket.io-client:socket';
-
-            /**
-             * 
-             * Each Socket in Socket.IO is identified by a random, unguessable, unique identifier Socket#id.
-             * For your convenience, each socket automatically joins a room identified by this id.
-               This makes it easy to broadcast messages to other sockets:
-             */
-
-            // https://socket.io/docs/emit-cheatsheet/
-
-            /**
-             * 
-             * io.sockets.emit('hi', 'everyone');
-              // is equivalent to
-              io.of('/').emit('hi', 'everyone');
-
-             */
-
-            // A Socket is the fundamental class for interacting with browser clients.
-            //A Socket belongs to a certain Namespace (by default /) and uses an underlying Client to communicate.
-
-            // A socketnel is vannak middlewarek!! authentication
-            // Registers a middleware, which is a function that gets executed for
-            // every incoming Packet and receives as parameter the packet
-            // and a function to optionally defer execution to the next registered middleware.
-            // https://socket.io/docs/server-api/#socket-use-fn
-
-            /**
-             * The mechanics of joining rooms are handled by the Adapter that has been configured
-             * (see Server#adapter above), defaulting to socket.io-adapter.
-
-             For your convenience, each socket automatically joins a room identified by its id (see Socket#id).
-             This makes it easy to broadcast messages to other sockets:
-                 https://socket.io/docs/server-api/#socket-join-room-callback                
-             */
-
-            // ITT a TOKENES MIDDLEWARES CUCC: https://socket.io/docs/client-api/#With-query-parameters
-
-
-            //stackoverflow: io.sockets.sockets[yourSocketID].rooms equals socket.rooms
         });
     });
 
     socket.on('join-room', data => {
 
         //Szerveroldalon kezelni, hogy kie a kovetkezo lepes
-        const roomNumber = data.roomNumber;
+        const roomName = data.roomName;
         Promise.all(['totalRoomCount', 'usersInGame', 'allRooms'].map(key => redisDB.getAsync(key))).then(values => {
             const allRooms = JSON.parse(values[2]);
             let usersInGame = JSON.parse(values[1])['users'];
@@ -206,10 +130,10 @@ io.on('connection', socket => {
             const _userInGame = usersInGame.includes(socket.id);
 
             if (!_userInGame) {
-                let indexPos = emptyRooms.indexOf(roomNumber);
+                let indexPos = emptyRooms.indexOf(roomName);
                 if (indexPos > -1) {
                     emptyRooms.splice(indexPos, 1);
-                    fullRooms.push(roomNumber);
+                    fullRooms.push(roomName);
 
                     usersInGame.push(socket.id);
                     console.log('Join room! Jelenleg jatekban levok: ' + usersInGame);
@@ -217,10 +141,8 @@ io.on('connection', socket => {
                         users: usersInGame
                     }));
 
-                    console.log('Create room! Jelenleg jatekban levok ' + usersInGame);
-
                     /* User Joining socket room */
-                    socket.join("room-" + roomNumber);
+                    socket.join("room-" + roomName);
                     redisDB.set("allRooms", JSON.stringify({
                         emptyRooms: emptyRooms,
                         fullRooms: fullRooms
@@ -236,12 +158,12 @@ io.on('connection', socket => {
                     });
 
 
-                    io.sockets.in("room-" + roomNumber).emit('start-game', {
+                    io.sockets.in("room-" + roomName).emit('start-game', {
                         'ellenfel': data.username,
                         'totalRoomCount': totalRoomCount,
                         'fullRooms': fullRooms,
                         'emptyRooms': emptyRooms,
-                        'roomNumber': currentRoom
+                        'roomName': currentRoom
                     });
                 }
             }
@@ -252,8 +174,8 @@ io.on('connection', socket => {
         console.log('User disconnected');
         const rooms = Object.keys(socket.rooms);
         console.log('Disconnectingnel! Socket.rooms: ' + rooms);
-        const roomNumber = (rooms[1] !== undefined && rooms[1] !== null) ? (rooms[1]).split('-')[1] : null;
-        if (rooms !== null) {
+        const roomName = (rooms[1] !== undefined && rooms[1] !== null) ? (rooms[1]).split('-')[1] : null;
+        if (roomName !== null) {
             Promise.all(['totalRoomCount', 'usersInGame', 'allRooms'].map(key => redisDB.getAsync(key))).then(values => {
                 const allRooms = JSON.parse(values[2]);
                 let usersInGame = JSON.parse(values[1])['users'];
@@ -261,11 +183,16 @@ io.on('connection', socket => {
                 let fullRooms = allRooms['fullRooms'];
                 let emptyRooms = allRooms['emptyRooms'];
 
-                let usersInGamePos = usersInGame.indexOf(parseInt(socket.id));
-                usersInGame.splice(usersInGamePos, 1);
-                redisDB.set("usersInGame", JSON.stringify({
-                    users: usersInGame
-                }));
+                let usersInGamePos = usersInGame.indexOf(socket.id);
+                console.log(usersInGamePos);
+                if (usersInGamePos > -1) {
+                    usersInGame.splice(usersInGamePos, 1);
+                    redisDB.set("usersInGame", JSON.stringify({
+                        users: usersInGame
+                    }));
+                }
+               
+
 
                 /**
                  * 
@@ -276,17 +203,18 @@ io.on('connection', socket => {
                  * 
                  */
 
-                let fullRoomsPos = fullRooms.indexOf(parseInt(roomNumber));
+                let fullRoomsPos = fullRooms.indexOf(roomName);
                 if (fullRoomsPos > -1) {
                     fullRooms.splice(fullRoomsPos, 1);
-
-
                 }
-                if (totalRoomCount > 0) {
-                    totalRoomCount--;
-                } else {
-                    totalRoomCount = 1;
+
+                let emptyRoomsPos = emptyRooms.indexOf(roomName);
+                if (emptyRoomsPos > -1) {
+                    emptyRooms.splice(emptyRoomsPos, 1);
                 }
+
+                totalRoomCount--;
+
                 redisDB.set("totalRoomCount", totalRoomCount);
                 redisDB.set("allRooms", JSON.stringify({
                     emptyRooms: emptyRooms,
@@ -294,30 +222,17 @@ io.on('connection', socket => {
                 }));
                 console.log('Disconnection........ SocketID:' + socket.id);
                 console.log('Jatekban levok: ' + usersInGame);
-                io.sockets.in("room-" + roomNumber).emit('room-disconnect', { id: socket.id });
+                io.sockets.in("room-" + roomName).emit('room-disconnect', { id: socket.id });
+                io.emit('rooms-available', {
+                    'totalRoomCount': totalRoomCount,
+                    'fullRooms': fullRooms,
+                    'emptyRooms': emptyRooms
+                });
+                
             });
         }
     });
 
-    /**
-     * 
-     * io.emit --> broadcast mindenkinek
-     * socket.emit --> csak a socketnek broadcast - a socketnel csinal emitet
-     * 
-     * createGame
-     * joinGame
-     * move
-     * 
-     * sendMessage
-     * 
-     * disconnect
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     */
 });
 
 
@@ -327,3 +242,61 @@ const port = 3000;
 http.listen(port, () => {
     console.log(`Listening... Port: ${port}`);
 });
+
+
+
+            // io.sockets.emit --> This will emit the event to ALL the connected clients
+            // (event the socket that might have fired this event).
+            // pl: io.sockets.emit('broadcast',{ description: clients + ' clients connected!'});
+
+            // if we want to send an event to everyone, but the client that caused it, we can use the socket.broadcast.emit.
+
+
+            // One thing to keep in mind while using rooms is that they can only be joined on the server side.
+            // https://www.tutorialspoint.com/socket.io/socket.io_rooms.htm
+
+            // Message − When the server sends a message using the send function.
+
+            // DEBUG=* node app.js
+            // localStorage.debug = 'socket.io-client:socket';
+
+            // io.emit --> broadcast mindenkinek
+            // socket.emit --> csak a socketnek broadcast - a socketnel csinal emitet
+
+            /**
+             * 
+             * Each Socket in Socket.IO is identified by a random, unguessable, unique identifier Socket#id.
+             * For your convenience, each socket automatically joins a room identified by this id.
+               This makes it easy to broadcast messages to other sockets:
+             */
+
+            // https://socket.io/docs/emit-cheatsheet/
+
+            /**
+             * 
+             * io.sockets.emit('hi', 'everyone');
+              // is equivalent to
+              io.of('/').emit('hi', 'everyone');
+    
+             */
+
+
+            // A socketnel is vannak middlewarek!! authentication
+            // Registers a middleware, which is a function that gets executed for
+            // every incoming Packet and receives as parameter the packet
+            // and a function to optionally defer execution to the next registered middleware.
+            // https://socket.io/docs/server-api/#socket-use-fn
+
+            /**
+             * The mechanics of joining rooms are handled by the Adapter that has been configured
+             * (see Server#adapter above), defaulting to socket.io-adapter.
+    
+             For your convenience, each socket automatically joins a room identified by its id (see Socket#id).
+             This makes it easy to broadcast messages to other sockets:
+                 https://socket.io/docs/server-api/#socket-join-room-callback                
+             */
+
+            // ITT a TOKENES MIDDLEWARES CUCC: https://socket.io/docs/client-api/#With-query-parameters
+
+
+            //stackoverflow: io.sockets.sockets[yourSocketID].rooms equals socket.rooms
