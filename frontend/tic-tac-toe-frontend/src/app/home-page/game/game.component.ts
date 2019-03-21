@@ -18,6 +18,7 @@ export class GameComponent implements OnInit {
 	emptyRooms = <Array<number>> [];
   roomName: string;
   enemy = null;
+  amIRoomCreator: boolean = false;
 
   user = {
     username: localStorage.getItem('username')
@@ -42,28 +43,33 @@ export class GameComponent implements OnInit {
 			this.emptyRooms = response['emptyRooms'];
     });
     
-    this.gameService.startGame().subscribe((response) => {
+    /*this.gameService.startGame().subscribe((response) => {
       this.roomName = response['roomName'];
       this.enemy = response['ellenfel'];
       this.router.navigate(['/home/play']);
-    });
+    });*/
     
     		// Socket event to check if any player left the room, if yes then reload the page.
-		this.gameService.playerLeft().subscribe((response) => {
+		/*this.gameService.playerLeft().subscribe((response) => {
       alert('Player Left, You are the winner');
-		});
+		});*/
 
   }
 
 
   createRoom() {
     this.gameService.createNewRoom(this.user).subscribe((response) => {
-      this.roomName = response.roomName;
+      //this.roomName = response.roomName;
+      //this.amIRoomCreator = true;
+      localStorage.setItem('inGame', 'true');
+      this.router.navigate(['/home/play']);
     });
   }
 
   joinRoom(roomName) {
-		this.gameService.joinNewRoom(roomName);
+    this.gameService.joinNewRoom(roomName);
+    localStorage.setItem('inGame', 'true');
+    this.router.navigate(['/home/play']);
 	}
 
 }

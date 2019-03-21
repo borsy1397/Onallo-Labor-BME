@@ -5,19 +5,19 @@ import * as io from 'socket.io-client';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class GameService {
 
-  constructor(private http: HttpClient) { }
+	constructor(private http: HttpClient) { }
 
-  socket = null;
+	socket = null;
 
-  connect() {
-    this.socket = io('http://localhost:3000');
-  }
+	connect() {
+		this.socket = io('http://localhost:3000');
+	}
 
-  createNewRoom(data): any {
+	createNewRoom(data): any {
 		this.socket.emit('create-room', { 'username': data.username });
 		const observable = new Observable(observer => {
 			this.socket.on('new-room', (data) => {
@@ -87,5 +87,15 @@ export class GameService {
 			};
 		});
 		return observable;
+	}
+
+	disconnect() {
+		if (this.socket != null) {
+			this.socket.disconnect();
+		}
+	}
+
+	inGame(): boolean {
+		return !!localStorage.getItem('inGame');
 	}
 }

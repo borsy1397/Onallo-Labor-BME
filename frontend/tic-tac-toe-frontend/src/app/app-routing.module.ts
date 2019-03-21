@@ -10,6 +10,7 @@ import { ProfileComponent } from './home-page/profile/profile.component';
 import { GameComponent } from './home-page/game/game.component';
 import { AuthGuard } from './auth.guard';
 import { PlayComponent } from './home-page/play/play.component';
+import { PageNotFoundComponent } from './landing-page/util/page-not-found/page-not-found.component';
 
 const appRoutes: Routes = [
   {
@@ -29,13 +30,13 @@ const appRoutes: Routes = [
       { path: 'login', component: LoginComponent },
       { path: 'signup', component: SignUpComponent }
     ]
-  }/**
+  }
   ,
   {
     path: '**', // wildcard
     component: PageNotFoundComponent
   }
-  */
+  
 ];
 
 @NgModule({

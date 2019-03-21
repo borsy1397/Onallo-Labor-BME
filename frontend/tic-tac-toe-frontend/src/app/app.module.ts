@@ -18,6 +18,7 @@ import { ProfileComponent } from './home-page/profile/profile.component';
 import { RanktableComponent } from './home-page/ranktable/ranktable.component';
 import { GameComponent } from './home-page/game/game.component';
 import { PlayComponent } from './home-page/play/play.component';
+import { PageNotFoundComponent } from './landing-page/util/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { PlayComponent } from './home-page/play/play.component';
     ProfileComponent,
     RanktableComponent,
     GameComponent,
-    PlayComponent
+    PlayComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,

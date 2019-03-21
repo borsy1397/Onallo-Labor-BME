@@ -75,7 +75,7 @@ io.on('connection', socket => {
             const _userInGame = usersInGame.includes(socket.id);
 
             if (!_userInGame) {
-                let isIncludes = emptyRooms.includes(data.username);
+                let isIncludes = emptyRooms.includes(data.username) || fullRooms.includes(data.username);
                 if (!isIncludes) {
                     totalRoomCount++;
 
@@ -206,14 +206,15 @@ io.on('connection', socket => {
                 let fullRoomsPos = fullRooms.indexOf(roomName);
                 if (fullRoomsPos > -1) {
                     fullRooms.splice(fullRoomsPos, 1);
+                    totalRoomCount--;
                 }
 
                 let emptyRoomsPos = emptyRooms.indexOf(roomName);
                 if (emptyRoomsPos > -1) {
                     emptyRooms.splice(emptyRoomsPos, 1);
+                    totalRoomCount--;
                 }
 
-                totalRoomCount--;
 
                 redisDB.set("totalRoomCount", totalRoomCount);
                 redisDB.set("allRooms", JSON.stringify({

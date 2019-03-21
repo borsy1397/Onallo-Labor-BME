@@ -1,3 +1,14 @@
-<p>
-  play works!
-</p>
+
+<div class="player-waitng" [hidden]="roomName == null ? true : false">
+  <p>
+    play works!
+  </p>
+  <p>this user created the room: {{roomName}}</p>
+  <p>this is my name: {{myname}}</p>
+  <p>the enemy name do not availevable yet</p>
+</div>
+
+<div [hidden]="roomName == null ? false : true">
+  <h2 class="text-center">Waiting for player to join....</h2>
+  <button class="btn btn-success" (click)="returnToLobby()">Back</button>
+</div>
