@@ -16,6 +16,8 @@ export class PlayComponent implements OnInit {
   roomName: string = null;
   myname: string = localStorage.getItem('username');
 
+  messages = <Array<String>> [];
+
   returnToLobby() {
     this.router.navigate(['/home/games']);
   }
@@ -27,11 +29,17 @@ export class PlayComponent implements OnInit {
     if (!this.gameService.inGame()) {
       this.router.navigate(['/home/games']);
     } 
-    this.gameService.inGame();
     // a /home/play routera navigalni ne lehessen, csak akkor, ha jatekban van
     
     this.gameService.startGame().subscribe((response) => {
       this.roomName = response['roomName'];
+    });
+
+    this.gameService.receiveMessage().subscribe((response) => {
+      let kuldo = response['kuldo'];
+      let uzenet = response['uzenet'];
+      console.log(kuldo);
+      this.messages.push(`${kuldo}: ${uzenet}`);
     });
 
     this.gameService.playerLeft().subscribe((response) => {
@@ -45,5 +53,9 @@ export class PlayComponent implements OnInit {
     // a /home/play routera navigalni ne lehessen, csak akkor, ha jatekban van
     localStorage.removeItem('inGame');
     this.gameService.disconnect();
+  }
+
+  sendMessage() {
+    this.gameService.sendMessage({username: this.myname, message: 'anyad'});
   }
 }

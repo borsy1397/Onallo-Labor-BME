@@ -17,6 +17,24 @@ export class GameService {
 		this.socket = io('http://localhost:3000');
 	}
 
+	sendMessage(data) {
+		this.socket.emit('send-message', data);
+	}
+
+	receiveMessage() {
+		const observable = new Observable(observer => {
+			this.socket.on('receive-message', (data) => {
+				observer.next(
+					data
+				);
+			});
+			return () => {
+				this.socket.disconnect();
+			};
+		});
+		return observable;
+	}
+
 	createNewRoom(data): any {
 		this.socket.emit('create-room', { 'username': data.username });
 		const observable = new Observable(observer => {

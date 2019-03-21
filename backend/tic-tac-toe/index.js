@@ -170,6 +170,19 @@ io.on('connection', socket => {
         });
     });
 
+
+
+    socket.on('send-message', data => {
+        console.log(data);
+        const currentRoom = (Object.keys(io.sockets.adapter.sids[socket.id]).filter(item => item != socket.id)[0]).split('-')[1];
+        io.sockets.in("room-" + currentRoom).emit('receive-message', {
+            'uzenet': data.message,
+            'kuldo': data.username
+        });
+    });
+
+
+
     socket.on('disconnecting', () => {
         console.log('User disconnected');
         const rooms = Object.keys(socket.rooms);

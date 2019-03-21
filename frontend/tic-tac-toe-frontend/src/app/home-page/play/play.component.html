@@ -1,14 +1,31 @@
-
-<div class="player-waitng" [hidden]="roomName == null ? true : false">
-  <p>
+<div class="text-center" [hidden]="roomName == null ? true : false">
+  <!-- <p>
     play works!
   </p>
   <p>this user created the room: {{roomName}}</p>
   <p>this is my name: {{myname}}</p>
-  <p>the enemy name do not availevable yet</p>
+  <p>the enemy name do not availevable yet</p> -->
+
+  <div class="container text-center" style="background: pink;">
+    <div class="chat" style="background: green; display: inline-block;">
+      <div class="messageBox" style="background: blue;">
+        <ul>
+          <li *ngFor="let message of messages">
+            {{message}}
+          </li>
+        </ul>
+      </div>
+      <div class="sendMessage">
+        <form style="width: 100%;">
+          <input id="m" style="width: 80%;" autocomplete="off" /><button style="width: 20%;"
+            (click)="sendMessage()">Send</button>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div [hidden]="roomName == null ? false : true">
-  <h2 class="text-center">Waiting for player to join....</h2>
-  <button class="btn btn-success" (click)="returnToLobby()">Back</button>
-</div>
+  <div [hidden]="roomName == null ? false : true">
+    <h2 class="text-center">Waiting for player to join....</h2>
+    <button class="btn btn-success" (click)="returnToLobby()">Back</button>
+  </div>
