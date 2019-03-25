@@ -14,11 +14,8 @@ export class GameComponent implements OnInit {
 
   constructor(private gameService: GameService, private authService: AuthService, private router: Router) { }
 
-  totalRooms = <Number> 0;
-	emptyRooms = <Array<number>> [];
-  roomName: string;
-  enemy = null;
-  amIRoomCreator: boolean = false;
+  totalRooms = <Number>0;
+  emptyRooms = <Array<number>>[];
 
   user = {
     username: localStorage.getItem('username')
@@ -27,40 +24,25 @@ export class GameComponent implements OnInit {
 
   ngOnInit() {
 
-    this.authService.checkAuth() // eleg csak ennyi
+    this.authService.checkAuth();
 
     this.gameService.connect();
 
     // HTTP call to get Empty rooms and total room numbers
-		this.gameService.getRoomStats().then(response => {
-			this.totalRooms = response['totalRoomCount'];
-			this.emptyRooms = response['emptyRooms'];
-		});
-
-		// Socket evenet will total available rooms to play.
-		this.gameService.getRoomsAvailable().subscribe(response => {
-			this.totalRooms = response['totalRoomCount'];
-			this.emptyRooms = response['emptyRooms'];
+    this.gameService.getRoomStats().then(response => {
+      this.totalRooms = response['totalRoomCount'];
+      this.emptyRooms = response['emptyRooms'];
     });
-    
-    /*this.gameService.startGame().subscribe((response) => {
-      this.roomName = response['roomName'];
-      this.enemy = response['ellenfel'];
-      this.router.navigate(['/home/play']);
-    });*/
-    
-    		// Socket event to check if any player left the room, if yes then reload the page.
-		/*this.gameService.playerLeft().subscribe((response) => {
-      alert('Player Left, You are the winner');
-		});*/
 
+    this.gameService.getRoomsAvailable().subscribe(response => {
+      this.totalRooms = response['totalRoomCount'];
+      this.emptyRooms = response['emptyRooms'];
+    });
   }
 
 
   createRoom() {
     this.gameService.createNewRoom(this.user).subscribe((response) => {
-      //this.roomName = response.roomName;
-      //this.amIRoomCreator = true;
       localStorage.setItem('inGame', 'true');
       this.router.navigate(['/home/play']);
     });
@@ -70,6 +52,6 @@ export class GameComponent implements OnInit {
     this.gameService.joinNewRoom(roomName);
     localStorage.setItem('inGame', 'true');
     this.router.navigate(['/home/play']);
-	}
+  }
 
 }

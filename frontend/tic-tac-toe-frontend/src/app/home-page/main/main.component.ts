@@ -16,14 +16,15 @@ export class MainComponent implements OnInit {
 
   ngOnInit() {
 
-    //if(!this.authService.checkAuth()){
-    //  this.router.navigate(['/login']);
-    //}
-    
-    this.authService.checkAuth() // eleg csak ennyi
+    /** 
+     * 
+     * Ez a a home page amugy tok feleslges
+     * vagyis hat nem, mert igy az authguard faszan mukodik, szoval valami contentet kell ide rakni
+    */
 
+    
     // ezt innen nyilvan ki kell szedni
-    this.userService.getUser().subscribe(res => {
+    /*this.userService.getUser().subscribe(res => {
       console.log("Angular home path, van token, ervenyes, es a szerver vissza kuldi a /user routera a cuccot");
       console.log(res);
       console.log("----------------------------------");
@@ -31,12 +32,12 @@ export class MainComponent implements OnInit {
       console.log("Angular home path, /user routera  a backend hibat ir, mert nincs vagy nem jo a token");
       console.log(err);
       console.log("Angular home path, /user routera  a backend hibat ir, mert nincs vagy nem jo a token");
-    });
+    });*/
+  }
 
-    //this.socket = io('http://localhost:3000/jatek');
-
-
-
+  logout() {
+    localStorage.clear();
+    this.router.navigate(['/login']);
   }
 
 }

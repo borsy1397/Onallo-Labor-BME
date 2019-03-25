@@ -55,8 +55,6 @@ module.exports.authorizationMW = (req, res, next) => {
 
       req.userData = decoded;
       next();
-
-
       // uj token kell?
     });
   } else {

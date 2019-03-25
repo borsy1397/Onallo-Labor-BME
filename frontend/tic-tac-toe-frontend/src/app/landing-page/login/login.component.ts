@@ -35,7 +35,27 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     this.loginService.login(this.user).subscribe(res => {
-      // Ha sikerult a bejelentkezes, akkor a ketto tokent el kell tarolni --talan megoldva
+      localStorage.setItem('token', res.token);
+      localStorage.setItem('refreshToken', res.refreshToken);
+      localStorage.setItem('username', res.username)
+
+      this.correct = true;
+
+      this.spinner.show();
+      setTimeout(() => {
+        this.spinner.hide();
+        this.router.navigate(['/home']);
+      }, 2500);
+    }, err => {
+      this.correct = false;
+      this.errorMessage = err.error.message;
+    });
+  }
+
+}
+
+
+// Ha sikerult a bejelentkezes, akkor a ketto tokent el kell tarolni --talan megoldva
 
       // HEADERBE BERAKNI A TOKENEKET KERESNEL -- talan megoldva
 
@@ -43,7 +63,7 @@ export class LoginComponent implements OnInit {
       // Ezt valahol kezelni kell majd
       // Illetve regisztralni sem szabad, szoval ott is ellenorizni   ----- ez talan megoldva
 
-      // Token interceptor????? --- talan megoldva
+      // Token interceptor????? --- talan megoldva, vagyis hat refreshtoken meg nincs megcsinalva, meg ketszer kuldi vissza(?)
 
 
       /*import { HttpHeaders } from '@angular/common/http';
@@ -75,25 +95,3 @@ export class LoginComponent implements OnInit {
       //   component: LoginComponent,
       //   resolve: [IsLoggedIn]
       // }
-
-      //  A localstorageba itt kene beleraknom a tokeneket?????? --- talan megoldva
-
-      localStorage.setItem('token', res.token);
-      localStorage.setItem('refreshToken', res.refreshToken);
-      localStorage.setItem('username', res.username)
-
-      this.correct = true;
-
-      this.spinner.show();
-      setTimeout(() => {
-        this.spinner.hide();
-        this.router.navigate(['/home']);
-      }, 2500);
-    }, err => {
-      this.correct = false;
-      this.errorMessage = err.error.message;
-    });
-
-  }
-
-}

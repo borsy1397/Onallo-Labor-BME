@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GameService } from 'src/app/services/game/game.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { Router } from '@angular/router';
+import { Message } from 'src/app/model/Message';
 
 @Component({
   selector: 'app-play',
@@ -15,8 +16,9 @@ export class PlayComponent implements OnInit {
 
   roomName: string = null;
   myname: string = localStorage.getItem('username');
-
-  messages = <Array<String>> [];
+  enemyName: string = null;
+  messages: Message[] = [];
+  message: string = "";
 
   returnToLobby() {
     this.router.navigate(['/home/games']);
@@ -24,38 +26,47 @@ export class PlayComponent implements OnInit {
 
 
   ngOnInit() {
+    // meglehet akadolyozni, hogy refresheljuk a paget????? AZ lenne a legjobb megoldas vagy ez, hogy meghivjuk az ondestroyt????
 
-    this.authService.checkAuth();
     if (!this.gameService.inGame()) {
-      this.router.navigate(['/home/games']);
-    } 
-    // a /home/play routera navigalni ne lehessen, csak akkor, ha jatekban van
+      this.returnToLobby();
+    }
     
+    window.onbeforeunload = () => this.ngOnDestroy();
+
     this.gameService.startGame().subscribe((response) => {
       this.roomName = response['roomName'];
+      this.enemyName = this.myname === this.roomName ? response['ellenfel'] : this.roomName;
     });
 
-    this.gameService.receiveMessage().subscribe((response) => {
-      let kuldo = response['kuldo'];
-      let uzenet = response['uzenet'];
-      console.log(kuldo);
-      this.messages.push(`${kuldo}: ${uzenet}`);
+    this.gameService.receiveMessage().subscribe((socketResponse: Message) => {
+      this.messages = [...this.messages, socketResponse];
     });
 
     this.gameService.playerLeft().subscribe((response) => {
-
-      // itt mutatni a vegeredmenyt, ha a player eltunik
       alert('Player Left, You are the winner');
+      this.returnToLobby();
     });
   }
 
-  ngOnDestroy(){
-    // a /home/play routera navigalni ne lehessen, csak akkor, ha jatekban van
-    localStorage.removeItem('inGame');
-    this.gameService.disconnect();
-  }
 
   sendMessage() {
-    this.gameService.sendMessage({username: this.myname, message: 'anyad'});
+    this.message = this.message.trim();
+    if (this.message.length > 0) {
+      this.gameService.sendMessage({
+        from: this.myname,
+        //to: 'user2',
+        message: this.message
+      });
+    }
+    this.message = "";
+  }
+
+  alignMessage(username: string): boolean {
+    return this.myname === username ? true : false;
+  }
+  ngOnDestroy() {
+    localStorage.removeItem('inGame');
+    this.gameService.disconnect();
   }
 }

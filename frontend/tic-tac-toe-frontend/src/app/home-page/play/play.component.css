@@ -1,5 +1,6 @@
 .messageBox {
     height: 90%;
+    background: rgb(247, 193, 131);
 }
 
 .sendMessage {
@@ -9,4 +10,14 @@
 .chat {
     height: 500px;
     width: 300px;
+}
+
+.messageBox ul {
+    list-style-type: none;
+    display: block;
+    margin-block-start:0.2em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 5px;
 }

@@ -1,0 +1,10 @@
+.create-room {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+}
+
+.join-game {
+    height: 400px;
+    position: relative;
+}

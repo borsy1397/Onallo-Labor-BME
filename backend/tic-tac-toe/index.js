@@ -23,7 +23,7 @@ app.use((err, req, res, next) => {
     res.status(500).send("Error!");
 });
 
-require('./routes/game')(app);
+//require('./routes/game')(app);
 require('./routes/user')(app);
 require('./routes/general')(app);
 
@@ -42,35 +42,20 @@ app.get('/getGames', (request,response) => {
 
 
 io.on('connection', socket => {
-    console.log("Connected...... " + socket.id);
+    console.log("Connected...... " + socket.id);  
 
-    /*Promise.all(['totalRoomCount', 'usersInGame', 'allRooms'].map(key => redisDB.getAsync(key))).then(values => {
-        const allRooms = JSON.parse(values[2]);
-        let totalRoomCount = values[0];
-        let fullRooms = allRooms['fullRooms'];
-        let emptyRooms = allRooms['emptyRooms'];
-
-        io.emit('rooms-available', {
-            'totalRoomCount': totalRoomCount,
-            'fullRooms': fullRooms,
-            'emptyRooms': emptyRooms
-        });
-    });*/
 
     /**
      * Szoval: tokent majd itt kell vizsgalni, hogy ervenyes e: jwt.verify()....
      */
 
     socket.on('create-room', data => {
-        //databan at kellene adni majd a usernamet
         Promise.all(['totalRoomCount', 'usersInGame', 'allRooms'].map(key => redisDB.getAsync(key))).then(values => {
             const allRooms = JSON.parse(values[2]);
             let usersInGame = JSON.parse(values[1])['users'];
             let totalRoomCount = values[0];
             let fullRooms = allRooms['fullRooms'];
             let emptyRooms = allRooms['emptyRooms'];
-
-            // majd azt kell megcsinalni, hogy ne a totalRoomCount legyen, hanem pl. a username legyen az azonosito
 
             const _userInGame = usersInGame.includes(socket.id);
 
@@ -96,7 +81,6 @@ io.on('connection', socket => {
 
                     console.log('Create room! Jelenleg jatekban levok ' + usersInGame);
 
-                    // Ha uj jatekot csinalnak, akkor emitelni kell, hogy uj jatek jott letre 
                     io.emit('rooms-available', {
                         'totalRoomCount': totalRoomCount,
                         'fullRooms': fullRooms,
@@ -104,11 +88,10 @@ io.on('connection', socket => {
                     });
 
                     io.sockets.in("room-" + data.username).emit('new-room', {
-                        'roomName': data.username, // en irtam
+                        'roomName': data.username,
                         'totalRoomCount': totalRoomCount,
                         'fullRooms': fullRooms,
                         'emptyRooms': emptyRooms,
-                        //'roomNumber': totalRoomCount
                     });
                 }
             }
@@ -141,7 +124,6 @@ io.on('connection', socket => {
                         users: usersInGame
                     }));
 
-                    /* User Joining socket room */
                     socket.join("room-" + roomName);
                     redisDB.set("allRooms", JSON.stringify({
                         emptyRooms: emptyRooms,
@@ -149,7 +131,6 @@ io.on('connection', socket => {
                     }));
 
                     /* Getting the room number from socket */
-                    // Most ez tenyleg kell? felesleges szerintem
                     const currentRoom = (Object.keys(io.sockets.adapter.sids[socket.id]).filter(item => item != socket.id)[0]).split('-')[1];
                     io.emit('rooms-available', {
                         'totalRoomCount': totalRoomCount,
@@ -174,14 +155,79 @@ io.on('connection', socket => {
 
     socket.on('send-message', data => {
         console.log(data);
+        // ez itt full felesleges, hiszen csak a username-t kell beirni - roomName
         const currentRoom = (Object.keys(io.sockets.adapter.sids[socket.id]).filter(item => item != socket.id)[0]).split('-')[1];
         io.sockets.in("room-" + currentRoom).emit('receive-message', {
             'uzenet': data.message,
-            'kuldo': data.username
+            //'kinek': data.to
+            'kuldo': data.from
         });
     });
 
+    socket.on('send-move', move => {
+        const roomName = move.roomName;
+        const whoseMove = move.myMove;
+        const whichGrid = move.grid;
 
+        /**
+         * 
+         * TODO:
+         * - a redisbeli game listabol kiszedni a megfelelo jatekot
+         * - eltarolni a jatek aktualis allasat
+         * - kliens oldalon nyilvan letiltani azt, amit nem lehet lepni, viszont szerveroldalon is ellenorizni, hogy valid-e
+         *   a lepes. Vagy, ha rosszat akar lepni, akkor emitelni? Vagy csak nem reagalni ra? pontosabban ne emiteljunk semmit?
+         * - Figyelni, hogy ha az a jatekos tudna a kliensoldali tiltas elleneri send-moveolni, akkor azt ne fogadjuk el
+         *   Ezt ellenorizni, hogy ki jon
+         * - NEM IS KELL UJ CUCC A REDISBE (GAMES), HANEM A FULLROOMS AZ TOK JO!!!!!! Vagy lehet nem.........ű
+         * - kiszervezni kulon osztalyba a Game objekumot
+         */
+
+        /*const lol = {
+            id: 
+            whoseMove: player1,
+            users: ['player1', 'player2'],
+            scores: ['score1', 'score2']
+        }*/
+
+    
+         Promise.all(['games'].map(key => redisDB.getAsync(key))).then(values => {
+            const games = JSON.parse(values[0])['games'];
+
+            // ide szep forEachet irni!!!
+            let jatek = null;
+
+            for(i = 0; i < games.length; i++) {
+                if(games[i].id === roomName){
+                    jatek = games[i];
+                }
+            }
+
+            if(jatek){
+                if(jatek.whoseMove === whoseMove){
+                    /**
+                     * itt kell majd egy if, hogy a lepes az megfelelo mezore tortent e
+                     * ha jo mezore, akkor megvizsgalni, hogy vege e a jateknak
+                     */
+                                
+                    redisDB.set('games', JSON.stringify({
+                        games: jatek
+                    }));
+                    
+                    io.sockets.in("room-" + roomName).emit('receive-move', {
+                        'whoseTurn': idePlayerNametIrni,
+                        'roomName': roomName
+                    });
+                }
+            }
+
+
+
+         });
+
+    });
+
+
+    // send move --> noautoformat.js
 
     socket.on('disconnecting', () => {
         console.log('User disconnected');
@@ -204,17 +250,6 @@ io.on('connection', socket => {
                         users: usersInGame
                     }));
                 }
-               
-
-
-                /**
-                 * 
-                 * TOROLNI A JATEKOT!!!! totalroomcountnal n
-                 * EMITELNI elkuldeni a total room countot
-                 * 
-                 * todo: page refreshnel felismerni, hogy ez ugyanaz
-                 * 
-                 */
 
                 let fullRoomsPos = fullRooms.indexOf(roomName);
                 if (fullRoomsPos > -1) {
@@ -228,12 +263,12 @@ io.on('connection', socket => {
                     totalRoomCount--;
                 }
 
-
                 redisDB.set("totalRoomCount", totalRoomCount);
                 redisDB.set("allRooms", JSON.stringify({
                     emptyRooms: emptyRooms,
                     fullRooms: fullRooms
                 }));
+
                 console.log('Disconnection........ SocketID:' + socket.id);
                 console.log('Jatekban levok: ' + usersInGame);
                 io.sockets.in("room-" + roomName).emit('room-disconnect', { id: socket.id });
@@ -242,6 +277,8 @@ io.on('connection', socket => {
                     'fullRooms': fullRooms,
                     'emptyRooms': emptyRooms
                 });
+
+                // kiszedni a redisbeli games-bol a jatekot, ha a user disconnectel
                 
             });
         }

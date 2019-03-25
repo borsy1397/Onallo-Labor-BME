@@ -5,25 +5,72 @@
   <p>this user created the room: {{roomName}}</p>
   <p>this is my name: {{myname}}</p>
   <p>the enemy name do not availevable yet</p> -->
+  <!-- <div class="container text-center" style="display: inline-block;">
+      <div class="chat" style="display: inline-block;">
+          <div class="container">
+              <div class="row heading-row">
+                <div class="col-md-12 text-center app-heading">
+                  <h2>Cim</h2>
+                </div>
+                <div class="col-md-6 text-center">
+                  <div class="player-heading" [class.current-player]="displayPlayerTurn">
+                    Player 1
+                  </div>
+                </div>
+                <div class="col-md-6 text-center">
+                  <div class="player-heading"  [class.current-player]="!displayPlayerTurn">
+                    Player 2
+                  </div>
+                </div>
+              </div>	
+              <div class="row game-row">
+                <div class="text-center game-container">
+                  <table id="game" class="game-grid" #game>
+                    <tr *ngFor="let iterationNumber of gameGrid">
+                      <td *ngFor="let number of iterationNumber"
+                         class="grid-{{number}}"
+                        id="grid{{number}}" (click)="play(number)">
+                          {{ renderPlayedText(number)}}
+                      </td>
+                    </tr>
+                  </table>
+                  <br/>
+                  <h6 class="text-center">You are in Room Number {{roomNumber}}.</h6>
+                </div>
+              </div>
+            </div>
+      </div>
+    </div> -->
 
-  <div class="container text-center" style="background: pink;">
-    <div class="chat" style="background: green; display: inline-block;">
-      <div class="messageBox" style="background: blue;">
+  <div class="container text-center" style="display: inline-block;">
+    <div class="chat" style="display: inline-block;">
+      <div class="messageBox">
+        <div style="border-bottom: 1px solid grey">
+            <p>Your enemy's name: {{enemyName}}</p>
+        </div>
         <ul>
-          <li *ngFor="let message of messages">
-            {{message}}
+          <li *ngFor="let message of messages" class="text-left" [class.text-right]="alignMessage(message.kuldo)" style="margin-bottom: 10px;">
+            <span style="background: rgb(245, 219, 185);  padding: 3px;" >
+                {{message.uzenet}}
+            </span>
           </li>
         </ul>
       </div>
       <div class="sendMessage">
         <form style="width: 100%;">
-          <input id="m" style="width: 80%;" autocomplete="off" /><button style="width: 20%;"
+          <input id="message" [(ngModel)]="message" name="message" style="width: 80%;" autocomplete="off" /><button style="width: 20%;"
             (click)="sendMessage()">Send</button>
         </form>
       </div>
     </div>
   </div>
+  
+<div style="display: inline-block;">
+
 </div>
+
+</div>
+
 
   <div [hidden]="roomName == null ? false : true">
     <h2 class="text-center">Waiting for player to join....</h2>

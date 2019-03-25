@@ -17,13 +17,13 @@ main {
 header {
     height: 20%;
     width: 100%;
-    background: cyan;
+    background-image: linear-gradient(#D4D3DD, #EFEFBB, 0.2);
 }
 
 footer {
     height: 10%;
     width: 100%;
-    background: grey;
+    background-image: linear-gradient(#EFEFBB, #D4D3DD, 0.2);
 }
 
 .full-page > .container {

@@ -22,6 +22,7 @@ export class TokenInterceptor implements HttpInterceptor {
      * Ezzel valami kezdeni, hogy ne ketszer kuldje el, vagy mi
      */
     return next.handle(authReq).pipe(tap(event => {
+      //ezt a pipos faszsagot lehet el kell tuntetni
       console.log("Nincs hiba a tokennel - interceptor");
       console.log(event);
       console.log("-------------------------------------------------------------");
