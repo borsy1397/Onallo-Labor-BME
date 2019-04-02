@@ -6,15 +6,19 @@ socket.on('send-move', move => {
     const whoseMove = move.myMove;
     const whichGrid = move.grid;
 
-    Promise.all(['games'].map(key => redisDB.getAsync(key))).then(values => {
+    Promise.all(['games', 'usersInGame', 'allRooms', 'totalRoomCount'].map(key => redisDB.getAsync(key))).then(values => {
         const games = JSON.parse(values[0])['games'];
-
+        let usersInGame = JSON.parse(values[1])['users'];
+        const allRooms = JSON.parse(values[2]);
+        let fullRooms = allRooms['fullRooms'];
+        let totalRoomCount = values[3];
 
         let jatek = null;
         // ide szep forEachet irni!!!
-        for (i = 0; i < games.length; i++) {
-            if (games[i].id === roomName) {
-                jatek = games[i];
+        let gameIndex = null;
+        for (gameIndex = 0; gameIndex < games.length; gameIndex++) {
+            if (games[gameIndex].id === roomName) {
+                jatek = games[gameIndex];
             }
         }
 
@@ -23,6 +27,7 @@ socket.on('send-move', move => {
                 /**
                  * itt kell majd egy if, hogy a lepes az megfelelo mezore tortent e
                  * ha jo mezore, akkor megvizsgalni, hogy vege e a jateknak
+                 * van e egyaltalan ilyen mezo? amit kuldd a user... megvizsgalni, hogy valid e - 1-2-4-8-16....
                  */
 
                 /*const lol = {
@@ -42,13 +47,14 @@ socket.on('send-move', move => {
                      * na itt ezt szepen megirni, hogy melyik poziciot frissitse!!!!
                      */
                     let indexx = null;
-                    if (whoseMove === 'player1') {
+                    if (whoseMove === jatek.users[0]) {
                         indexx = 0;
                     } else {
                         indexx = 1;
                     }
 
                     jatek.scores[indexx] += whichGrid;
+                    jatek.gameState.push(whichGrid);
 
 
                     const wins = [7, 56, 448, 73, 146, 292, 273, 84];
@@ -56,14 +62,76 @@ socket.on('send-move', move => {
                         if ((winningPosition & jatek.scores[indexx]) === winningPosition) {
                             // JATEK VEGE!!!!
                             // kiszedni a games-bol az aktualis jatekot, illetve a full roomsbol, meg a usersInGamebol is
-                        } else {
-                            // if dontetlen
-                            // kulonben jatek megy tovabb
+                            // eltarolni mindket usernel a GameResultot
+
+                            games.splice(gameIndex, 1);
+
+                            /*let usersInGamePos = usersInGame.indexOf(socket.id);
+                            if (usersInGamePos > -1) {
+                                usersInGame.splice(usersInGamePos, 1);
+                                redisDB.set("usersInGame", JSON.stringify({
+                                    users: usersInGame
+                                }));
+                            }
+
+                            let fullRoomsPos = fullRooms.indexOf(roomName);
+                            if (fullRoomsPos > -1) {
+                                fullRooms.splice(fullRoomsPos, 1);
+                                totalRoomCount--;
+                            }*/
+                            
+                            // receive movet ide is!!!!
+                            io.sockets.in("room-" + roomName).emit('receive-move', {
+                                'whoseTurn': null,
+                                'roomName': null,
+                                'whichGrid': whichGrid
+                            });
+
+                            io.sockets.in("room-" + roomName).emit('game-end', {
+                                'draw': false,
+                                'winner': whoseMove
+                            });
                         }
                     });
 
+                    if (jatek.gameState.length >= 9) {
 
-                    games[i] = jatek;
+
+                        games.splice(gameIndex, 1);
+
+                        //dontetlen
+                        io.sockets.in("room-" + roomName).emit('receive-move', {
+                            /**
+                             * eldonteni, hogy aztadjuk vissza, hogy ki jon, vagy vagy hogy ki volt, de szerintem ez jo igy.
+                             * Max annyi, hogy erthetobben elnevezni, pl. WhoIsNext
+                             */
+                            'whoseTurn': null,
+                            'roomName': null,
+                            'whichGrid': whichGrid
+                        });
+
+                        io.sockets.in("room-" + roomName).emit('game-end', {
+                            'draw': true,
+                            'winner': null
+                        });
+                        //eltarolni mindket usernel a GameResultot
+                    } else {
+                        games[gameIndex] = jatek;
+                        redisDB.set('games', JSON.stringify({
+                            games: games
+                        }));
+
+                        io.sockets.in("room-" + roomName).emit('receive-move', {
+                            'whoseTurn': indexx === 0 ? jatek.users[1] : jatek.users[0],
+                            'roomName': roomName,
+                            'whichGrid': whichGrid
+                        });
+                    }
+                    // if dontetlen
+                    // kulonben jatek megy tovabb
+
+
+                    /*games[i] = jatek;
                     redisDB.set('games', JSON.stringify({
                         games: games
                     }));
@@ -71,11 +139,8 @@ socket.on('send-move', move => {
                     io.sockets.in("room-" + roomName).emit('receive-move', {
                         'whoseTurn': idePlayerNametIrni,
                         'roomName': roomName
-                    });
+                    });*/
                 }
-
-
-
             }
         }
     });

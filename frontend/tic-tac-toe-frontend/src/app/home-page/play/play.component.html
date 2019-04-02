@@ -5,10 +5,10 @@
   <p>this user created the room: {{roomName}}</p>
   <p>this is my name: {{myname}}</p>
   <p>the enemy name do not availevable yet</p> -->
-  <!-- <div class="container text-center" style="display: inline-block;">
+  <div class="container text-center" style="display: inline-block;">
       <div class="chat" style="display: inline-block;">
           <div class="container">
-              <div class="row heading-row">
+              <!-- <div class="row heading-row">
                 <div class="col-md-12 text-center app-heading">
                   <h2>Cim</h2>
                 </div>
@@ -22,16 +22,33 @@
                     Player 2
                   </div>
                 </div>
-              </div>	
+              </div>	 -->
               <div class="row game-row">
                 <div class="text-center game-container">
-                  <table id="game" class="game-grid" #game>
+                  <!-- <table id="game" class="game-grid" #game>
                     <tr *ngFor="let iterationNumber of gameGrid">
                       <td *ngFor="let number of iterationNumber"
                          class="grid-{{number}}"
                         id="grid{{number}}" (click)="play(number)">
                           {{ renderPlayedText(number)}}
                       </td>
+                    </tr>
+                  </table> -->
+                  <table class="center">
+                    <tr>
+                      <td><button (click)="sendMove(1)" class="tile" id="button_01"></button></td>
+                      <td><button (click)="sendMove(2)" class="tile" id="button_02"></button></td>
+                      <td><button (click)="sendMove(4)" class="tile" id="button_4"></button></td>
+                    </tr>
+                    <tr>
+                      <td><button (click)="sendMove(8)" class="tile" id="button_8"></button></td>
+                      <td><button (click)="sendMove(16)" class="tile" id="button_16"></button></td>
+                      <td><button (click)="sendMove(32)" class="tile" id="button_32"></button></td>
+                    </tr>
+                    <tr>
+                      <td><button (click)="sendMove(64)" class="tile" id="button_64"></button></td>
+                      <td><button (click)="sendMove(128)" class="tile" id="button_128"></button></td>
+                      <td><button (click)="sendMove(256)" class="tile" id="button_256"></button></td>
                     </tr>
                   </table>
                   <br/>
@@ -40,7 +57,7 @@
               </div>
             </div>
       </div>
-    </div> -->
+    </div>
 
   <div class="container text-center" style="display: inline-block;">
     <div class="chat" style="display: inline-block;">

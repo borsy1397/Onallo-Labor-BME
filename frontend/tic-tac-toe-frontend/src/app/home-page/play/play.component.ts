@@ -19,6 +19,8 @@ export class PlayComponent implements OnInit {
   enemyName: string = null;
   messages: Message[] = [];
   message: string = "";
+  whoseTurn: string = null;
+  whichIsActualGridWhatIGetAfterSend: string = null;
 
   returnToLobby() {
     this.router.navigate(['/home/games']);
@@ -43,9 +45,40 @@ export class PlayComponent implements OnInit {
       this.messages = [...this.messages, socketResponse];
     });
 
+    this.gameService.receiveMove().subscribe(response => {
+      this.whoseTurn = response['whoseTurn'];
+      this.whichIsActualGridWhatIGetAfterSend = response['whichGrid'];
+      // na ennel kell majd kirajzolni!!!! mittudom, pl. renderActualGameBoard(). ezt a hosszu nevu valtozot bele kell rakni
+      // az aktualis tablaba, amit majd csinalok. pl. gameBoard 2 dimenzios matrix (3x3)
+      // a fentebb levo response[] cuccokat amugy nem is kell eltarolni. Vagyis de, a whoseTurnet igen, de a masikat nem, mert
+      // csak belerakjuk egy gameBoardba, szoval az felesleges.
+      // ugyanis felesleges lesz a gameEndben is a drawot eltarolni!!!
+    })
+
+    this.gameService.gameEnd().subscribe(response => {
+      if(response['draw']) {
+        alert('DRAW');
+      } else {
+        alert('THE WINNER IS:' + response['winner']);
+      }
+
+      // es itt majd csinalni csudijo dolgokat, pl. animacio hogy keresztbehuzzok a nyero reszt, meg gratulalunk, meg minden
+      //vagyis szerintem ezt itt kell majd
+
+    })
+
     this.gameService.playerLeft().subscribe((response) => {
       alert('Player Left, You are the winner');
       this.returnToLobby();
+    });
+  }
+
+  sendMove(grid) {
+    // itt is ellenorizni majd minden szir szart, hogy nem e lepett mar e oda, meg ilyesmi
+    this.gameService.sendMove({
+      myMove: this.myname,
+      //to: 'user2',
+      whichGrid: +grid
     });
   }
 

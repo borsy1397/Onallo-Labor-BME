@@ -51,7 +51,11 @@ export class GameComponent implements OnInit {
   joinRoom(roomName) {
     this.gameService.joinNewRoom(roomName);
     localStorage.setItem('inGame', 'true');
+    // ha a jatekos mar jatekban van egy kliensbol, es csatlakozni akarunk pl. a sajat jatekonhoz, amit letre hoztunk egy
+    // kliensbol, akkor is atnagival. Ezt valahogy megoldani, hogy ilyen ne legyen
     this.router.navigate(['/home/play']);
   }
+
+
 
 }

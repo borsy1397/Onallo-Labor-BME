@@ -1,7 +1,6 @@
 const redis = require('redis');
 const bluebird = require('bluebird');
 
-
 const redisClient = redis.createClient();
 bluebird.promisifyAll(redisClient);
 
@@ -15,6 +14,10 @@ redisClient.set("usersInGame", JSON.stringify({
 redisClient.set("allRooms", JSON.stringify({
     emptyRooms: [],
     fullRooms: []
+}));
+
+redisClient.set("games", JSON.stringify({
+    games: []
 }));
 
 module.exports = redisClient;

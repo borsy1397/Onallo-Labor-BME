@@ -18,6 +18,44 @@ export class GameService {
 		this.socket = io('http://localhost:3000');
 	}
 
+	gameEnd(): any {
+		return new Observable(observer => {
+			if (this.socket != null) {
+				this.socket.on('game-end', (data) => {
+					observer.next(
+						data
+					);
+				});
+				return () => {
+					this.socket.disconnect();
+				};
+			}
+		});
+	}
+	
+	sendMove(moveDetails) {
+		if (this.socket != null) {
+			console.log(moveDetails);
+			this.socket.emit('send-move', moveDetails);
+		}
+	}
+
+	receiveMove(): any {
+		return new Observable(observer => {
+			if (this.socket != null) {
+				this.socket.on('receive-move', (data) => {
+					observer.next(
+						data
+					);
+				});
+				return () => {
+					this.socket.disconnect();
+				};
+			}
+		});
+	}
+
+
 	sendMessage(data) {
 		if (this.socket != null) {
 			this.socket.emit('send-message', data);
