@@ -6,10 +6,18 @@ const gameResultSchema = new mongoose.Schema({
     // vagy a winner es loser is legyen tomb, ahol a szimbolumot is taroljuk?
     // lepesek: ha nem 3x3 lenne, akkor lehetnenek lepesek is (amugy is, csak nem izgalmas)
     // mennyi ideig jatszottak
-    winner: {type: String, unique: true },
-    loser: {type: String, unique: true },
-    finishedDate: { type: Date, default: Date.now },
-    //points: Number
+    win: {type: Boolean},
+    draw: {type: Boolean},
+    enemy: {type: Object}, //vagy csak stringkent taroljuk a nevet? Elegansabb lenne, ha maga a user lenne, es akkor lehet navigalni a profiljara
+    //finishedDate: { type: Date, default: Date.now },
+    //roomName: {type: String},
+    //moves: {type: Number}
+    //playtime
+    // whostart
+    // createdDate
+    //type
+    // roomname
+    
 });
 
 const GameResult = new mongoose.model('GameResult', gameResultSchema);
