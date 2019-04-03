@@ -1,4 +1,5 @@
-const GameResult = require('../models/GameResult');
+const GameResult = require('../../models/GameResult');
+const User =  require('../../models/User');
 
 module.exports = (io, redisDB) => {
 
@@ -9,7 +10,8 @@ module.exports = (io, redisDB) => {
          */
     
         socket.on('create-room', data => {
-            Promise.all(['totalRoomCount', 'usersInGame', 'allRooms'].map(key => redisDB.getAsync(key))).then(values => {
+            require('./create-room')(io, socket, redisDB, data);
+            /*Promise.all(['totalRoomCount', 'usersInGame', 'allRooms'].map(key => redisDB.getAsync(key))).then(values => {
                 const allRooms = JSON.parse(values[2]);
                 let usersInGame = JSON.parse(values[1])['users'];
                 let totalRoomCount = values[0];
@@ -55,7 +57,7 @@ module.exports = (io, redisDB) => {
                         });
                     }
                 }
-            });
+            });*/
         });
     
         socket.on('join-room', data => {
@@ -241,60 +243,97 @@ module.exports = (io, redisDB) => {
                             const wins = [7, 56, 448, 73, 146, 292, 273, 84];
                             wins.forEach((winningPosition) => {
                                 if ((winningPosition & jatek.scores[indexx]) === winningPosition) {
+
+                                    // Ha vege a jateknak, akkor itt kileptetni valahogy mindenkit, vagy majd disconnectnel ezt ugyis megcsinaljuk?
                                     // JATEK VEGE!!!!
                                     // kiszedni a games-bol az aktualis jatekot, illetve a full roomsbol, meg a usersInGamebol is
                                     // eltarolni mindket usernel a GameResultot
-                                    
-        
+
+                                    User.findOne({ username: whoseMove})
+                                        .exec()
+                                        .then(user => {
+                                            if (!user) {
+                                                console.log("nincs is ilyen user, lol");
+                                            } else {
+                                                User.findOne({ username: whoIsNext})
+                                                .exec()
+                                                .then(user2 => {
+                                                    if (!user2) {
+                                                        console.log("nincs is ilyen user, lol");
+                                                    } else {
+                                                        
+                                                        const gameResultWin = new GameResult({
+                                                            //_id: new mongoose.Types.ObjectId(),
+                                                            draw: false,
+                                                            win: true,
+                                                            enemy: user2 // Na ide kell majd megadni a usert. De ameddig nincs, addig stringkent taroljuk
+                                                            // De faszom, itt csak a stringet tudjuk, tehat csak a nevet. Le kell kerdezni az ID-t
+                                                            // ki kell olvasnunk az adatbazisbol!!!! Users.find(....)
+                                                            // at kell majd gondolni, hogy alapjaiba veve megvaltoztatjuk a strukturajat a programnak, hogy
+                                                            // pl. id-t tarolunk a jatek kozben, meg a fullroomsnal, meg ilyesmi.
+                                                        });
+                                              
+                                                        gameResultWin
+                                                         .save()
+                                                          .then(result => {
+                                                             console.log(result);
+                                                          })
+                                                          .catch(err => {
+                                                            console.log(err);
+                                                        });
+
+                                                        const gameResultLose = new GameResult({
+                                                            //_id: new mongoose.Types.ObjectId(),
+                                                            draw: false,
+                                                            win: false,
+                                                            enemy: user // Na ide kell majd megadni a usert. De ameddig nincs, addig stringkent taroljuk
+                                                            // De faszom, itt csak a stringet tudjuk, tehat csak a nevet. Le kell kerdezni az ID-t
+                                                            // ki kell olvasnunk az adatbazisbol!!!! Users.find(....)
+                                                            // at kell majd gondolni, hogy alapjaiba veve megvaltoztatjuk a strukturajat a programnak, hogy
+                                                            // pl. id-t tarolunk a jatek kozben, meg a fullroomsnal, meg ilyesmi.
+                    
+                                                          });
+                                              
+                                                          gameResultLose
+                                                            .save()
+                                                            .then(result => {
+                                                              console.log(result);
+                                                            })
+                                                            .catch(err => {
+                                                              console.log(err);
+                                                            });
+                                                                        
+                                                            // A USERHEZ IS EL KELL MENTENI!!!!!! szoval le kell kerni a usereket
+                            
+                                                        user2.games.push(gameResultLose);
+                                                        user2.save().then(result => {
+                                                            console.log(result);
+                                                        });
+
+                                                        user.games.push(gameResultWin);
+                                                        user.save().then(result => {
+                                                            console.log(result);
+                                                        });
+                    
+                                                    }
+                                                })
+                                                .catch(err => {
+                                                    console.log(err);
+                                                });
+            
+                                            }
+                                        })
+                                        .catch(err => {
+                                            console.log(err);
+                                        });
+                                        
+
                                     //games.splice(gameIndex, 1);
 
                                     // DISCONNECTHEZ IS GAME RESULT
 
-                                   /* const gameResultWin = new GameResult({
-                                        //_id: new mongoose.Types.ObjectId(),
-                                        draw: false,
-                                        win: true,
-                                        enemy: null // Na ide kell majd megadni a usert. De ameddig nincs, addig stringkent taroljuk
-                                        // De faszom, itt csak a stringet tudjuk, tehat csak a nevet. Le kell kerdezni az ID-t
-                                        // ki kell olvasnunk az adatbazisbol!!!! Users.find(....)
-                                        // at kell majd gondolni, hogy alapjaiba veve megvaltoztatjuk a strukturajat a programnak, hogy
-                                        // pl. id-t tarolunk a jatek kozben, meg a fullroomsnal, meg ilyesmi.
-
-                                      });
-                          
-                                      gameResultWin
-                                        .save()
-                                        .then(result => {
-                                          console.log(result);
-                                        })
-                                        .catch(err => {
-                                          console.log(err);
-                                        });
-
+                                   
                                         
-                                    const gameResultLose = new GameResult({
-                                        //_id: new mongoose.Types.ObjectId(),
-                                        draw: false,
-                                        win: false,
-                                        enemy: null // Na ide kell majd megadni a usert. De ameddig nincs, addig stringkent taroljuk
-                                        // De faszom, itt csak a stringet tudjuk, tehat csak a nevet. Le kell kerdezni az ID-t
-                                        // ki kell olvasnunk az adatbazisbol!!!! Users.find(....)
-                                        // at kell majd gondolni, hogy alapjaiba veve megvaltoztatjuk a strukturajat a programnak, hogy
-                                        // pl. id-t tarolunk a jatek kozben, meg a fullroomsnal, meg ilyesmi.
-
-                                      });
-                          
-                                      gameResultLose
-                                        .save()
-                                        .then(result => {
-                                          console.log(result);
-                                        })
-                                        .catch(err => {
-                                          console.log(err);
-                                        });
-                                                    */
-                                        // A USERHEZ IS EL KELL MENTENI!!!!!! szoval le kell kerni a usereket
-        
                                     
                                     // receive movet ide is!!!!
                                     io.sockets.in("room-" + roomName).emit('receive-move', {
@@ -311,7 +350,91 @@ module.exports = (io, redisDB) => {
                             });
         
                             if (jatek.gameState.length >= 9) {
-        
+
+
+
+
+                                User.findOne({ username: whoseMove})
+                                .exec()
+                                .then(user => {
+                                    if (!user) {
+                                        console.log("nincs is ilyen user, lol");
+                                    } else {
+
+                                        const gameResultDraw = new GameResult({
+                                            //_id: new mongoose.Types.ObjectId(),
+                                            draw: true,
+                                            win: false,
+                                            enemy: whoIsNext // Na ide kell majd megadni a usert. De ameddig nincs, addig stringkent taroljuk
+                                            // De faszom, itt csak a stringet tudjuk, tehat csak a nevet. Le kell kerdezni az ID-t
+                                            // ki kell olvasnunk az adatbazisbol!!!! Users.find(....)
+                                            // at kell majd gondolni, hogy alapjaiba veve megvaltoztatjuk a strukturajat a programnak, hogy
+                                            // pl. id-t tarolunk a jatek kozben, meg a fullroomsnal, meg ilyesmi.
+    
+                                        });
+                              
+                                        gameResultDraw
+                                         .save()
+                                          .then(result => {
+                                             console.log(result);
+                                          })
+                                          .catch(err => {
+                                            console.log(err);
+                                        });
+
+                                        user.games.push(gameResultDraw);
+                                        user.save().then(result => {
+                                            console.log(result);
+                                        });
+    
+                                    }
+                                })
+                                .catch(err => {
+                                    console.log(err);
+                                });
+                                
+
+                                User.findOne({ username: whoIsNext})
+                                .exec()
+                                .then(user => {
+                                    if (!user) {
+                                        console.log("nincs is ilyen user, lol");
+                                    } else {
+
+                                        const gameResultDraw = new GameResult({
+                                            //_id: new mongoose.Types.ObjectId(),
+                                            draw: true,
+                                            win: false,
+                                            enemy: whoseMove // Na ide kell majd megadni a usert. De ameddig nincs, addig stringkent taroljuk
+                                            // De faszom, itt csak a stringet tudjuk, tehat csak a nevet. Le kell kerdezni az ID-t
+                                            // ki kell olvasnunk az adatbazisbol!!!! Users.find(....)
+                                            // at kell majd gondolni, hogy alapjaiba veve megvaltoztatjuk a strukturajat a programnak, hogy
+                                            // pl. id-t tarolunk a jatek kozben, meg a fullroomsnal, meg ilyesmi.
+    
+                                          });
+                              
+                                          gameResultDraw
+                                            .save()
+                                            .then(result => {
+                                              console.log(result);
+                                            })
+                                            .catch(err => {
+                                              console.log(err);
+                                            });
+                                                        
+                                            // A USERHEZ IS EL KELL MENTENI!!!!!! szoval le kell kerni a usereket
+            
+                                        user.games.push(gameResultDraw);
+                                        user.save().then(result => {
+                                            console.log(result);
+                                        });
+    
+                                    }
+                                })
+                                .catch(err => {
+                                    console.log(err);
+                                });
+     
                                 //game result itt is!!!
         
                                 //games.splice(gameIndex, 1);
@@ -403,6 +526,7 @@ module.exports = (io, redisDB) => {
                         emptyRooms: emptyRooms,
                         fullRooms: fullRooms
                     }));
+                    
     
                     console.log('Disconnection........ SocketID:' + socket.id);
                     console.log('Jatekban levok: ' + usersInGame);

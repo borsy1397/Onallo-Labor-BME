@@ -28,7 +28,7 @@ app.use((err, req, res, next) => {
 require('./routes/game')(app, redisDB);
 require('./routes/user')(app);
 require('./routes/general')(app);
-require('./utils/socket')(io, redisDB);
+require('./utils/socket/socket')(io, redisDB);
 
 
 const port = 3000;
