@@ -128,10 +128,6 @@ module.exports.loginMW = (req, res, next) => {
     });
 };
 
-/**
- * Email cimre kene kuldeni megerosito emailt.
- */
-
 module.exports.signupMW = (req, res, next) => {
   const userData = {
     email: req.body.email,
@@ -185,6 +181,7 @@ module.exports.signupMW = (req, res, next) => {
               email: userData.email,
               username: userData.username,
               password: hash
+              // Ide felvenni, hogy mikor csatlakozott!!!!!!, pontokat nullazni 
             });
 
             newUser

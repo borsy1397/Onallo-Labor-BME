@@ -9,10 +9,17 @@ module.exports = app => {
         getUserMW
     );
 
+    // app.get('/users/{id}');
 
-    // app.get('/user/all');
+    // app.get('/users/{id}');
 
-    // app.put('/user');
+    // app.put('/users/{id}');
 
-    // app.delete('/user');
+    // app.delete('/users/{id}');
+
+    // app.get('/users');
+
+    // app.post('/users');
+
+
 };

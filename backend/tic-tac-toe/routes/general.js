@@ -12,6 +12,7 @@ module.exports = app => {
         refreshTokenMW
     );
 
+    // nem kell olyan, hogy sign up, hanem ezt a userhez kell rakni, hogy post legyen
     app.post('/signup',
         signUpUserMW
     );

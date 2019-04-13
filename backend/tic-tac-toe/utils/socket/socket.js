@@ -1,7 +1,7 @@
 module.exports = (io, redisDB) => {
 
     io.on('connection', socket => {
-        console.log("Connected...... " + socket.id);  
+        console.log("Connected...... " + socket.id);
         /**
          * Szoval: tokent majd itt kell vizsgalni, hogy ervenyes e: jwt.verify()....
          */
@@ -27,9 +27,6 @@ module.exports = (io, redisDB) => {
         });
     });
 };
-
-
-
 
             // io.sockets.emit --> This will emit the event to ALL the connected clients
             // (event the socket that might have fired this event).
