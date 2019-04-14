@@ -1,4 +1,9 @@
 module.exports = (io, socket, redisDB, data) => {
+    const username = socket.decodedUsername;
+    /**
+     * Gondoljuk at, hogy mi legyen az egesznek a strukturaja
+     * Fullrooms? Emptyrooms? Mit taroljunk? Nevet, ahogy eddig? Vagy socket ID-t?
+     */
 
     Promise.all(['totalRoomCount', 'usersInGame', 'allRooms']
         .map(key => redisDB.getAsync(key)))
@@ -9,15 +14,14 @@ module.exports = (io, socket, redisDB, data) => {
             let fullRooms = JSON.parse(values[2])['fullRooms'];
             let emptyRooms = JSON.parse(values[2])['emptyRooms'];
 
-            const _userInGame = usersInGame.includes(socket.id) || usersInGame.includes(data.username)
-                                emptyRooms.includes(data.username) || fullRooms.includes(data.username);
+            const _userInGame = usersInGame.includes(socket.id) || usersInGameUsername.includes(username)
+                                emptyRooms.includes(username) || fullRooms.includes(username);
             if (!_userInGame) {
 
-                socket.username = data.username;
-
                 totalRoomCount++;
-                emptyRooms.push(data.username);
+                emptyRooms.push(username);
                 usersInGame.push(socket.id);
+                usersInGameUsername.push(username);
 
                 redisDB.set("totalRoomCount", totalRoomCount);
                 redisDB.set("allRooms", JSON.stringify({
@@ -25,12 +29,13 @@ module.exports = (io, socket, redisDB, data) => {
                     fullRooms: fullRooms
                 }));
                 redisDB.set("usersInGame", JSON.stringify({
-                    users: usersInGame
+                    users: usersInGame,
+                    usersName: usersInGameUsername
                 }));
 
                 // console.log('Create room! Jelenleg jatekban levok ' + usersInGame);
 
-                socket.join("room-" + data.username);
+                socket.join("room-" + username);
 
                 io.emit('rooms-available', {
                     'totalRoomCount': totalRoomCount,
@@ -39,7 +44,7 @@ module.exports = (io, socket, redisDB, data) => {
                 });
 
                 // Ezek igazabol nem is kellenek, csak hogy emitteljunk, az a lenyeg
-                io.sockets.in("room-" + data.username).emit('new-room', {});
+                io.sockets.in("room-" + username).emit('new-room', {});
 
             }
         });

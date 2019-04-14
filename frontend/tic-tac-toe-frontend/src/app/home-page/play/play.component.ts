@@ -61,6 +61,7 @@ export class PlayComponent implements OnInit {
       } else {
         alert('THE WINNER IS:' + response['winner']);
       }
+      this.returnToLobby();
 
       // es itt majd csinalni csudijo dolgokat, pl. animacio hogy keresztbehuzzok a nyero reszt, meg gratulalunk, meg minden
       //vagyis szerintem ezt itt kell majd

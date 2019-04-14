@@ -15,7 +15,9 @@ export class GameService {
 	socket = null;
 
 	connect() {
-		this.socket = io('http://localhost:3000');
+		this.socket = io('http://localhost:3000', {
+			query: { token: localStorage.getItem('token') }
+		});
 	}
 
 	gameEnd(): any {
@@ -32,7 +34,7 @@ export class GameService {
 			}
 		});
 	}
-	
+
 	sendMove(moveDetails) {
 		if (this.socket != null) {
 			console.log(moveDetails);
@@ -126,7 +128,22 @@ export class GameService {
 				'roomName': roomName,
 				'username': localStorage.getItem('username')
 			});
+
+			console.log(this.socket.decodedUsername);
 		}
+
+		return new Observable(observer => {
+			if (this.socket != null) {
+				this.socket.on('goto-play', (data) => {
+					observer.next(
+						data
+					);
+				});
+				return () => {
+					this.socket.disconnect();
+				};
+			}
+		});
 	}
 
 	startGame(): any {
@@ -170,45 +187,6 @@ export class GameService {
 		return !!localStorage.getItem('inGame');
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

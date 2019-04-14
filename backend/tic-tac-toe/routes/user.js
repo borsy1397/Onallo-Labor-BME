@@ -4,12 +4,15 @@ const getUserMW = require('../middlewares/user').getUserMW;
 
 module.exports = app => {
 
-    app.get('/user',
+    /*app.get('/user',
+        authorizationMW,
+        getUserMW
+    );*/
+
+    app.get('/users/{id}',
         authorizationMW,
         getUserMW
     );
-
-    // app.get('/users/{id}');
 
     // app.get('/users/{id}');
 
