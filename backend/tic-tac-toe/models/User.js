@@ -1,4 +1,4 @@
-const mongoose = require('../config').mongoose;
+const mongoose = require('../utils/db/mongo/mongoose').mongoose;
 
 const userSchema = new mongoose.Schema({
     email: {type: String, unique: true, required: true, trim: true},  

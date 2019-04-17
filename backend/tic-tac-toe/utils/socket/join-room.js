@@ -1,4 +1,5 @@
 module.exports = (io, socket, redisDB, data) => {
+    const username = socket.decodedUsername;
     const roomName = data.roomName;
     Promise.all(['totalRoomCount', 'usersInGame', 'allRooms', 'games'].map(key => redisDB.getAsync(key))).then(values => {
         let totalRoomCount = values[0];
@@ -8,15 +9,8 @@ module.exports = (io, socket, redisDB, data) => {
         let emptyRooms = JSON.parse(values[2])['emptyRooms'];
         let games = JSON.parse(values[3])['games'];
 
-        const _userInGame = usersInGame.includes(socket.id) || usersInGameUsername.includes(data.username)
-                            emptyRooms.includes(data.username) || fullRooms.includes(data.username);
-
-        // ha nagyon biztonsagos legyen, akkor itt meg kellene keresni, hogy van e ilyen username az adatbazisban
-        // es igy ki van vedve, hogy random usernamet rak bele
-        // de olyan usernamet meg mindig megadhat, ami nem a sajatja, de letezik az adatbazisban.
-        // VAGY! ugyis tokent fog kuldeni a user, es akkor a tokenben kodolva van a username!!!
-        // na ez lesz a megoldas!
-        // es akkor frontenden nem a localstoragebol kell kiolvasni.
+        const _userInGame = usersInGame.includes(socket.id) || usersInGameUsername.includes(username)
+                            emptyRooms.includes(username) || fullRooms.includes(username);
 
         if (!_userInGame) {
 
@@ -24,23 +18,22 @@ module.exports = (io, socket, redisDB, data) => {
             if (indexPos > -1) {
                 
                 //console.log('Join room! Jelenleg jatekban levok: ' + usersInGame);
-                socket.username = data.username;
                 
                 const newGame = {
                     id: roomName,
                     whoseMove: roomName,
-                    users: [roomName, data.username],
+                    users: [roomName, username],
                     type: ['x', 'o'],
                     scores: [0, 0],
                     gameState: [],
-                    created: Date.now
+                    created: Date.now()
                 }
                 
                 games.push(newGame);
                 emptyRooms.splice(indexPos, 1);
                 fullRooms.push(roomName);
                 usersInGame.push(socket.id);
-                usersInGameUsername.push(data.username);
+                usersInGameUsername.push(username);
                 
                 
                 redisDB.set("usersInGame", JSON.stringify({
@@ -63,13 +56,10 @@ module.exports = (io, socket, redisDB, data) => {
                     'emptyRooms': emptyRooms
                 });
 
-                io.emit('goto-play', {
-
-                });
-                
-                // itt kellene visszakuldeni, hogy milyen tipusu szart kell raknia? vagy majd hol?                
+                io.emit('goto-play', {});
+                               
                 io.sockets.in("room-" + roomName).emit('start-game', {
-                    'ellenfel': data.username,
+                    'ellenfel': username,
                     'roomName': roomName
                 });
             }

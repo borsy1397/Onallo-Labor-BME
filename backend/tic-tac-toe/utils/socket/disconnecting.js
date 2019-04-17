@@ -4,10 +4,7 @@ const User = require('../../models/User');
 
 module.exports = (io, socket, redisDB) => {
 
-    // Megnezni, hogy ha a socket megszunik, torolni kell e a roomot, amiben volt
-    // Szerintem nem, sot... szinte biztos, de rakeresni (Should i delete room when socket disconnected)
-
-    //console.log('User disconnected');
+    console.log('User disconnected');
     //console.log('Disconnectingnel! Socket.rooms: ' + rooms);
     const rooms = Object.keys(socket.rooms);
     const roomName = (rooms[1] !== undefined && rooms[1] !== null) ? (rooms[1]).split('-')[1] : null;
@@ -24,12 +21,11 @@ module.exports = (io, socket, redisDB) => {
                 if (games[gameIndex].id === roomName) {
                     console.log(games);
                     console.log('-----------Disconnecting')
-                    const winner = games[gameIndex].users[0] == socket.username ? games[gameIndex].users[1] : games[gameIndex].users[0]
+                    const winner = games[gameIndex].users[0] == socket.decodedUsername ? games[gameIndex].users[1] : games[gameIndex].users[0]
+                    let indexx = games[gameIndex].users[0] === winner ? 0 : 1;
+                    let playtime = Math.ceil((Date.now() - games[gameIndex].created) / 1000);
                     games.splice(gameIndex, 1);
                     console.log(games);
-
-                    
-
 
                     User.findOne({ username: winner })
                     .exec()
@@ -39,18 +35,23 @@ module.exports = (io, socket, redisDB) => {
                         } else {
                             console.log('elso user:');
                             console.log(games);
-                            User.findOne({ username: socket.username })
+                            User.findOne({ username: socket.decodedUsername })
                                 .exec()
                                 .then(user2 => {
                                     if (!user2) {
                                         console.log("nincs is ilyen user, lol");
                                     } else {
+
+                                        
+
                                         //console.log('masodik user:');
                                         //console.log(games);
                                         const gameResultWin = new GameResult({
                                             draw: false,
                                             win: true,
-                                            enemy: user2
+                                            enemy: user2,
+                                            shape: 'x',
+                                            playTime: playtime
                                         });
 
                                         gameResultWin
@@ -65,7 +66,10 @@ module.exports = (io, socket, redisDB) => {
                                         const gameResultLose = new GameResult({
                                             draw: false,
                                             win: false,
-                                            enemy: user
+                                            enemy: user,
+                                            //shape: jatek.type[indexx === 0 ? 1 : 0], EZT KIJAVITANI!!!!!!
+                                            shape: 'o',
+                                            playTime: playtime
                                         });
 
                                         gameResultLose
@@ -82,6 +86,7 @@ module.exports = (io, socket, redisDB) => {
                                             //console.log(result);
                                         });
 
+                                        user.points += 2;
                                         user.games.push(gameResultWin);
                                         user.save().then(result => {
                                             //console.log(result);
@@ -116,7 +121,7 @@ module.exports = (io, socket, redisDB) => {
                 usersInGame.splice(usersInGamePos, 1);
             }
             
-            let usersInGameUsernamePos = usersInGameUsername.indexOf(socket.username);
+            let usersInGameUsernamePos = usersInGameUsername.indexOf(socket.decodedUsername);
             if (usersInGameUsernamePos > -1) {
                 usersInGameUsername.splice(usersInGameUsernamePos, 1);
             }

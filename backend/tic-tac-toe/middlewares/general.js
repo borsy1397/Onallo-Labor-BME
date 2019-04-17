@@ -177,11 +177,12 @@ module.exports.signupMW = (req, res, next) => {
             });
           } else {
             const newUser = new User({
-              //_id: new mongoose.Types.ObjectId(),
               email: userData.email,
               username: userData.username,
-              password: hash
-              // Ide felvenni, hogy mikor csatlakozott!!!!!!, pontokat nullazni 
+              password: hash,
+              games: [],
+              joined: Date.now(),
+              points: 0
             });
 
             newUser

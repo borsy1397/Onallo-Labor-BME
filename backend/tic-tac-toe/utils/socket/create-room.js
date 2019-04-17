@@ -1,9 +1,5 @@
 module.exports = (io, socket, redisDB, data) => {
     const username = socket.decodedUsername;
-    /**
-     * Gondoljuk at, hogy mi legyen az egesznek a strukturaja
-     * Fullrooms? Emptyrooms? Mit taroljunk? Nevet, ahogy eddig? Vagy socket ID-t?
-     */
 
     Promise.all(['totalRoomCount', 'usersInGame', 'allRooms']
         .map(key => redisDB.getAsync(key)))
@@ -44,6 +40,7 @@ module.exports = (io, socket, redisDB, data) => {
                 });
 
                 // Ezek igazabol nem is kellenek, csak hogy emitteljunk, az a lenyeg
+                // whoWillStart??
                 io.sockets.in("room-" + username).emit('new-room', {});
 
             }

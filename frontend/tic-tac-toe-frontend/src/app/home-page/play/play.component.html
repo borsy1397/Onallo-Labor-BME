@@ -1,95 +1,142 @@
 <div class="text-center" [hidden]="roomName == null ? true : false">
-  <!-- <p>
-    play works!
-  </p>
-  <p>this user created the room: {{roomName}}</p>
-  <p>this is my name: {{myname}}</p>
-  <p>the enemy name do not availevable yet</p> -->
-  <div class="container text-center" style="display: inline-block;">
-      <div class="chat" style="display: inline-block;">
-          <div class="container">
-              <!-- <div class="row heading-row">
-                <div class="col-md-12 text-center app-heading">
-                  <h2>Cim</h2>
-                </div>
-                <div class="col-md-6 text-center">
-                  <div class="player-heading" [class.current-player]="displayPlayerTurn">
-                    Player 1
-                  </div>
-                </div>
-                <div class="col-md-6 text-center">
-                  <div class="player-heading"  [class.current-player]="!displayPlayerTurn">
-                    Player 2
-                  </div>
-                </div>
-              </div>	 -->
-              <div class="row game-row">
-                <div class="text-center game-container">
-                  <!-- <table id="game" class="game-grid" #game>
-                    <tr *ngFor="let iterationNumber of gameGrid">
-                      <td *ngFor="let number of iterationNumber"
-                         class="grid-{{number}}"
-                        id="grid{{number}}" (click)="play(number)">
-                          {{ renderPlayedText(number)}}
-                      </td>
-                    </tr>
-                  </table> -->
-                  <table class="center">
-                    <tr>
-                      <td><button style="height: 30px; width: 30px;" (click)="sendMove(1)" class="tile" id="button_01"></button></td>
-                      <td><button style="height: 30px; width: 30px;" (click)="sendMove(2)" class="tile" id="button_02"></button></td>
-                      <td><button style="height: 30px; width: 30px;" (click)="sendMove(4)" class="tile" id="button_4"></button></td>
-                    </tr>
-                    <tr>
-                      <td><button style="height: 30px; width: 30px;" (click)="sendMove(8)" class="tile" id="button_8"></button></td>
-                      <td><button style="height: 30px; width: 30px;"(click)="sendMove(16)" class="tile" id="button_16"></button></td>
-                      <td><button style="height: 30px; width: 30px;" (click)="sendMove(32)" class="tile" id="button_32"></button></td>
-                    </tr>
-                    <tr>
-                      <td><button style="height: 30px; width: 30px;" (click)="sendMove(64)" class="tile" id="button_64"></button></td>
-                      <td><button style="height: 30px; width: 30px;" (click)="sendMove(128)" class="tile" id="button_128"></button></td>
-                      <td><button style="height: 30px; width: 30px;" (click)="sendMove(256)" class="tile" id="button_256"></button></td>
-                    </tr>
-                  </table>
-                  <br/>
-                  <!-- <h6 class="text-center">You are in Room Number {{roomNumber}}.</h6> -->
-                </div>
-              </div>
+  <div class="container game text-center" style="background: rgb(247, 203, 162);">
+    <div class="row text-center">
+      <div class="col-md-8 text-center">
+        <div class="container text-center">
+          <h1>This is Username's room</h1>
+          <div class="row text-center">
+            <div class="col-md-6">
+              <h2>Your name</h2>
+              <h3>X</h3>
             </div>
-      </div>
-    </div>
-
-  <div class="container text-center" style="display: inline-block;">
-    <div class="chat" style="display: inline-block;">
-      <div class="messageBox">
-        <div style="border-bottom: 1px solid grey">
-            <p>Your enemy's name: {{enemyName}}</p>
+            <div class="col-md-6">
+              <h2>Your enemy name</h2>
+              <h3>O</h3>
+            </div>
+          </div>
+          <div class="game-board text-center">
+            <table class="center text-center">
+              <tr>
+                <td><button (click)="sendMove(1)" id="button_1"></button></td>
+                <td><button (click)="sendMove(2)" id="button_2"></button></td>
+                <td><button (click)="sendMove(4)" id="button_4"></button></td>
+              </tr>
+              <tr>
+                <td><button (click)="sendMove(8)" id="button_8"></button></td>
+                <td><button (click)="sendMove(16)" id="button_16"></button></td>
+                <td><button (click)="sendMove(32)" id="button_32"></button></td>
+              </tr>
+              <tr>
+                <td><button (click)="sendMove(64)" id="button_64"></button></td>
+                <td><button (click)="sendMove(128)" id="button_128"></button></td>
+                <td><button (click)="sendMove(256)" id="button_256"></button></td>
+              </tr>
+            </table>
+          </div>
         </div>
-        <ul>
-          <li *ngFor="let message of messages" class="text-left" [class.text-right]="alignMessage(message.kuldo)" style="margin-bottom: 10px;">
-            <span style="background: rgb(245, 219, 185);  padding: 3px;" >
-                {{message.uzenet}}
-            </span>
-          </li>
-        </ul>
       </div>
-      <div class="sendMessage">
-        <form style="width: 100%;">
-          <input id="message" [(ngModel)]="message" name="message" style="width: 80%;" autocomplete="off" /><button style="width: 20%;"
-            (click)="sendMessage()">Send</button>
-        </form>
+      <div class="col-md-4">
+        <div class="container text-center" style="display: inline-block;">
+          <div class="chat" style="display: inline-block;">
+            <div class="messageBox">
+              <div style="border-bottom: 1px solid grey">
+                <p>Your enemy's name: {{enemyName}}</p>
+              </div>
+              <ul>
+                <li *ngFor="let message of messages" class="text-left" [class.text-right]="alignMessage(message.kuldo)"
+                  style="margin-bottom: 10px;">
+                  <span style="background: rgb(245, 219, 185);  padding: 3px;">
+                    {{message.uzenet}}
+                  </span>
+                </li>
+              </ul>
+            </div>
+            <div class="sendMessage">
+              <form style="width: 100%;">
+                <input id="message" [(ngModel)]="message" name="message" style="width: 80%;"
+                  autocomplete="off" /><button style="width: 20%;" (click)="sendMessage()">Send</button>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  
-<div style="display: inline-block;">
-
-</div>
-
 </div>
 
 
-  <div [hidden]="roomName == null ? false : true">
-    <h2 class="text-center">Waiting for player to join....</h2>
-    <button class="btn btn-success" (click)="returnToLobby()">Back</button>
+<div [hidden]="roomName == null ? false : true">
+  <h2 class="text-center">Waiting for player to join....</h2>
+  <button class="btn btn-success" (click)="returnToLobby()">Back</button>
+</div>
+
+
+
+
+
+
+<!-- 
+<div class="row text-center">
+  <div class="col-md-8 col-lg-8">
+    <div class="chat" style="display: inline-block;">
+      <div class="container">
+        <div class="row game-row">
+          <div class="text-center game-container">
+            <table class="center">
+              <tr>
+                <td><button id="" style="height: 30px; width: 30px;" (click)="sendMove(1)" class="tile id-1"
+                    id="button_01"></button></td>
+                <td><button id="" style="height: 30px; width: 30px;" (click)="sendMove(2)" class="tile id-2"
+                    id="button_02"></button></td>
+                <td><button id="" style="height: 30px; width: 30px;" (click)="sendMove(4)" class="tile id-4"
+                    id="button_4"></button></td>
+              </tr>
+              <tr>
+                <td><button id="" style="height: 30px; width: 30px;" (click)="sendMove(8)" class="tile id-8"
+                    id="button_8"></button></td>
+                <td><button id="" style="height: 30px; width: 30px;" (click)="sendMove(16)" class="tile id-16"
+                    id="button_16"></button></td>
+                <td><button id="" style="height: 30px; width: 30px;" (click)="sendMove(32)" class="tile id-32"
+                    id="button_32"></button></td>
+              </tr>
+              <tr>
+                <td><button id="" style="height: 30px; width: 30px;" (click)="sendMove(64)" class="tile id-64"
+                    id="button_64"></button></td>
+                <td><button id="" style="height: 30px; width: 30px;" (click)="sendMove(128)" class="tile id-128"
+                    id="button_128"></button></td>
+                <td><button id="" style="height: 30px; width: 30px;" (click)="sendMove(256)" class="tile id-256"
+                    id="button_256"></button></td>
+              </tr>
+            </table>
+            <br />
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+  <div class="col-md-4 col-lg-4">
+    <div class="container text-center" style="display: inline-block;">
+      <div class="chat" style="display: inline-block;">
+        <div class="messageBox">
+          <div style="border-bottom: 1px solid grey">
+            <p>Your enemy's name: {{enemyName}}</p>
+          </div>
+          <ul>
+            <li *ngFor="let message of messages" class="text-left" [class.text-right]="alignMessage(message.kuldo)"
+              style="margin-bottom: 10px;">
+              <span style="background: rgb(245, 219, 185);  padding: 3px;">
+                {{message.uzenet}}
+              </span>
+            </li>
+          </ul>
+        </div>
+        <div class="sendMessage">
+          <form style="width: 100%;">
+            <input id="message" [(ngModel)]="message" name="message" style="width: 80%;" autocomplete="off" /><button
+              style="width: 20%;" (click)="sendMessage()">Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->

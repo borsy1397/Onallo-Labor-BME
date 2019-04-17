@@ -13,14 +13,18 @@ export class PlayComponent implements OnInit {
 
   constructor(private gameService: GameService, private authService: AuthService, private router: Router) { }
 
-
   roomName: string = null;
-  myname: string = localStorage.getItem('username');
   enemyName: string = null;
+  myname: string = localStorage.getItem('username');
+
   messages: Message[] = [];
   message: string = "";
-  whoseTurn: string = null;
-  whichIsActualGridWhatIGetAfterSend: string = null;
+
+  myTurn: boolean = null;
+  myShape: string = null;
+  enemyShape: string = null;
+
+  whichGrid: string = null;
 
   returnToLobby() {
     this.router.navigate(['/home/games']);
@@ -28,17 +32,27 @@ export class PlayComponent implements OnInit {
 
 
   ngOnInit() {
-    // meglehet akadolyozni, hogy refresheljuk a paget????? AZ lenne a legjobb megoldas vagy ez, hogy meghivjuk az ondestroyt????
 
     if (!this.gameService.inGame()) {
       this.returnToLobby();
     }
-    
+
     window.onbeforeunload = () => this.ngOnDestroy();
 
     this.gameService.startGame().subscribe((response) => {
       this.roomName = response['roomName'];
-      this.enemyName = this.myname === this.roomName ? response['ellenfel'] : this.roomName;
+
+      if (this.myname === this.roomName) {
+        this.enemyName = response['ellenfel'];
+        this.myShape = 'x';
+        this.enemyShape = 'o';
+        this.myTurn = true;
+      } else {
+        this.enemyName = this.roomName;
+        this.myShape = 'o';
+        this.enemyShape = 'x';
+        this.myTurn = false;
+      }
     });
 
     this.gameService.receiveMessage().subscribe((socketResponse: Message) => {
@@ -46,17 +60,19 @@ export class PlayComponent implements OnInit {
     });
 
     this.gameService.receiveMove().subscribe(response => {
-      this.whoseTurn = response['whoseTurn'];
-      this.whichIsActualGridWhatIGetAfterSend = response['whichGrid'];
-      // na ennel kell majd kirajzolni!!!! mittudom, pl. renderActualGameBoard(). ezt a hosszu nevu valtozot bele kell rakni
-      // az aktualis tablaba, amit majd csinalok. pl. gameBoard 2 dimenzios matrix (3x3)
-      // a fentebb levo response[] cuccokat amugy nem is kell eltarolni. Vagyis de, a whoseTurnet igen, de a masikat nem, mert
-      // csak belerakjuk egy gameBoardba, szoval az felesleges.
-      // ugyanis felesleges lesz a gameEndben is a drawot eltarolni!!!
-    })
+      this.whichGrid = response['whichGrid'];
+
+      if (this.myTurn) {
+        this.renderMove(this.whichGrid, this.myShape);
+        this.myTurn = false;
+      } else {
+        this.renderMove(this.whichGrid, this.enemyShape);
+        this.myTurn = true;
+      }
+    });
 
     this.gameService.gameEnd().subscribe(response => {
-      if(response['draw']) {
+      if (response['draw']) {
         alert('DRAW');
       } else {
         alert('THE WINNER IS:' + response['winner']);
@@ -74,13 +90,20 @@ export class PlayComponent implements OnInit {
     });
   }
 
+  renderMove(grid: string, shape: string) {
+    console.log(grid);
+    document.querySelector(`#button_${grid}`).classList.add(`shape-${shape}`);
+  }
+
   sendMove(grid) {
     // itt is ellenorizni majd minden szir szart, hogy nem e lepett mar e oda, meg ilyesmi
-    this.gameService.sendMove({
-      myMove: this.myname,
-      //to: 'user2',
-      whichGrid: +grid
-    });
+    // szerveroldalon persze ez le van kezelve, de hogy meglegyen a jatek elmeny..
+    if (this.myTurn) {
+      this.gameService.sendMove({
+        myMove: this.myname,
+        whichGrid: +grid
+      });
+    }
   }
 
 
@@ -89,7 +112,6 @@ export class PlayComponent implements OnInit {
     if (this.message.length > 0) {
       this.gameService.sendMessage({
         from: this.myname,
-        //to: 'user2',
         message: this.message
       });
     }
@@ -99,6 +121,7 @@ export class PlayComponent implements OnInit {
   alignMessage(username: string): boolean {
     return this.myname === username ? true : false;
   }
+
   ngOnDestroy() {
     localStorage.removeItem('inGame');
     this.gameService.disconnect();

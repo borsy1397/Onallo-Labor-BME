@@ -4,13 +4,7 @@ const User = require('../../models/User');
 
 module.exports = (io, socket, redisDB, move) => {
     const roomName = (Object.keys(io.sockets.adapter.sids[socket.id]).filter(item => item != socket.id)[0]).split('-')[1];
-    // Ez erdekes helyzet: Az ellenfel ne kuldhessen a masik jatekos neveben lepest!!!!!!!!!
-    // esetleg ezt meglehetne ugy csinalni, hogy itt a socketID-t nezzuk, es nem a nevet. pl. whoseMove = socket.id
-    // ekkor viszont lehet uyganugy kell egy tombot tarolni, vagy fasz se tudja
-    // const whoseMove = socket.username ??????
-    // az elozoek valamelyikeben irtam, hogy ha a tokent ugyis dekodoljuk, akkor onnan kiolvasni
-    // viszont ez majd ott derul ki, hogy minden egyes socket emitnel a frontend oldalon ezt meglehet csinalni (gondolom igen)
-    const whoseMove = move.myMove;
+    const whoseMove = socket.decodedUsername;
     const whichGrid = move.whichGrid;
 
     Promise.all(['games', 'usersInGame', 'allRooms', 'totalRoomCount'].map(key => redisDB.getAsync(key))).then(values => {
@@ -32,7 +26,6 @@ module.exports = (io, socket, redisDB, move) => {
                 //console.log('ciklusban jatek: ');
                 //console.log(jatek);
                 break;
-                // ide kell majd egy break
             }
         }
         //console.log('Jatekok tomb splice elott:');
@@ -78,10 +71,7 @@ module.exports = (io, socket, redisDB, move) => {
                 const isOkayMove = jatek.gameState.includes(whichGrid);
 
                 if (!isOkayMove && positionValid) {
-
-                    /**
-                     * Na amugy ami itt van kod azt sokkal szebbre kene atirni, ha lehet
-                     */
+                    
                     let indexx = null;
                     if (whoseMove === jatek.users[0]) {
                         indexx = 0;
@@ -119,10 +109,15 @@ module.exports = (io, socket, redisDB, move) => {
                                                 } else {
                                                     //console.log('masodik user:');
                                                     //console.log(games);
+                                                    
+                                                    let playtime = Math.ceil((Date.now() - jatek.created) / 1000);
+
                                                     const gameResultWin = new GameResult({
                                                         draw: false,
                                                         win: true,
-                                                        enemy: user2 
+                                                        enemy: user2,
+                                                        shape: jatek.type[indexx],
+                                                        playTime: playtime
                                                     });
 
                                                     gameResultWin
@@ -137,7 +132,9 @@ module.exports = (io, socket, redisDB, move) => {
                                                     const gameResultLose = new GameResult({
                                                         draw: false,
                                                         win: false,
-                                                        enemy: user 
+                                                        enemy: user,
+                                                        shape: jatek.type[indexx === 0 ? 1 : 0],
+                                                        playTime: playtime
                                                     });
 
                                                     gameResultLose
@@ -155,6 +152,7 @@ module.exports = (io, socket, redisDB, move) => {
                                                         //console.log(result);
                                                     });
 
+                                                    user.points += 2;
                                                     user.games.push(gameResultWin);
                                                     user.save().then(result => {
                                                         //console.log(result);
@@ -235,13 +233,15 @@ module.exports = (io, socket, redisDB, move) => {
                                                 console.log("nincs is ilyen user, lol");
                                             } else {
 
+                                                let playtime = Math.ceil((Date.now() - jatek.created) / 1000);
 
 
                                                 const gameResultDraw1 = new GameResult({
                                                     draw: true,
                                                     win: false,
-                                                    enemy: whoIsNext
-
+                                                    enemy: user2,
+                                                    shape: jatek.type[indexx],
+                                                    playTime: playtime
                                                 });
 
                                                 gameResultDraw1
@@ -253,20 +253,18 @@ module.exports = (io, socket, redisDB, move) => {
                                                         console.log(err);
                                                     });
 
+                                                user.points++;
                                                 user.games.push(gameResultDraw1);
                                                 user.save().then(result => {
                                                     //console.log(result);
                                                 });
 
-
-
-
-
-
                                                 const gameResultDraw2 = new GameResult({
                                                     draw: true,
                                                     win: false,
-                                                    enemy: whoseMove
+                                                    enemy: user,
+                                                    shape: jatek.type[indexx === 0 ? 1 : 0],
+                                                    playTime: playtime
                                                 });
 
                                                 gameResultDraw2
@@ -278,54 +276,12 @@ module.exports = (io, socket, redisDB, move) => {
                                                         console.log(err);
                                                     });
 
-
+                                                user2.points++;
                                                 user2.games.push(gameResultDraw2);
                                                 user2.save().then(result => {
                                                     //console.log(result);
                                                 });
 
-                                                //console.log('masodik user:');
-                                                //console.log(games);
-                                                const gameResultWin = new GameResult({
-                                                    draw: false,
-                                                    win: true,
-                                                    enemy: user2
-                                                });
-
-                                                gameResultWin
-                                                    .save()
-                                                    .then(result => {
-                                                        // console.log(result);
-                                                    })
-                                                    .catch(err => {
-                                                        console.log(err);
-                                                    });
-
-                                                const gameResultLose = new GameResult({
-                                                    draw: false,
-                                                    win: false,
-                                                    enemy: user
-                                                });
-
-                                                gameResultLose
-                                                    .save()
-                                                    .then(result => {
-                                                        //console.log(result);
-                                                    })
-                                                    .catch(err => {
-                                                        console.log(err);
-                                                    });
-
-
-                                                user2.games.push(gameResultLose);
-                                                user2.save().then(result => {
-                                                    //console.log(result);
-                                                });
-
-                                                user.games.push(gameResultWin);
-                                                user.save().then(result => {
-                                                    //console.log(result);
-                                                });
 
                                                 console.log("VEGE A JATEKNAK")
 
@@ -341,7 +297,6 @@ module.exports = (io, socket, redisDB, move) => {
                                 console.log(err);
                             });
 
-                        // erre van szukseg? hogy socket.id-t is mentsunk. vagy mas strukturaja legyen?
                         let usersInGamePos = usersInGame.indexOf(socket.id);
                         if (usersInGamePos > -1) {
                             usersInGame.splice(usersInGamePos, 1);

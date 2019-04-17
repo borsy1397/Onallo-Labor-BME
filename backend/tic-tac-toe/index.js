@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-const redisDB = require('./utils/redis');
+const redisDB = require('./utils/db/redis/redis');
 
 
 app.use(bodyParser.json());

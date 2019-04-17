@@ -1,6 +1,6 @@
-module.exports.getGames = function (redisDB) {
+module.exports.getGames = (redisDB) => {
 
-    return function (req, res, next) {
+    return (req, res, next) => {
         Promise.all(['totalRoomCount', 'allRooms'].map(key => redisDB.getAsync(key))).then(values => {
             const totalRoomCount = values[0];
             const allRooms = JSON.parse(values[1]);
@@ -10,7 +10,6 @@ module.exports.getGames = function (redisDB) {
                 'emptyRooms': allRooms['emptyRooms']
             });
         });
-        //return next();
     };
 
 };
