@@ -10,6 +10,6 @@ const gameResultSchema = new mongoose.Schema({
     playTime: {type: Number} 
 });
 
-const GameResult = new mongoose.model('GameResult', gameResultSchema);
+const GameResult = mongoose.model('GameResult', gameResultSchema);
 
 module.exports = GameResult;

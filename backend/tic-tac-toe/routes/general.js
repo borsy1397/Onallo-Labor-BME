@@ -1,9 +1,7 @@
-const signUpUserMW = require('../middlewares/general').signupMW;
-const loginMW = require('../middlewares/general').loginMW;
-const refreshTokenMW = require('../middlewares/general').refreshTokenMW;
+const loginMW = require('../middlewares/general/login');
+const refreshTokenMW = require('../middlewares/general/token');
 
 module.exports = app => {
-    
     app.post('/login',
         loginMW
     );
@@ -12,9 +10,5 @@ module.exports = app => {
         refreshTokenMW
     );
 
-    // nem kell olyan, hogy sign up, hanem ezt a userhez kell rakni, hogy post legyen
-    app.post('/signup',
-        signUpUserMW
-    );
-
+    // majd ha eljutok odaig, akkor password reset es emailes account megerosites
 }

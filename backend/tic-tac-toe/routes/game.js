@@ -1,10 +1,10 @@
-const authorizationMW = require('../middlewares/general').authorizationMW;
-const getGames = require('../middlewares/game').getGames;
+const authorizeMW = require('../middlewares/general/authorize');
+const getGamesMW = require('../middlewares/game/getGames');
 
 module.exports = (app, redisDB) => {
 
-    app.get('/getGames',
-        authorizationMW,
-        getGames(redisDB)
+    app.get('/games',
+        authorizeMW,
+        getGamesMW(redisDB)
     );	
 }

@@ -9,7 +9,7 @@ export class SignUpService {
   constructor(private http: HttpClient) { }
 
   signUp(user) {
-    return this.http.post("http://localhost:3000/signup", user);
+    return this.http.post("http://localhost:3000/users", user);
   }
   
 }

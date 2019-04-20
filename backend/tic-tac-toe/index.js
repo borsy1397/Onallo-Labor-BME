@@ -8,6 +8,9 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const redisDB = require('./utils/db/redis/redis');
 
+require('./models/User');
+require('./models/GameResult');
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

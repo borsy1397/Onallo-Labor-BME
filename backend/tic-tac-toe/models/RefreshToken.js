@@ -6,6 +6,6 @@ const refreshTokenSchema = new mongoose.Schema({
 });
 
 
-const RefreshToken = new mongoose.model('RefreshToken', refreshTokenSchema);
+const RefreshToken = mongoose.model('RefreshToken', refreshTokenSchema);
 
 module.exports = RefreshToken;

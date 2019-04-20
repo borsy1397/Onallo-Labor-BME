@@ -11,6 +11,7 @@ import { GameComponent } from './home-page/game/game.component';
 import { AuthGuard } from './auth.guard';
 import { PlayComponent } from './home-page/play/play.component';
 import { PageNotFoundComponent } from './landing-page/util/page-not-found/page-not-found.component';
+import { UserDetailsComponent } from './home-page/user-details/user-details.component';
 
 const appRoutes: Routes = [
   {
@@ -18,6 +19,7 @@ const appRoutes: Routes = [
     component: MainComponent,
     canActivate: [AuthGuard],
     children: [
+      { path: 'player/:id', component: UserDetailsComponent },
       { path: 'games', component: GameComponent },
       { path: 'profile', component: ProfileComponent },
       { path: 'ranktable', component: RanktableComponent },

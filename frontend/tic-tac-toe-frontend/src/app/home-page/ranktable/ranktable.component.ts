@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '../../services/user/user.service';
+import { RankUser } from 'src/app/model/RankUser';
 
 @Component({
   selector: 'app-ranktable',
@@ -7,9 +9,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RanktableComponent implements OnInit {
 
-  constructor() { }
+  constructor(private userService: UserService) { }
+
+
+  //private users: RankUser[] = [];
+  private users: any;
+  private position: number = null;
 
   ngOnInit() {
+    this.userService.getRank().subscribe(response => {
+      this.users = response.users;
+      console.log(this.users);
+      this.position = response.myPosition;
+      console.log(this.position);
+    });
   }
-
 }

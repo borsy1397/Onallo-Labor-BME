@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GameService } from 'src/app/services/game/game.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { UserService } from 'src/app/services/user/user.service';
 import { Router } from '@angular/router';
 
 
@@ -28,7 +29,6 @@ export class GameComponent implements OnInit {
     if (this.gameService.inGame()) {
       this.inGame2 = "igen";
     }
-    
 
     // ha egy user epp jatszik, es erre az oldalra navigal egy masik tabrol, akkor vagy eliranyitani a profiljara pl, vagy kiirni egy 
     // uzenetet, hogy epp jatszik, nem tud csatlakozni mas jatekokhoz es nem is tud letrehozni
@@ -39,7 +39,6 @@ export class GameComponent implements OnInit {
 
     this.authService.checkAuth();
 
-    this.gameService.connect();
 
     // HTTP call to get Empty rooms and total room numbers
     this.gameService.getRoomStats().then(response => {
@@ -47,13 +46,15 @@ export class GameComponent implements OnInit {
       this.emptyRooms = response['emptyRooms'];
     });
 
+    this.gameService.connect();
+
     this.gameService.getRoomsAvailable().subscribe(response => {
       this.totalRooms = response['totalRoomCount'];
       this.emptyRooms = response['emptyRooms'];
     });
   }
 
-  
+
   returnToLobby() {
     this.router.navigate(['/home']);
   }

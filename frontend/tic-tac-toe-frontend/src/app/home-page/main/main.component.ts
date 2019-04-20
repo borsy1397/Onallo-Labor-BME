@@ -13,8 +13,13 @@ export class MainComponent implements OnInit {
   constructor(private userService: UserService, private authService: AuthService, private router: Router) { }
 
   routerLinkGames = "/home/games";
+  routerLinkRanktable = "/home/ranktable";
 
   ngOnInit() {
+
+    // this.userService.getUser().subscribe(response => {
+    //   console.log(response);
+    // });
 
     /** 
      * 

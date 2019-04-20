@@ -1,3 +1,7 @@
-<p>
-  ranktable works!
-</p>
+<div>
+  <ul>
+    <li *ngFor="let user of users">
+      <p routerLink="/home/player/{{user.id}}">{{user.username}}</p>
+    </li>
+  </ul>
+</div>

@@ -64,7 +64,7 @@ export class GameService {
 		}
 	}
 
-	receiveMessage(): Observable<Message> {
+	 receiveMessage(): Observable<Message> {
 		return new Observable(observer => {
 			if (this.socket != null) {
 
@@ -101,7 +101,7 @@ export class GameService {
 
 	getRoomStats() {
 		return new Promise(resolve => {
-			this.http.get(`http://localhost:3000/getGames`).subscribe(data => {
+			this.http.get(`http://localhost:3000/games`).subscribe(data => {
 				resolve(data);
 			});
 		});
