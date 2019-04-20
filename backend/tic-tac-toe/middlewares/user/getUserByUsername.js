@@ -4,7 +4,14 @@ const UserDTO = require('../../models/dto/UserDTO');
 
 module.exports = (req, res, next) => {
     User.findOne({ _id: req.params.username })
-    .populate('games')
+    .populate({
+      path: 'games',
+      model: 'GameResult',
+      populate: {
+        path: 'enemy',
+        model: 'User'
+      }
+    })
     .exec()
     .then(user => {
       if (!user) {
