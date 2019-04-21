@@ -11,7 +11,6 @@ module.exports = (req, res, next) => {
                 });
             }
             req.userData = decoded;
-            console.log('miafaszvan');
             next();
             // uj token kell?
         });

@@ -92,7 +92,8 @@ export class PlayComponent implements OnInit {
 
   renderMove(grid: string, shape: string) {
     console.log(grid);
-    document.querySelector(`#button_${grid}`).classList.add(`shape-${shape}`);
+    //document.querySelector(`#button_${grid}`).classList.add(`shape-${shape}`);
+    document.querySelector(`#button_${grid}`).innerHTML = shape;
   }
 
   sendMove(grid) {

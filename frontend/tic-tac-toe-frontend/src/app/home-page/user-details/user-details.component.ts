@@ -21,6 +21,17 @@ export class UserDetailsComponent implements OnInit {
   }
 
   getUser() {
+    /**
+     * TODO
+     * 
+     * Na, szoval szepen meg kellene majd csinalni.
+     * Van getUserById es van GetUserByUsername. Ezt majd kiokoskodni, hogy mikor melyiket hasznalni
+     * Ha a rank-ról navigál a user a saját accountjára, vagy magára keres rá, akkor nem ez a komponens kell, hanem a profile
+     * Ezt ellenőrizni kell valahogy.
+     * 
+     * A servicokkal kell játszani, mert a usert el kellene tárolni eg yváltozóban, nem a local storageban
+     * gitlabon majd megnézni, hogy ez hogy van/lesz megoldva, és csak a servicet kell majd injektálni, úgy meg el van kérve.
+     */
     const id = this.route.snapshot.paramMap.get('id');
     this.userService.getUserById(id).subscribe(response => {
       this.user = response;

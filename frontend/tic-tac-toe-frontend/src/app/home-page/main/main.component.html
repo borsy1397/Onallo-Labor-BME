@@ -1,7 +1,10 @@
-<div class="full-page text-center">
+<!-- <div class="full-page text-center">
     <header>
+        <h1>
+            Tic-Tac-Toe
+        </h1>
         <div class="container">
-            <a href="">Profile</a>
+            <a [routerLink]="routerLinkProfile">Profile</a>
             <a [routerLink]="routerLinkRanktable">Rank</a>
             <a [routerLink]="routerLinkGames">Games</a>
             <a href="" (click)="logout()">Logout</a>
@@ -19,4 +22,49 @@
             <h5>Copyright</h5>
         </div>
     </footer>
+</div> -->
+
+<div class="container context text-center">
+    <header class="text-center">
+        <h1 class="text-center">Tic-Tac-Toe</h1>
+        <div class="container navbarr" style="width: 100%;">
+            <a [routerLink]="routerLinkProfile">Profile</a>
+            <a [routerLink]="routerLinkRanktable">Rank</a>
+            <a [routerLink]="routerLinkGames">Games</a>
+            <a href="" (click)="logout()">Logout</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="container">
+            <router-outlet></router-outlet>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <h5>Copyright</h5>
+        </div>
+    </footer>
+</div>
+
+<div class="area">
+    <ul class="circles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
 </div>

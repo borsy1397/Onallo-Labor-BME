@@ -14,12 +14,9 @@ export class MainComponent implements OnInit {
 
   routerLinkGames = "/home/games";
   routerLinkRanktable = "/home/ranktable";
+  routerLinkProfile = "/home/profile";
 
   ngOnInit() {
-
-    // this.userService.getUser().subscribe(response => {
-    //   console.log(response);
-    // });
 
     /** 
      * 
@@ -27,17 +24,7 @@ export class MainComponent implements OnInit {
      * vagyis hat nem, mert igy az authguard faszan mukodik, szoval valami contentet kell ide rakni
     */
 
-    
-    // ezt innen nyilvan ki kell szedni
-    /*this.userService.getUser().subscribe(res => {
-      console.log("Angular home path, van token, ervenyes, es a szerver vissza kuldi a /user routera a cuccot");
-      console.log(res);
-      console.log("----------------------------------");
-    }, err => {
-      console.log("Angular home path, /user routera  a backend hibat ir, mert nincs vagy nem jo a token");
-      console.log(err);
-      console.log("Angular home path, /user routera  a backend hibat ir, mert nincs vagy nem jo a token");
-    });*/
+  
   }
 
   logout() {

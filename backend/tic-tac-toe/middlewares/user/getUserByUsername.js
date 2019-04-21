@@ -3,7 +3,7 @@ const UserDTO = require('../../models/dto/UserDTO');
 
 
 module.exports = (req, res, next) => {
-    User.findOne({ _id: req.params.username })
+    User.findOne({ username: req.params.username })
     .populate({
       path: 'games',
       model: 'GameResult',

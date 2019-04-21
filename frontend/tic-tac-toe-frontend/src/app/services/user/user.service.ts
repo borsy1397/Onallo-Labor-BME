@@ -23,4 +23,8 @@ export class UserService {
   getUserById(id: string): Observable<User> {
     return this.http.get<User>(`http://localhost:3000/users/${id}`);
   }
+
+  getUserByUsername(name: string): Observable<User> {
+    return this.http.get<User>(`http://localhost:3000/users/search/${name}`);
+  }
 }
