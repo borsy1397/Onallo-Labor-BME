@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const secretKeys = require('../../assets/secret').secretKeys;
+const secretKeys = require('../secret').secretKeys;
 
 module.exports = (io, redisDB) => {
     io.use(authorizeSocket).on('connection', socket => {

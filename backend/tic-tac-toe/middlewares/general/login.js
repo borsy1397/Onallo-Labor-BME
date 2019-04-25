@@ -1,7 +1,7 @@
 const User = require('../../models/User');
 const bcrypt = require('bcrypt');
 const RefreshToken = require('../../models/RefreshToken');
-const secretKeys = require('../../assets/secret').secretKeys;
+const secretKeys = require('../../utils/secret').secretKeys;
 const jwt = require('jsonwebtoken');
 const randToken = require('rand-token');
 

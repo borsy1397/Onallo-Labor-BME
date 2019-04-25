@@ -1,18 +1,4 @@
-.messageBox {
-    height: 90%;
-    background: rgb(247, 193, 131);
-}
-
-.sendMessage {
-    height: 10%;
-}
-
-.chat {
-    height: 450px;
-    width: 250px;
-}
-
-.messageBox ul {
+ul {
     list-style-type: none;
     display: block;
     margin-block-start: 0.2em;
@@ -20,6 +6,18 @@
     margin-inline-start: 0px;
     margin-inline-end: 0px;
     padding-inline-start: 5px;
+}
+
+.message {
+    max-width: 75%;
+    word-wrap: break-word;
+    padding: 10px;
+    display: inline-block;
+    border-radius: 8px;
+    border-bottom-left-radius: 20px;
+    border-top-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-top-right-radius: 20px;
 }
 
 .shape-x {
@@ -30,17 +28,30 @@
     background: green;
 }
 
+.enemy-color {
+    background: green;
+}
+
+.own-color {
+    background: blue;
+}
+
 td button {
-    width: 100px;
-    height: 100px;
+    width: 130px;
+    height: 130px;
     font-size: 2.6em;
-    font-size: 10vmin;  /* Responsive font size! Awesome! */
+    font-size: 10vmin;
+    /* Responsive font size! Awesome! */
 }
 
 .game {
-    width: 75%;
+    width: 90%;
 }
 
 .center {
     margin: 0 auto;
+}
+
+.whose-turn {
+    border: 1px solid black;
 }

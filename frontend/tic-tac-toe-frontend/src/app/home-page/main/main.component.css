@@ -8,10 +8,24 @@ header {
 }
 
 header a {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   padding: 10px 20px;
   margin: 10px 10px;
   text-decoration: none;
+  color: black;
+  background-color: white;
+  border-radius: 10%;
+}
+
+header a:hover {
+  padding: 13px 23px;
+  margin: 10px 10px;
+  text-decoration: none;
+  color: blue;
+  font-weight: bold;
+  background-color: rgb(255, 169, 169);
+  border-radius: 10%;
+  z-index: 3432423213123;
 }
 
 header h1 {
@@ -47,6 +61,7 @@ h1 { color: #CEF0D4; font-family: 'Rouge Script', cursive; font-size: 130px; fon
 footer {
   width: 100%;
 }
+
 body {
   font-family: 'Exo', sans-serif;
 }

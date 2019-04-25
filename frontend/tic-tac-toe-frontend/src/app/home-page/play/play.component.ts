@@ -45,12 +45,14 @@ export class PlayComponent implements OnInit {
       if (this.myname === this.roomName) {
         this.enemyName = response['ellenfel'];
         this.myShape = 'x';
+        document.querySelector(`#you`).classList.add("whose-turn");
         this.enemyShape = 'o';
         this.myTurn = true;
       } else {
         this.enemyName = this.roomName;
         this.myShape = 'o';
         this.enemyShape = 'x';
+        document.querySelector(`#enemy`).classList.add("whose-turn");
         this.myTurn = false;
       }
     });
@@ -65,9 +67,13 @@ export class PlayComponent implements OnInit {
       if (this.myTurn) {
         this.renderMove(this.whichGrid, this.myShape);
         this.myTurn = false;
+        document.querySelector(`#enemy`).classList.add("whose-turn");
+        document.querySelector(`#you`).classList.remove("whose-turn");
       } else {
         this.renderMove(this.whichGrid, this.enemyShape);
         this.myTurn = true;
+        document.querySelector(`#you`).classList.add("whose-turn");
+        document.querySelector(`#enemy`).classList.add("whose-turn");
       }
     });
 
@@ -100,6 +106,7 @@ export class PlayComponent implements OnInit {
     // itt is ellenorizni majd minden szir szart, hogy nem e lepett mar e oda, meg ilyesmi
     // szerveroldalon persze ez le van kezelve, de hogy meglegyen a jatek elmeny..
     if (this.myTurn) {
+      console.log("SAJAT KLIKK");
       this.gameService.sendMove({
         myMove: this.myname,
         whichGrid: +grid
