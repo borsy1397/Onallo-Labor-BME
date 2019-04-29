@@ -47,16 +47,16 @@ export class PlayComponent implements OnInit {
         this.myShape = 'x';
         this.enemyShape = 'o';
         document.querySelector(`#you`).classList.add("whose-turn");
-        document.querySelector(`#you h3`).classList.add(`shape-${this.myShape}`);
-        document.querySelector(`#enemy h3`).classList.add(`shape-${this.enemyShape}`);
+        document.querySelector(`#you h4`).classList.add(`shape-${this.myShape}`);
+        document.querySelector(`#enemy h4`).classList.add(`shape-${this.enemyShape}`);
         this.myTurn = true;
       } else {
         this.enemyName = this.roomName;
         this.myShape = 'o';
         this.enemyShape = 'x';
         document.querySelector(`#enemy`).classList.add("whose-turn");
-        document.querySelector(`#you h3`).classList.add(`shape-${this.myShape}`);
-        document.querySelector(`#enemy h3`).classList.add(`shape-${this.enemyShape}`);
+        document.querySelector(`#you h4`).classList.add(`shape-${this.myShape}`);
+        document.querySelector(`#enemy h4`).classList.add(`shape-${this.enemyShape}`);
         this.myTurn = false;
       }
     });
@@ -73,11 +73,13 @@ export class PlayComponent implements OnInit {
         this.myTurn = false;
         document.querySelector(`#enemy`).classList.add("whose-turn");
         document.querySelector(`#you`).classList.remove("whose-turn");
+
       } else {
         this.renderMove(this.whichGrid, this.enemyShape);
         this.myTurn = true;
         document.querySelector(`#you`).classList.add("whose-turn");
         document.querySelector(`#enemy`).classList.remove("whose-turn");
+
       }
     });
 

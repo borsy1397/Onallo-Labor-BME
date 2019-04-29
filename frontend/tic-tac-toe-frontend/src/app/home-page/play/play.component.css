@@ -72,12 +72,30 @@ td button {
     margin: 0 auto;
 }
 
+#you h2 {
+    margin-bottom: 0px;
+    color: navy;
+}
+
+#enemy h2 {
+    margin-bottom: 0px;
+    color: navy;
+}
+
 .row h2 {
+    opacity: 0.5;
+}
+
+.row h4 {
     opacity: 0.5;
 }
 
 .whose-turn {
     border-bottom: 3px solid green;
+}
+
+.whose-turn h4 {
+    opacity: 1;
 }
 
 .whose-turn h2 {
