@@ -7,7 +7,10 @@ module.exports = (io, socket, redisDB, move) => {
     const whoseMove = socket.decodedUsername;
     const whichGrid = move.whichGrid;
 
+    console.log(whichGrid + " " + whoseMove + " " + " metodus elejen");
+
     Promise.all(['games', 'usersInGame', 'allRooms', 'totalRoomCount'].map(key => redisDB.getAsync(key))).then(values => {
+        console.log("Egyaltalan benne vaguynk a promise allban?");
         let games = JSON.parse(values[0])['games'];
         let usersInGame = JSON.parse(values[1])['users'];
         let usersInGameUsername = JSON.parse(values[1])['usersName'];
@@ -22,6 +25,7 @@ module.exports = (io, socket, redisDB, move) => {
         let gameIndex = null;
         for (gameIndex = 0; gameIndex < games.length; gameIndex++) {
             if (games[gameIndex].id === roomName) {
+                console.log("Van ilyen jatek?????????,");
                 jatek = games[gameIndex];
                 //console.log('ciklusban jatek: ');
                 //console.log(jatek);
@@ -39,38 +43,42 @@ module.exports = (io, socket, redisDB, move) => {
         //console.log('Bejottunk a sendmoveba: gameindex es jatek   ' + gameIndex + "     " + jatek)
 
         if (jatek) {
+            console.log(whichGrid + " " + whoseMove + " " + " ha tenylegesen ove a lepes");
             if (jatek.whoseMove === whoseMove) {
                 //console.log('elso ifnel:');
                 //console.log(games);
-
-                for (i = 0; i < games.length; i++) {
-                    if (games[i].id == roomName) {
-                        console.log(games);
-                        console.log('-----------Send move')
-                        games.splice(i, 1);
-                        console.log(games);
-                        break;
-                    }
-                }
-
-                //console.log('ciklus utan:');
-                //console.log(games);
-
-                redisDB.set('games', JSON.stringify({
-                    games: games
-                }));
+                console.log(whichGrid + " " + whoseMove + " " + " ha tenylegesen ove a lepes");
 
                 const valid = [1, 2, 4, 8, 16, 32, 64, 128, 256];
                 positionValid = false;
                 valid.forEach((validPosition) => {
                     if (validPosition === whichGrid) {
+                        console.log(whichGrid + " " + whoseMove + " " + " validacio soran, hogy van e ilyen szam");
                         positionValid = true;
                     }
                 });
 
                 const isOkayMove = jatek.gameState.includes(whichGrid);
+                console.log(whichGrid + " " + whoseMove + " " + " ellenorzes, hogy a gamestateban van e mar ilyen szam " + isOkayMove);
 
                 if (!isOkayMove && positionValid) {
+
+                    for (i = 0; i < games.length; i++) {
+                        if (games[i].id == roomName) {
+                            //console.log(games);
+                            //console.log('-----------Send move')
+                            games.splice(i, 1);
+                            //console.log(games);
+                            break;
+                        }
+                    }
+    
+                    //console.log('ciklus utan:');
+                    //console.log(games);
+    
+                    redisDB.set('games', JSON.stringify({
+                        games: games
+                    }));
                     
                     let indexx = null;
                     if (whoseMove === jatek.users[0]) {
@@ -214,7 +222,7 @@ module.exports = (io, socket, redisDB, move) => {
                         }
                     });
 
-                    if (jatek.gameState.length >= 9) {
+                    if (jatek.gameState.length >= 9 && !end_game) {
 
                         end_game = true;
 

@@ -1,5 +1,7 @@
 const User = require('../../models/User');
 const bcrypt = require('bcrypt');
+const emailValidator = require('email-validator');
+
 module.exports = (req, res, next) => {
     const userData = {
         email: req.body.email,

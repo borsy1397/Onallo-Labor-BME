@@ -45,14 +45,18 @@ export class PlayComponent implements OnInit {
       if (this.myname === this.roomName) {
         this.enemyName = response['ellenfel'];
         this.myShape = 'x';
-        document.querySelector(`#you`).classList.add("whose-turn");
         this.enemyShape = 'o';
+        document.querySelector(`#you`).classList.add("whose-turn");
+        document.querySelector(`#you h3`).classList.add(`shape-${this.myShape}`);
+        document.querySelector(`#enemy h3`).classList.add(`shape-${this.enemyShape}`);
         this.myTurn = true;
       } else {
         this.enemyName = this.roomName;
         this.myShape = 'o';
         this.enemyShape = 'x';
         document.querySelector(`#enemy`).classList.add("whose-turn");
+        document.querySelector(`#you h3`).classList.add(`shape-${this.myShape}`);
+        document.querySelector(`#enemy h3`).classList.add(`shape-${this.enemyShape}`);
         this.myTurn = false;
       }
     });
@@ -73,7 +77,7 @@ export class PlayComponent implements OnInit {
         this.renderMove(this.whichGrid, this.enemyShape);
         this.myTurn = true;
         document.querySelector(`#you`).classList.add("whose-turn");
-        document.querySelector(`#enemy`).classList.add("whose-turn");
+        document.querySelector(`#enemy`).classList.remove("whose-turn");
       }
     });
 
@@ -100,6 +104,7 @@ export class PlayComponent implements OnInit {
     console.log(grid);
     //document.querySelector(`#button_${grid}`).classList.add(`shape-${shape}`);
     document.querySelector(`#button_${grid}`).innerHTML = shape;
+    document.querySelector(`#button_${grid}`).classList.add(`shape-${shape}`);
   }
 
   sendMove(grid) {

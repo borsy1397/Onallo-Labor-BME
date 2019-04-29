@@ -9,7 +9,7 @@
 				<ul class="nav nav-pills">
 					<li class="nav-item room-number" *ngFor="let enemyName of emptyRooms" style="margin-right: 10px;">
 						<a class="nav-link active" title="Join room: {{enemyName}}"
-							(click)="joinRoom(enemyName)">#{{enemyName}}</a>
+							(click)="joinRoom(enemyName)">{{enemyName}}</a>
 					</li>
 				</ul>
 			</div>
