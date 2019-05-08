@@ -22,6 +22,8 @@ export class SignUpComponent implements OnInit {
   errorMessage = "";
   correct = true;
 
+  routerLinkLogin = "/login";
+
   constructor(
     private signUpService: SignUpService,
     private authService: AuthService,

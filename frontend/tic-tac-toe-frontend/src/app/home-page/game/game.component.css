@@ -8,3 +8,45 @@
     height: 400px;
     position: relative;
 }
+
+.col {
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.enemy {
+    background: #3c8f79;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.visit-play .visit {
+    border-bottom-left-radius: 10px;
+    background: rgb(150, 150, 150);
+    font-size: 1.2rem;
+}
+
+.visit-play .play {
+    border-bottom-right-radius: 10px;
+    background: rgb(119, 119, 119);
+    font-size: 1.2rem;
+}
+
+.enemy span {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+}
+
+span strong {
+    color: white;
+    margin-left: 20px;
+}
+
+.header {
+    font-size: 1.2rem;
+}
+
+.header .btn-success {
+    font-size: 1.2rem;
+}

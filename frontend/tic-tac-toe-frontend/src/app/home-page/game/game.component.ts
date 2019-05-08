@@ -16,6 +16,7 @@ export class GameComponent implements OnInit {
   constructor(private gameService: GameService, private authService: AuthService, private router: Router) { }
 
   totalRooms = <Number>0;
+  usersInGame = <Number>0;
   emptyRooms = <Array<number>>[];
   inGame2: string = null;
 
@@ -44,6 +45,7 @@ export class GameComponent implements OnInit {
     this.gameService.getRoomStats().then(response => {
       this.totalRooms = response['totalRoomCount'];
       this.emptyRooms = response['emptyRooms'];
+      this.usersInGame = response['usersInGame'];
     });
 
     this.gameService.connect();
@@ -51,6 +53,7 @@ export class GameComponent implements OnInit {
     this.gameService.getRoomsAvailable().subscribe(response => {
       this.totalRooms = response['totalRoomCount'];
       this.emptyRooms = response['emptyRooms'];
+      this.usersInGame = response['usersInGame'];
     });
   }
 

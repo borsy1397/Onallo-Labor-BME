@@ -92,7 +92,13 @@ module.exports = (io, socket, redisDB) => {
                                             //console.log(result);
                                         });
 
-                                        console.log("VEGE A JATEKNAK")
+                                        console.log("VEGE A JATEKNAK");
+                                        io.emit('rooms-available', {
+                                            'totalRoomCount': totalRoomCount,
+                                            'fullRooms': fullRooms,
+                                            'emptyRooms': emptyRooms,
+                                            'usersInGame': usersInGame.length
+                                        });
                                     }
                                 })
                                 .catch(err => {
@@ -110,7 +116,8 @@ module.exports = (io, socket, redisDB) => {
                     io.emit('rooms-available', {
                         'totalRoomCount': totalRoomCount,
                         'fullRooms': fullRooms,
-                        'emptyRooms': emptyRooms
+                        'emptyRooms': emptyRooms,
+                        'usersInGame': usersInGame.length
                     });
                     break;
                 }
@@ -150,6 +157,14 @@ module.exports = (io, socket, redisDB) => {
             redisDB.set('games', JSON.stringify({
                 games: games
             }));
+
+            io.sockets.in("room-" + roomName).emit('room-disconnect', { id: socket.id });
+            io.emit('rooms-available', {
+                'totalRoomCount': totalRoomCount,
+                'fullRooms': fullRooms,
+                'emptyRooms': emptyRooms,
+                'usersInGame': usersInGame.length
+            });
             
             
             // console.log('Disconnection........ SocketID:' + socket.id);

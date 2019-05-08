@@ -72,14 +72,14 @@ module.exports = (io, socket, redisDB, move) => {
                             break;
                         }
                     }
-    
+
                     //console.log('ciklus utan:');
                     //console.log(games);
-    
+
                     redisDB.set('games', JSON.stringify({
                         games: games
                     }));
-                    
+
                     let indexx = null;
                     if (whoseMove === jatek.users[0]) {
                         indexx = 0;
@@ -117,7 +117,7 @@ module.exports = (io, socket, redisDB, move) => {
                                                 } else {
                                                     //console.log('masodik user:');
                                                     //console.log(games);
-                                                    
+
                                                     let playtime = Math.ceil((Date.now() - jatek.created) / 1000);
 
                                                     const gameResultWin = new GameResult({
@@ -172,7 +172,8 @@ module.exports = (io, socket, redisDB, move) => {
                                                     io.emit('rooms-available', {
                                                         'totalRoomCount': totalRoomCount,
                                                         'fullRooms': fullRooms,
-                                                        'emptyRooms': emptyRooms
+                                                        'emptyRooms': emptyRooms,
+                                                        'usersInGame': usersInGame.length
                                                     });
 
                                                 }
@@ -292,6 +293,13 @@ module.exports = (io, socket, redisDB, move) => {
 
 
                                                 console.log("VEGE A JATEKNAK")
+
+                                                io.emit('rooms-available', {
+                                                    'totalRoomCount': totalRoomCount,
+                                                    'fullRooms': fullRooms,
+                                                    'emptyRooms': emptyRooms,
+                                                    'usersInGame': usersInGame.length
+                                                });
 
                                             }
                                         })

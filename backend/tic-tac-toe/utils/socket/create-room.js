@@ -36,7 +36,8 @@ module.exports = (io, socket, redisDB, data) => {
                 io.emit('rooms-available', {
                     'totalRoomCount': totalRoomCount,
                     'fullRooms': fullRooms,
-                    'emptyRooms': emptyRooms
+                    'emptyRooms': emptyRooms,
+                    'usersInGame': usersInGame.length
                 });
 
                 // Ezek igazabol nem is kellenek, csak hogy emitteljunk, az a lenyeg

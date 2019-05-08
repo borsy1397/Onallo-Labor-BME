@@ -59,10 +59,6 @@ h1 { color: #CEF0D4; font-family: 'Rouge Script', cursive; font-size: 130px; fon
 
 /* h1 { color: #d04764; font-family: 'Lobster', cursive; font-size: 136px; font-weight: normal; line-height: 48px; margin: 0 0 18px; text-shadow: 1px 0 0 #fff; } */
 
-footer {
-  width: 100%;
-}
-
 body {
   font-family: 'Exo', sans-serif;
 }
@@ -224,6 +220,64 @@ body {
   animation-delay: 13s;
   animation-duration: 30s;
 }
+
+.circles li:nth-child(17) {
+  left: 65%;
+  width: 50px;
+  height: 50px;
+  animation-delay: 3s;
+  animation-duration: 12s;
+}
+
+.circles li:nth-child(18) {
+  left: 200%;
+  width: 40px;
+  height: 40px;
+  animation-delay: 13s;
+  animation-duration: 30s;
+}
+
+.circles li:nth-child(19) {
+  left: 30%;
+  width: 35px;
+  height: 35px;
+  animation-delay: 13s;
+  animation-duration: 23s;
+}
+
+.circles li:nth-child(20) {
+  left: 90%;
+  width: 40px;
+  height: 40px;
+  animation-delay: 13s;
+  animation-duration: 35s;
+}
+
+.circles li:nth-child(21) {
+  left: 70%;
+  width: 20px;
+  height: 20px;
+  animation-delay: 13s;
+  animation-duration: 20s;
+}
+
+.circles li:nth-child(22) {
+  left: 200%;
+  width: 120px;
+  height: 120px;
+  animation-delay: 25s;
+  animation-duration: 20s;
+}
+
+.circles li:nth-child(23) {
+  left: 50%;
+  width: 100px;
+  height: 100px;
+  animation-delay: 20s;
+  animation-duration: 10s;
+}
+
+
 
 @keyframes animate {
   0% {

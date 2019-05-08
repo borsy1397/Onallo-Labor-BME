@@ -17,14 +17,7 @@ export class MainComponent implements OnInit {
   routerLinkProfile = "/home/profile";
 
   ngOnInit() {
-
-    /** 
-     * 
-     * Ez a a home page amugy tok feleslges
-     * vagyis hat nem, mert igy az authguard faszan mukodik, szoval valami contentet kell ide rakni
-    */
-
-  
+    this.router.navigate(['/home/games']);
   }
 
   logout() {

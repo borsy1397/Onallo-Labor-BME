@@ -1,4 +1,5 @@
 ul {
+    padding-top: 6px;
     list-style-type: none;
     display: block;
     margin-block-start: 0.2em;
@@ -23,6 +24,7 @@ ul li {
 .message {
     max-width: 75%;
     word-wrap: break-word;
+    font-size: 0.9rem;
     padding: 10px;
     display: inline-block;
     border-radius: 8px;
@@ -47,12 +49,19 @@ ul li {
     color: blue;
 }
 
+p {
+    font-weight: bold;
+    font-size: 30px;
+}
+
 .enemy-color {
-    background: green;
+    background: rgb(6, 6, 46);
+    color: white;
 }
 
 .own-color {
-    background: blue;
+    background: white;
+    color: rgb(6, 6, 46);
 }
 
 td button {

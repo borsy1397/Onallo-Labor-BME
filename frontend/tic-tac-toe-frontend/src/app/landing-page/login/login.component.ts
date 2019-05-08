@@ -17,6 +17,8 @@ export class LoginComponent implements OnInit {
     password: ""
   }
 
+  routerLinkSignUp = "/signup";
+
   errorMessage = "";
   correct = true;
 
@@ -29,7 +31,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     if (this.authService.checkAuth()) {
-      this.router.navigate(['/home']); // Ez itt legyen, vagy a konstruktorba irjam?
+      this.router.navigate(['/home/games']); // Ez itt legyen, vagy a konstruktorba irjam?
     }
   }
 
@@ -44,7 +46,7 @@ export class LoginComponent implements OnInit {
       this.spinner.show();
       setTimeout(() => {
         this.spinner.hide();
-        this.router.navigate(['/home']);
+        this.router.navigate(['/home/games']);
       }, 2500);
     }, err => {
       this.correct = false;
