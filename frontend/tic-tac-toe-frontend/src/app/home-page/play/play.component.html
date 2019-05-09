@@ -43,7 +43,7 @@
         <div class="row" style="height: 100%; background-color: rgb(255, 245, 235)">
           <div class="col-md-12" style="height: 10%;  padding: 0px;">
             <div style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); height: 100%;">
-              <p>Chat with {{enemyName}}!</p>
+              <p (click)="open()">Chat with {{enemyName}}!</p>
             </div>
           </div>
           <div class="col-md-12" style="height: 84%; overflow: auto; padding-left: 0px; padding-right: 0px;" #scrollMe
@@ -74,7 +74,7 @@
 
 
 <div [hidden]="roomName == null ? false : true">
-  <h2 class="text-center">Waiting for player to join....</h2>
+  <h2 class="text-center">Waiting for other player...</h2>
   <button class="btn btn-success" (click)="returnToLobby()">Back</button>
 </div>
 

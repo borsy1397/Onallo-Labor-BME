@@ -11,10 +11,9 @@ import { User } from 'src/app/model/User';
 export class UserDetailsComponent implements OnInit {
 
   constructor(private userService: UserService, private route: ActivatedRoute, private router: Router) {
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
-  private user: User;
+  user: User;
 
   ngOnInit() {
     this.getUser();
@@ -32,10 +31,14 @@ export class UserDetailsComponent implements OnInit {
      * A servicokkal kell játszani, mert a usert el kellene tárolni eg yváltozóban, nem a local storageban
      * gitlabon majd megnézni, hogy ez hogy van/lesz megoldva, és csak a servicet kell majd injektálni, úgy meg el van kérve.
      */
-    const id = this.route.snapshot.paramMap.get('id');
-    this.userService.getUserById(id).subscribe(response => {
+    const username = this.route.snapshot.paramMap.get('username');
+    // this.userService.getUserById(id).subscribe(response => {
+    //   this.user = response;
+    //   console.log(this.user.games);
+    // });
+    this.userService.getUserByUsername(username).subscribe(response => {
       this.user = response;
-      console.log(this.user.games);
+      console.log(this.user.username);
     });
   }
 

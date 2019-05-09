@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { GameService } from 'src/app/services/game/game.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { Router } from '@angular/router';
@@ -29,7 +29,6 @@ export class PlayComponent implements OnInit {
   returnToLobby() {
     this.router.navigate(['/home/games']);
   }
-
 
   ngOnInit() {
 
@@ -85,9 +84,14 @@ export class PlayComponent implements OnInit {
 
     this.gameService.gameEnd().subscribe(response => {
       if (response['draw']) {
-        alert('DRAW');
+        alert('DRAW!');
       } else {
-        alert('THE WINNER IS:' + response['winner']);
+        if(response['winner'] == this.enemyName) {
+          alert('You lost :( The winner is: ' + response['winner']);
+        } else {
+          alert('Congratulations! You are the winner! :)');
+        }
+        
       }
       this.returnToLobby();
 
@@ -97,7 +101,7 @@ export class PlayComponent implements OnInit {
     })
 
     this.gameService.playerLeft().subscribe((response) => {
-      alert('Player Left, You are the winner');
+      alert('Player Left! You are the winner! Congratulations! :)');
       this.returnToLobby();
     });
   }

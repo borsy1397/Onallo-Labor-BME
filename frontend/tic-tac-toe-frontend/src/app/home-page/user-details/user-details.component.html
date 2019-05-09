@@ -2,4 +2,5 @@
   <li *ngFor="let game of user.games">
       <p routerLink="/home/player/{{game.enemy.id}}">{{game.enemy.username}}</p>
   </li>
+  <span style="color: white;">{{user.username}}</span>
 </ul>

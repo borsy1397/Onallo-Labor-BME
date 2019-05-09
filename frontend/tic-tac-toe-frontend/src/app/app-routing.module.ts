@@ -19,7 +19,7 @@ const appRoutes: Routes = [
     component: MainComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: 'player/:id', component: UserDetailsComponent },
+      { path: 'player/:username', component: UserDetailsComponent },
       { path: 'games', component: GameComponent },
       { path: 'profile', component: ProfileComponent },
       { path: 'ranktable', component: RanktableComponent },

@@ -6,7 +6,6 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 
 import { TokenInterceptor } from './token-interceptor';
 
-
 import { AppComponent } from './app.component';
 import { LandingComponent } from './landing-page/landing/landing.component';
 import { LoginComponent } from './landing-page/login/login.component';

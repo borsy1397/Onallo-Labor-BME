@@ -9,6 +9,16 @@
     position: relative;
 }
 
+hr {
+    border-color: white;
+    width: 60%;
+}
+
+.row {
+    max-height: 400px;
+    overflow: auto;
+}
+
 .col {
     padding-right: 0px;
     padding-left: 0px;
@@ -18,18 +28,35 @@
     background: #3c8f79;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+    height: 75px;
+    padding-top: 8px;
+}
+
+.enemy:hover {
+    background: #439e86;
 }
 
 .visit-play .visit {
     border-bottom-left-radius: 10px;
-    background: rgb(150, 150, 150);
-    font-size: 1.2rem;
+    background: rgba(30, 230, 56, 0.699);
+    font-size: 1.7rem;
+    color: white;
+}
+
+.visit-play .visit:hover {
+    background: rgba(51, 233, 75, 0.76);
+}
+
+.visit-play .play:hover {
+    background: rgba(51, 233, 75, 0.76);
+    background: rgb(36, 207, 14);
 }
 
 .visit-play .play {
     border-bottom-right-radius: 10px;
-    background: rgb(119, 119, 119);
-    font-size: 1.2rem;
+    background: rgb(22, 189, 0);
+    font-size: 1.7rem;
+    color: white;
 }
 
 .enemy span {
@@ -45,6 +72,7 @@ span strong {
 
 .header {
     font-size: 1.2rem;
+    margin-bottom: 15px;
 }
 
 .header .btn-success {
