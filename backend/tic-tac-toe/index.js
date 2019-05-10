@@ -11,7 +11,6 @@ const redisDB = require('./utils/db/redis/redis');
 require('./models/User');
 require('./models/GameResult');
 
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));

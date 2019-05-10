@@ -1,9 +1,9 @@
 <div class="container">
   <div class="container" style="margin-bottom: 15px;">
-    <h1 style="color: white;">My rank: {{position}}. </h1>
+    <h1 style="color: white;">You are in the {{position}}. place </h1>
   </div>
   <div class="container" style="width: 50%;">
-    <div class="container" style="margin-bottom: 20px;">
+    <div class="container rank-user-points" style="margin-bottom: 20px;">
       <div class="row" style="font-weight: 300;">
         <div class="col-lg-3" style="padding-right: 0px; padding-left: 0px;">
           <div class="header mr-3">RANK</div>
@@ -16,7 +16,7 @@
         </div>
       </div>
     </div>
-    <div class="container">
+    <div class="container" style="max-height: 377px; overflow: auto;">
       <ul>
         <li *ngFor="let user of users | slice:0; let i = index;">
           <div class="row justify-content-between" [style.background]="isMyName(user.username) ? 'white' : '#85bbff'"

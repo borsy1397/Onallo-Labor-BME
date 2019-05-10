@@ -1,1 +1,54 @@
-<p>{{user.username}}</p>
+<div class="container">
+    <div class="container" style="margin-bottom: 15px;">
+        <h1 style="color: white;">Welcome {{user.username}}!</h1>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+
+            </div>
+            <div class="col-lg-8">
+                <div class="container">
+                    <div class="container rank-user-points" style="margin-bottom: 20px;">
+                        <div class="row" style="font-weight: 300; border-radius: 10px; background: pink;">
+                            <div class="col-lg-3" style="padding-right: 0px; padding-left: 0px;">
+                                <div>Result</div>
+                            </div>
+                            <div class="col-lg-3" style="padding-right: 0px; padding-left: 0px;">
+                                <div>Type</div>
+                            </div>
+                            <div class="col-lg-3" style="padding-right: 0px; padding-left: 0px;">
+                                <div>Enemy</div>
+                            </div>
+                            <div class="col-lg-3" style="padding-right: 0px; padding-left: 0px;">
+                                <div>Time</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container" style="max-height: 377px; overflow: auto;">
+                        <ul>
+                            <li *ngFor="let game of user.games">
+                                <div class="row justify-content-between"
+                                    style="margin-top: 10px; background: green; border-radius: 5px; font-size: 1.5rem; padding-top: 3px; padding-bottom: 3px; cursor: pointer;"
+                                    routerLink="/home/player/{{game.enemy.username}}">
+                                    <div class="col-lg-3">
+                                        {{game.win}}
+                                    </div>
+                                    <div class="col-lg-3" style="font-weight: 600;">
+                                        {{game.shape}}
+                                    </div>
+                                    <div class="col-lg-3">
+                                        {{game.enemy.username}}
+                                    </div>
+                                    <div class="col-lg-3">
+                                        {{game.playTime}}
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

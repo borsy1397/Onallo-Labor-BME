@@ -1,0 +1,20 @@
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.row .col-lg-6:first-child {
+    text-align: left;
+}
+
+.row .col-lg-6:last-child {
+    text-align: right;
+}
+
+
+@media screen and (max-width: 992px) {
+    .rank-user-points {
+        display: none;
+    }
+}
