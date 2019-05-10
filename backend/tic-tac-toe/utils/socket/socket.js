@@ -3,7 +3,6 @@ const secretKeys = require('../secret').secretKeys;
 
 module.exports = (io, redisDB) => {
     io.use(authorizeSocket).on('connection', socket => {
-        console.log("Connected...... " + socket.id);
 
         socket.on('create-room', data => {
             require('./create-room')(io, socket, redisDB, data);

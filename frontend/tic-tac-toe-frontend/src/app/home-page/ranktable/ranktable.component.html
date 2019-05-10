@@ -1,7 +1,39 @@
-<div>
-  <ul>
-    <li *ngFor="let user of users">
-      <p routerLink="/home/player/{{user.id}}">{{user.username}}</p>
-    </li>
-  </ul>
+<div class="container">
+  <div class="container" style="margin-bottom: 15px;">
+    <h1 style="color: white;">My rank: {{position}}. </h1>
+  </div>
+  <div class="container" style="width: 50%;">
+    <div class="container" style="margin-bottom: 20px;">
+      <div class="row" style="font-weight: 300;">
+        <div class="col-lg-3" style="padding-right: 0px; padding-left: 0px;">
+          <div class="header mr-3">RANK</div>
+        </div>
+        <div class="col-lg-5" style="padding-right: 0px; padding-left: 0px;">
+          <div class="header-2">USERNAME</div>
+        </div>
+        <div class="col-lg-4" style="padding-right: 0px; padding-left: 0px;">
+          <div class="header-3">POINTS</div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <ul>
+        <li *ngFor="let user of users | slice:0; let i = index;">
+          <div class="row justify-content-between" [style.background]="isMyName(user.username) ? 'white' : '#85bbff'"
+            style="margin-top: 10px; border-radius: 5px; font-size: 1.5rem; padding-top: 3px; padding-bottom: 3px; cursor: pointer;" routerLink="/home/player/{{user.username}}">
+            <div class="col-lg-3">
+              {{i+1}}.
+            </div>
+            <div class="col-lg-5" style="font-weight: 600;">
+              {{user.username}}
+            </div>
+            <div class="col-lg-4">
+              {{user.points}}
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
 </div>

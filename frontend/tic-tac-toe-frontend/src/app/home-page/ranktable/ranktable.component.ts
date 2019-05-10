@@ -16,6 +16,8 @@ export class RanktableComponent implements OnInit {
   private users: any;
   private position: number = null;
 
+  myName: string = localStorage.getItem('username');
+
   ngOnInit() {
     this.userService.getRank().subscribe(response => {
       this.users = response.users;
@@ -24,4 +26,9 @@ export class RanktableComponent implements OnInit {
       console.log(this.position);
     });
   }
+
+  isMyName(username: string): boolean {
+    return this.myName === username ? true : false;
+  }
+
 }

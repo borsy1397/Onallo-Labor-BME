@@ -7,8 +7,8 @@ bluebird.promisifyAll(redisClient);
 redisClient.set("totalRoomCount", 0);
 
 redisClient.set("usersInGame", JSON.stringify({
-    users: [], // socket id
-    usersName: [] // username
+    users: [], 
+    usersName: []
 }));
 
 redisClient.set("allRooms", JSON.stringify({

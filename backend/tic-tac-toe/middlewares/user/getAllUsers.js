@@ -8,7 +8,7 @@ const UsersListDTO = require('../../models/dto/UsersListDTO');
 module.exports = (req, res, next) => {
     User.find()
         .sort({ points: -1 })
-        .limit(5)
+        .limit(10)
         .exec()
         .then(users => {
             if (!users) {
