@@ -13,7 +13,6 @@ module.exports = (user, ownProfile) => {
         username: user.username,
         email: user.email,
         games: gamesDTO, 
-        //games: user.games, 
         joined: user.joined,
         points: user.points
     }

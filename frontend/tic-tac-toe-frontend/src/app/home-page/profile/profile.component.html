@@ -1,12 +1,20 @@
 <div class="container">
     <div class="container" style="margin-bottom: 15px;">
-        <h1 style="color: white;">Welcome {{user.username}}!</h1>
+        <h1 style="color: #fffbcb;">Welcome {{user.username}}!</h1>
     </div>
     <div class="container">
         <div class="row" style="color: white">
-            <div class="col-lg-4">
-                <h2>You have {{user.points}} points!</h2>
+            <div class="col-lg-4" style="text-align: left; color: #fffac5; padding-top: 20px; border: 1px solid white;">
+                <h2 style="margin-bottom: 30px;">You have <strong style="color: cyan;">{{user.points}}</strong> points!
+                </h2>
                 <h3>Joined: {{joined(user.joined)}}</h3>
+                <h3 style="margin-bottom: 30px;">{{user.email}}</h3>
+                <!-- <h5 style="cursor: pointer; font-style: italic;">Change email</h5>
+                <h5 style="cursor: pointer; font-style: italic;">Change password</h5> -->
+                <button class="btn btn-info btn-block" style="font-size: 1.2rem;">Change email</button>
+                <button class="btn btn-info btn-block" style="font-size: 1.2rem;">Change password</button>
+                <button class="btn btn-danger" style="position: absolute; bottom: 0; width: 90%; font-size: 0.9rem; margin-bottom: 10px;">Delete profile</button>
+                <!-- <h6 style="cursor: pointer; font-style: italic; position: absolute; bottom: 0;">Delete profile</h6> -->
             </div>
             <div class="col-lg-8">
                 <div class="container">
