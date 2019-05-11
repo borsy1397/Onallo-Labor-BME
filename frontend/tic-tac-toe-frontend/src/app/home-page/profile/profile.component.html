@@ -3,21 +3,23 @@
         <h1 style="color: white;">Welcome {{user.username}}!</h1>
     </div>
     <div class="container">
-        <div class="row">
+        <div class="row" style="color: white">
             <div class="col-lg-4">
-
+                <h2>You have {{user.points}} points!</h2>
+                <h3>Joined: {{joined(user.joined)}}</h3>
             </div>
             <div class="col-lg-8">
                 <div class="container">
-                    <div class="container rank-user-points" style="margin-bottom: 20px;">
-                        <div class="row" style="font-weight: 300; border-radius: 10px; background: pink;">
+                    <div class="container rank-user-points" style="margin-bottom: 10px;">
+                        <div class="row" style="font-weight: 700; font-size: 1.7rem; border-radius: 10px; background: #5ab2a2;
+                        color: #17182f;">
                             <div class="col-lg-3" style="padding-right: 0px; padding-left: 0px;">
                                 <div>Result</div>
                             </div>
-                            <div class="col-lg-3" style="padding-right: 0px; padding-left: 0px;">
-                                <div>Type</div>
+                            <div class="col-lg-2" style="padding-right: 0px; padding-left: 0px;">
+                                <div>Shape</div>
                             </div>
-                            <div class="col-lg-3" style="padding-right: 0px; padding-left: 0px;">
+                            <div class="col-lg-4" style="padding-right: 0px; padding-left: 0px;">
                                 <div>Enemy</div>
                             </div>
                             <div class="col-lg-3" style="padding-right: 0px; padding-left: 0px;">
@@ -25,23 +27,25 @@
                             </div>
                         </div>
                     </div>
-                    <div class="container" style="max-height: 377px; overflow: auto;">
+                    <div class="container" style="max-height: 377px; overflow: scroll;
+                    overflow-x: hidden; -ms-overflow-style: none; scrollbar-width: none; ">
                         <ul>
                             <li *ngFor="let game of user.games">
                                 <div class="row justify-content-between"
-                                    style="margin-top: 10px; background: green; border-radius: 5px; font-size: 1.5rem; padding-top: 3px; padding-bottom: 3px; cursor: pointer;"
-                                    routerLink="/home/player/{{game.enemy.username}}">
+                                    style="margin-top: 10px; font-size: 1.5rem; padding-top: 3px; color: white; padding-bottom: 3px; cursor: pointer;"
+                                    routerLink="/home/player/{{game.enemy.username}}"
+                                    [style.background]="resColor(game.win, game.draw)">
                                     <div class="col-lg-3">
-                                        {{game.win}}
+                                        {{result(game.win, game.draw)}}
                                     </div>
-                                    <div class="col-lg-3" style="font-weight: 600;">
-                                        {{game.shape}}
+                                    <div class="col-lg-2" style="font-weight: 600;">
+                                        {{game.shape | uppercase}}
                                     </div>
-                                    <div class="col-lg-3">
+                                    <div class="col-lg-4">
                                         {{game.enemy.username}}
                                     </div>
                                     <div class="col-lg-3">
-                                        {{game.playTime}}
+                                        {{time(game.playTime)}}
                                     </div>
                                 </div>
                             </li>
