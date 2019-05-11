@@ -81,13 +81,13 @@ module.exports = (io, socket, redisDB) => {
                                                 console.log(err);
                                             });
 
-                                        user2.games.push(gameResultLose);
+                                        user2.games.unshift(gameResultLose);
                                         user2.save().then(result => {
                                             //console.log(result);
                                         });
 
                                         user.points += 2;
-                                        user.games.push(gameResultWin);
+                                        user.games.unshift(gameResultWin);
                                         user.save().then(result => {
                                             //console.log(result);
                                         });

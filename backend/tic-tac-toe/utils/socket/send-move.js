@@ -155,13 +155,13 @@ module.exports = (io, socket, redisDB, move) => {
                                                         });
 
 
-                                                    user2.games.push(gameResultLose);
+                                                    user2.games.unshift(gameResultLose);
                                                     user2.save().then(result => {
                                                         //console.log(result);
                                                     });
 
                                                     user.points += 2;
-                                                    user.games.push(gameResultWin);
+                                                    user.games.unshift(gameResultWin);
                                                     user.save().then(result => {
                                                         //console.log(result);
                                                     });
@@ -266,7 +266,7 @@ module.exports = (io, socket, redisDB, move) => {
                                                     });
 
                                                 user.points++;
-                                                user.games.push(gameResultDraw1);
+                                                user.games.unshift(gameResultDraw1);
                                                 user.save().then(result => {
                                                     //console.log(result);
                                                 });
@@ -289,7 +289,7 @@ module.exports = (io, socket, redisDB, move) => {
                                                     });
 
                                                 user2.points++;
-                                                user2.games.push(gameResultDraw2);
+                                                user2.games.unshift(gameResultDraw2);
                                                 user2.save().then(result => {
                                                     //console.log(result);
                                                 });

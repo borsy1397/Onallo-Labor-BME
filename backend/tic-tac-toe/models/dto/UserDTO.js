@@ -4,8 +4,20 @@ module.exports = (user, ownProfile) => {
     }
 
     let gamesDTO = [];
+    let win = 0;
+    let draw = 0;
+    let lost = 0;
 
     user.games.forEach(game => {
+        if(game.draw) {
+            draw++;
+        } else {
+            if(game.win) {
+                win++;
+            } else {
+                lost++;
+            }
+        }
         gamesDTO.push(GameDTO(game));
     })
     
@@ -14,7 +26,10 @@ module.exports = (user, ownProfile) => {
         email: user.email,
         games: gamesDTO, 
         joined: user.joined,
-        points: user.points
+        points: user.points,
+        win: win,
+        draw: draw,
+        lost: lost 
     }
 }
 
