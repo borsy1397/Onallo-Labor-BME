@@ -3,6 +3,7 @@ import { GameService } from 'src/app/services/game/game.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { Router } from '@angular/router';
 import { Message } from 'src/app/model/Message';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-play',
@@ -11,7 +12,7 @@ import { Message } from 'src/app/model/Message';
 })
 export class PlayComponent implements OnInit {
 
-  constructor(private gameService: GameService, private authService: AuthService, private router: Router) { }
+  constructor(private gameService: GameService, private authService: AuthService, private router: Router, private spinner: NgxSpinnerService) { }
 
   roomName: string = null;
   enemyName: string = null;
@@ -36,11 +37,13 @@ export class PlayComponent implements OnInit {
       this.returnToLobby();
     }
 
+    this.spinner.show();
+
     window.onbeforeunload = () => this.ngOnDestroy();
 
     this.gameService.startGame().subscribe((response) => {
       this.roomName = response['roomName'];
-
+      this.spinner.hide();
       if (this.myname === this.roomName) {
         this.enemyName = response['ellenfel'];
         this.myShape = 'x';

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Routes }  from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { LandingComponent } from './landing-page/landing/landing.component';
 import { LoginComponent } from './landing-page/login/login.component';
 import { SignUpComponent } from './landing-page/sign-up/sign-up.component';
@@ -23,10 +23,11 @@ const appRoutes: Routes = [
       { path: 'games', component: GameComponent },
       { path: 'profile', component: ProfileComponent },
       { path: 'ranktable', component: RanktableComponent },
-      { path: 'play', component: PlayComponent}
+      { path: 'play', component: PlayComponent }
     ]
   },
-  { path: '',
+  {
+    path: '',
     component: LandingComponent,
     children: [
       { path: 'login', component: LoginComponent },
@@ -38,15 +39,14 @@ const appRoutes: Routes = [
     path: '**', // wildcard
     component: PageNotFoundComponent
   }
-  
+
 ];
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule.forRoot(
-      appRoutes,
-      { enableTracing: true } // <-- debugging purposes only!!!!!!!!!!!
+      appRoutes, { onSameUrlNavigation: 'reload' }
     )
   ],
   exports: [
