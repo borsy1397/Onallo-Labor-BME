@@ -103,6 +103,10 @@ td button {
     border-bottom: 3px solid green;
 }
 
+.enemy-round {
+    opacity: 0.5;
+}
+
 .whose-turn h4 {
     opacity: 1;
 }

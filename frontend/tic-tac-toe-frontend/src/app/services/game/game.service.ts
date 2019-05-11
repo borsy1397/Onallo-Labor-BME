@@ -21,9 +21,13 @@ export class GameService {
 	}
 
 	gameEnd(): any {
+		console.log("MIAKURVAANYADVAN");
 		return new Observable(observer => {
+			console.log("MIAKURVAANYADVAN SOCKET KIVUL");
 			if (this.socket != null) {
+				console.log("MIAKURVAANYADVAN SOCKET BELUL");
 				this.socket.on('game-end', (data) => {
+					console.log("MIAKURVAANYADVAN SOCKET BELUL BELUL");
 					observer.next(
 						data
 					);

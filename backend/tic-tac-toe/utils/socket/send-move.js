@@ -216,12 +216,12 @@ module.exports = (io, socket, redisDB, move) => {
                                 'whichGrid': whichGrid
                             });
 
-                            setInterval(() => {
-                                io.sockets.in("room-" + roomName).emit('game-end', {
-                                    'draw': false,
-                                    'winner': whoseMove
-                                });
-                            }, 500);
+
+                            io.sockets.in("room-" + roomName).emit('game-end', {
+                                'draw': false,
+                                'winner': whoseMove
+                            });
+
 
                         }
                     });

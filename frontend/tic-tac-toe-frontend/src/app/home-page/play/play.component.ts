@@ -56,6 +56,7 @@ export class PlayComponent implements OnInit {
         this.enemyName = this.roomName;
         this.myShape = 'o';
         this.enemyShape = 'x';
+        document.querySelector(`.game-board`).classList.add("enemy-round");
         document.querySelector(`#enemy`).classList.add("whose-turn");
         document.querySelector(`#you h4`).classList.add(`shape-${this.myShape}`);
         document.querySelector(`#enemy h4`).classList.add(`shape-${this.enemyShape}`);
@@ -75,33 +76,35 @@ export class PlayComponent implements OnInit {
         this.myTurn = false;
         document.querySelector(`#enemy`).classList.add("whose-turn");
         document.querySelector(`#you`).classList.remove("whose-turn");
+        document.querySelector(`.game-board`).classList.add("enemy-round");
 
       } else {
         this.renderMove(this.whichGrid, this.enemyShape);
         this.myTurn = true;
         document.querySelector(`#you`).classList.add("whose-turn");
+        document.querySelector(`.game-board`).classList.remove("enemy-round");
         document.querySelector(`#enemy`).classList.remove("whose-turn");
-
       }
     });
 
     this.gameService.gameEnd().subscribe(response => {
+      console.log(response);
       if (response['draw']) {
         alert('DRAW!');
       } else {
-        if(response['winner'] == this.enemyName) {
+        if (response['winner'] == this.enemyName) {
           alert('You lost :( The winner is: ' + response['winner']);
         } else {
           alert('Congratulations! You are the winner! :)');
         }
-        
+
       }
       this.returnToLobby();
 
       // es itt majd csinalni csudijo dolgokat, pl. animacio hogy keresztbehuzzok a nyero reszt, meg gratulalunk, meg minden
       //vagyis szerintem ezt itt kell majd
 
-    })
+    });
 
     this.gameService.playerLeft().subscribe((response) => {
       alert('Player Left! You are the winner! Congratulations! :)');
