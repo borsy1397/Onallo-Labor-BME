@@ -8,6 +8,11 @@ ul {
     text-align: left;
 }
 
+.displayblock {
+    display: block;
+    width: 60%;
+}
+
 .row .col-lg-6:last-child {
     text-align: right;
 }
@@ -15,6 +20,10 @@ ul {
 ::-webkit-scrollbar {
     width: 0px;  
     background: transparent; 
+}
+
+.btn-danger {
+    width: 90%;
 }
 
 ::-webkit-scrollbar-thumb {

@@ -10,7 +10,7 @@ import { User } from 'src/app/model/User';
 })
 export class UserDetailsComponent implements OnInit {
 
-  constructor(private userService: UserService, private route: ActivatedRoute, private router: Router) {}
+  constructor(private userService: UserService, private route: ActivatedRoute, private router: Router) { }
 
   user: User = null;
 
@@ -24,7 +24,12 @@ export class UserDetailsComponent implements OnInit {
       this.router.navigate(['/home/profile']);
     } else {
       this.userService.getUserByUsername(username).subscribe(response => {
-        this.user = response;
+        // ITT MEGOLDANI, HOGYHA nincs ilyen user, akkor hibat dobjon ki
+        if (response) {
+          this.user = response;
+        } else {
+          this.router.navigate(['/home/games']);
+        }
       });
     }
   }

@@ -35,6 +35,7 @@ module.exports = (req, res, next) => {
       }
     
     
+      // Ezt majd uj middlewareba!!!
       User.findOne({ email: userData.email })
         .exec()
         .then(user => {

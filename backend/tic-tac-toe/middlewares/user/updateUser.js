@@ -35,6 +35,8 @@ module.exports = (req, res, next) => {
                         });
                 }
 
+                // Uj middleware!!
+
                 if (req.body.password != null) {
                     if (req.body.password.length < 8) {
                         return res.status(406).json({

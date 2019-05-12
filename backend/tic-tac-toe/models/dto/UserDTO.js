@@ -1,6 +1,7 @@
 module.exports = (user, ownProfile) => {
     if(!ownProfile) {
-        user.email = "";    
+        user.email = "";   
+        user._id = "";
     }
 
     let gamesDTO = [];
@@ -18,10 +19,20 @@ module.exports = (user, ownProfile) => {
                 lost++;
             }
         }
-        gamesDTO.push(GameDTO(game));
+        let enemyId = null;
+        let enemyUsername = null;
+        if(game.enemy == null || game.enemy == undefined) {
+            enemyId = "deleteduser";
+            enemyUsername = "deleted user";
+        } else {
+            enemyId = game.enemy._id;
+            enemyUsername = game.enemy.username;
+        }
+        gamesDTO.push(GameDTO(game, enemyId, enemyUsername));
     })
     
     return {
+        id: user._id,
         username: user.username,
         email: user.email,
         games: gamesDTO, 
@@ -33,15 +44,15 @@ module.exports = (user, ownProfile) => {
     }
 }
 
-function GameDTO(game) {
+function GameDTO(game, enemyId, enemyUsername) {
     return {
         draw: game.draw,
         playTime: game.playTime, 
         win: game.win,
         shape: game.shape,
         enemy: {
-            id: game.enemy._id,
-            username: game.enemy.username
+            id: enemyId,
+            username: enemyUsername
         }
     }
 }

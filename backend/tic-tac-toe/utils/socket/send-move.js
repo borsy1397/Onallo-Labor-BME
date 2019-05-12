@@ -198,8 +198,6 @@ module.exports = (io, socket, redisDB, move) => {
                                 'draw': false,
                                 'winner': whoseMove
                             });
-
-
                         }
                     });
 

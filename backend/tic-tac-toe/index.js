@@ -25,6 +25,10 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send("Error!");
 });
+app.use((req, res, next) => {
+    res.locals = {};
+    next();
+});
 
 
 require('./routes/user')(app);

@@ -4,6 +4,7 @@ const getUserByUsernameMW = require('../middlewares/user/getUserByUsername');
 const getAllUsersMW = require('../middlewares/user/getAllUsers');
 const getPositionMW = require('../middlewares/user/getPosition');
 const createUserMW = require('../middlewares/user/createUser');
+const deleteUserMW = require('../middlewares/user/deleteUser');
 
 
 module.exports = app => {
@@ -23,7 +24,10 @@ module.exports = app => {
         getAllUsersMW
     );
 
-    // delete
+    app.delete('/users/:id',
+        authorizeMW,
+        deleteUserMW
+    );
 
     // update
 

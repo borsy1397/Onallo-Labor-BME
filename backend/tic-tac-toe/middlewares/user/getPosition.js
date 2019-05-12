@@ -30,6 +30,5 @@ function indexOf(users, username) {
             return i+1;
         }
     }
-
     return -1;
 }

@@ -4,6 +4,7 @@ import { LoginUser } from 'src/app/model/LoginUser';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AuthService } from '../../services/auth/auth.service';
+import { CurrentUser } from 'src/app/model/CurrentUser';
 
 @Component({
   selector: 'app-login',
@@ -26,7 +27,7 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private spinner: NgxSpinnerService
-  ) {}
+  ) { }
 
   ngOnInit() {
     if (this.authService.checkAuth()) {
@@ -36,9 +37,13 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     this.loginService.login(this.user).subscribe(res => {
+      console.log(res);
       localStorage.setItem('token', res.token);
       localStorage.setItem('refreshToken', res.refreshToken);
-      localStorage.setItem('username', res.username)
+      localStorage.setItem('username', res.user.username)
+
+      this.loginService.setCurrentUser(res.user);
+      console.log("BUZIIIIIIIII " + this.loginService.getCurrentUser());
 
       this.correct = true;
       this.spinner.show();
@@ -55,14 +60,15 @@ export class LoginComponent implements OnInit {
 }
 
 
-      /*import { HttpHeaders } from '@angular/common/http';
+/*import { HttpHeaders } from '@angular/common/http';
+import { CurrentUser } from '../../model/CurrentUser';
 
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json', ---- van interceptor, szoval ez nem kell
-          'Authorization': 'my-auth-token'
-        })
-      };*/
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type': 'application/json', ---- van interceptor, szoval ez nem kell
+    'Authorization': 'my-auth-token'
+  })
+};*/
 
 
       // Ez jo cuccnak nez ki, lehet ezt kene hasznalni, mint minden komponensnel az authservices checkAuth-ot

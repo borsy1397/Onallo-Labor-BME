@@ -2,7 +2,7 @@ const RefreshToken = require('../../models/RefreshToken');
 const secretKeys = require('../../utils/secret').secretKeys;
 const jwt = require('jsonwebtoken');
 
-module.exports = (req, res, next) => { // Ezt rendesen at kellesz majd irni....
+module.exports = (req, res, next) => { // Ezt rendesen at kellesz majd irni.... Nem olvasunk majd adatbazisbol!!!!
     const userData = {
         username: req.body.username,
         refreshToken: req.body.refreshToken
@@ -37,7 +37,5 @@ module.exports = (req, res, next) => { // Ezt rendesen at kellesz majd irni....
                 message: "Error token serach"
             });
         });
- 
-
 
 }

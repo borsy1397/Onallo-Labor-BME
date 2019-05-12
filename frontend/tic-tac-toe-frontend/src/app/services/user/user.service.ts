@@ -3,13 +3,14 @@ import { Observable } from 'rxjs';
 import { RankUserObject } from 'src/app/model/RankUserObject';
 import { HttpClient } from '@angular/common/http';
 import { User } from 'src/app/model/User';
+import { LoginService } from '../login/login.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private loginService: LoginService) { }
 
   getRank(): Observable<RankUserObject> {
     return this.http.get<RankUserObject>("http://localhost:3000/users");
@@ -21,5 +22,10 @@ export class UserService {
 
   getUserByUsername(name: string): Observable<User> {
     return this.http.get<User>(`http://localhost:3000/users/search/${name}`);
+  }
+
+  deleteUserById(){
+    console.log(this.loginService.getCurrentUser().id);
+    return this.http.delete<any>(`http://localhost:3000/users/${this.loginService.getCurrentUser().id}`);
   }
 }
