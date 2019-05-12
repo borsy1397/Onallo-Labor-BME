@@ -101,9 +101,6 @@ export class PlayComponent implements OnInit {
       }
       this.returnToLobby();
 
-      // es itt majd csinalni csudijo dolgokat, pl. animacio hogy keresztbehuzzok a nyero reszt, meg gratulalunk, meg minden
-      //vagyis szerintem ezt itt kell majd
-
     });
 
     this.gameService.playerLeft().subscribe((response) => {
@@ -120,8 +117,6 @@ export class PlayComponent implements OnInit {
   }
 
   sendMove(grid) {
-    // itt is ellenorizni majd minden szir szart, hogy nem e lepett mar e oda, meg ilyesmi
-    // szerveroldalon persze ez le van kezelve, de hogy meglegyen a jatek elmeny..
     if (this.myTurn) {
       console.log("SAJAT KLIKK");
       this.gameService.sendMove({

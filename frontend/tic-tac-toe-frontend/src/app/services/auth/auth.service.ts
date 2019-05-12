@@ -4,11 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class AuthService {
-
-  /**
-   * Ide lehet kell majd a http, ha a backendnek kuldunk egy kerest, hogy a felhasznalo be van a jelentkezve
-   */
-
+  
   constructor() { }
 
   checkAuth(): boolean {

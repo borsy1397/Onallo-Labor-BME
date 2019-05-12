@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     if (this.authService.checkAuth()) {
-      this.router.navigate(['/home/games']); // Ez itt legyen, vagy a konstruktorba irjam?
+      this.router.navigate(['/home/games']);
     }
   }
 

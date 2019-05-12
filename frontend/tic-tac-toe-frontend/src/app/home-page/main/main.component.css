@@ -8,7 +8,6 @@ header {
 }
 
 header a {
-  /* border: 1px solid black; */
   padding: 10px 20px;
   margin: 10px 10px;
   text-decoration: none;
@@ -49,16 +48,6 @@ header h2 {
   width: 60%;
 }
 
-/*
-h1 { color: #d54d7b; font-family: "Great Vibes", cursive; font-size: 165px; line-height: 160px; font-weight: normal; margin-bottom: 0px; margin-top: 40px; text-align: center; text-shadow: 0 1px 1px #fff; }
-h1 { color: #CEF0D4; font-family: 'Rouge Script', cursive; font-size: 130px; font-weight: normal; line-height: 48px; margin: 0 0 50px; text-align: center; text-shadow: 1px 1px 2px #082b34; }
-*/
-
-/*h1 { color: #fff; font-family: 'Righteous', cursive; font-size: 65px; font-weight: normal; line-height: 60px; margin: 10px 0 20px; text-transform: uppercase; text-shadow: 2px 2px 0 #000; margin: 10px 0 24px; text-align: center; }
-*/
-
-/* h1 { color: #d04764; font-family: 'Lobster', cursive; font-size: 136px; font-weight: normal; line-height: 48px; margin: 0 0 18px; text-shadow: 1px 0 0 #fff; } */
-
 body {
   font-family: 'Exo', sans-serif;
 }
@@ -74,14 +63,7 @@ body {
 }
 
 .area {
-  /* background-image: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%); */
-  /*background-color: #DCD9D4;
-  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.50) 0%, rgba(0, 0, 0, 0.50) 100%), radial-gradient(at 50% 0%, rgba(255, 255, 255, 0.10) 0%, rgba(0, 0, 0, 0.50) 50%);
-  background-blend-mode: soft-light, screen;*/
-  /* background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8); */
-  /* background-image: linear-gradient(-20deg, #2b5876 0%, #4e4376 100%); */
   background-image: linear-gradient(to top, #17182f 0%, #17182f 100%);
-  /* background-image: linear-gradient(to right, #243949 0%, #517fa4 100%); */
   width: 100%;
   height: 100vh;
 }

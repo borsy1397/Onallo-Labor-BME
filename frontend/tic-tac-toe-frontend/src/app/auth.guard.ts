@@ -7,7 +7,6 @@ import { AuthService } from './services/auth/auth.service';
   providedIn: 'root'
 })
 
-// CanActivateChild kell?????
 export class AuthGuard implements CanActivate {
 
   constructor(

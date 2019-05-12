@@ -74,7 +74,6 @@ td button {
     border: none;
     box-shadow: none;
     background: none;
-    /* Responsive font size! Awesome! */
 }
 
 .center {
@@ -122,10 +121,10 @@ td button {
 }
 
 ::-webkit-scrollbar {
-    width: 0px;  /* Remove scrollbar space */
-    background: transparent;  /* Optional: just make scrollbar invisible */
+    width: 0px;  
+    background: transparent;  
 }
-/* Optional: show position indicator in red */
+
 ::-webkit-scrollbar-thumb {
     background: #FF0000;
 }

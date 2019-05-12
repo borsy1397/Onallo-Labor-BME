@@ -36,7 +36,7 @@ const appRoutes: Routes = [
   }
   ,
   {
-    path: '**', // wildcard
+    path: '**',
     component: PageNotFoundComponent
   }
 
