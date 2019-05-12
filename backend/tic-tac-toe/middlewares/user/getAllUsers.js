@@ -1,10 +1,6 @@
 const User = require('../../models/User');
 const UsersListDTO = require('../../models/dto/UsersListDTO');
 
-// azert visszakuldeni a poziciot, mert ha lapozas van, akkor nem tudjuk kliensoldalon, hogy hanyadik
-// max 20-at visszakuldeni, vagy lapozhatoan megcsinalni? Legyen lapozhato, ha lesz ido ra
-// ugyhogy frontenden is majd implementalni a paginget (skip())
-
 module.exports = (req, res, next) => {
     User.find()
         .sort({ points: -1 })

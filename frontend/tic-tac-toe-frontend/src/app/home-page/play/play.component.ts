@@ -24,7 +24,6 @@ export class PlayComponent implements OnInit {
   myTurn: boolean = null;
   myShape: string = null;
   enemyShape: string = null;
-
   whichGrid: string = null;
 
   returnToLobby() {
@@ -88,7 +87,6 @@ export class PlayComponent implements OnInit {
     });
 
     this.gameService.gameEnd().subscribe(response => {
-      console.log(response);
       if (response['draw']) {
         alert('DRAW!');
       } else {
@@ -103,22 +101,19 @@ export class PlayComponent implements OnInit {
 
     });
 
-    this.gameService.playerLeft().subscribe((response) => {
+    this.gameService.playerLeft().subscribe(() => {
       alert('Player Left! You are the winner! Congratulations! :)');
       this.returnToLobby();
     });
   }
 
   renderMove(grid: string, shape: string) {
-    console.log(grid);
-    //document.querySelector(`#button_${grid}`).classList.add(`shape-${shape}`);
     document.querySelector(`#button_${grid}`).innerHTML = shape;
     document.querySelector(`#button_${grid}`).classList.add(`shape-${shape}`);
   }
 
   sendMove(grid) {
     if (this.myTurn) {
-      console.log("SAJAT KLIKK");
       this.gameService.sendMove({
         myMove: this.myname,
         whichGrid: +grid

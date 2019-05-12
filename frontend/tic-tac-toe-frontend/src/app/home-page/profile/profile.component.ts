@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
 import { User } from 'src/app/model/User';
 
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -19,7 +20,6 @@ export class ProfileComponent implements OnInit {
   getUser() {
     this.userService.getUserByUsername(localStorage.getItem('username')).subscribe(response => {
       this.user = response;
-      console.log(this.user);
     });
   }
 

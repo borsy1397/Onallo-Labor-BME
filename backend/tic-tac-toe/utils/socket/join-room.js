@@ -16,8 +16,7 @@ module.exports = (io, socket, redisDB, data) => {
 
             let indexPos = emptyRooms.indexOf(roomName);
             if (indexPos > -1) {
-                
-                //console.log('Join room! Jelenleg jatekban levok: ' + usersInGame);
+
                 
                 const newGame = {
                     id: roomName,

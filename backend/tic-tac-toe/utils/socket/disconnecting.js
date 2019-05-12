@@ -1,11 +1,7 @@
 const GameResult = require('../../models/GameResult');
 const User = require('../../models/User');
 
-
 module.exports = (io, socket, redisDB) => {
-
-    console.log('User disconnected');
-    //console.log('Disconnectingnel! Socket.rooms: ' + rooms);
     const rooms = Object.keys(socket.rooms);
     const roomName = (rooms[1] !== undefined && rooms[1] !== null) ? (rooms[1]).split('-')[1] : null;
     if (roomName !== null) {
@@ -19,45 +15,34 @@ module.exports = (io, socket, redisDB) => {
             
             for (gameIndex = 0; gameIndex < games.length; gameIndex++) {
                 if (games[gameIndex].id === roomName) {
-                    console.log(games);
-                    console.log('-----------Disconnecting')
                     const winner = games[gameIndex].users[0] == socket.decodedUsername ? games[gameIndex].users[1] : games[gameIndex].users[0]
                     let indexx = games[gameIndex].users[0] === winner ? 0 : 1;
+                    let jatek = games[gameIndex];
                     let playtime = Math.ceil((Date.now() - games[gameIndex].created) / 1000);
                     games.splice(gameIndex, 1);
-                    console.log(games);
 
                     User.findOne({ username: winner })
                     .exec()
                     .then(user => {
                         if (!user) {
-                            console.log("nincs is ilyen user, lol");
                         } else {
-                            console.log('elso user:');
-                            console.log(games);
                             User.findOne({ username: socket.decodedUsername })
                                 .exec()
                                 .then(user2 => {
                                     if (!user2) {
-                                        console.log("nincs is ilyen user, lol");
                                     } else {
 
-                                        
-
-                                        //console.log('masodik user:');
-                                        //console.log(games);
                                         const gameResultWin = new GameResult({
                                             draw: false,
                                             win: true,
                                             enemy: user2,
-                                            shape: 'x',
+                                            shape: jatek.type[indexx === 0 ? 0 : 1],
                                             playTime: playtime
                                         });
 
                                         gameResultWin
                                             .save()
                                             .then(result => {
-                                                // console.log(result);
                                             })
                                             .catch(err => {
                                                 console.log(err);
@@ -67,15 +52,13 @@ module.exports = (io, socket, redisDB) => {
                                             draw: false,
                                             win: false,
                                             enemy: user,
-                                            //shape: jatek.type[indexx === 0 ? 1 : 0], EZT KIJAVITANI!!!!!!
-                                            shape: 'o',
+                                            shape: jatek.type[indexx === 0 ? 1 : 0],
                                             playTime: playtime
                                         });
 
                                         gameResultLose
                                             .save()
                                             .then(result => {
-                                                //console.log(result);
                                             })
                                             .catch(err => {
                                                 console.log(err);
@@ -83,19 +66,15 @@ module.exports = (io, socket, redisDB) => {
 
                                         user2.games.unshift(gameResultLose);
                                         user2.save().then(result => {
-                                            //console.log(result);
                                         });
 
                                         user.points += 2;
                                         user.games.unshift(gameResultWin);
                                         user.save().then(result => {
-                                            //console.log(result);
                                         });
-
-                                        console.log("VEGE A JATEKNAK");
+                                        //ide nem kell room-disconnect? vagy pont hogy jo, hogy nincs, es a tobbihez sem kell?
                                         io.emit('rooms-available', {
                                             'totalRoomCount': totalRoomCount,
-                                            'fullRooms': fullRooms,
                                             'emptyRooms': emptyRooms,
                                             'usersInGame': usersInGame.length
                                         });
@@ -112,10 +91,9 @@ module.exports = (io, socket, redisDB) => {
                     });
                     
                     
-                    io.sockets.in("room-" + roomName).emit('room-disconnect', { id: socket.id });
+                    io.sockets.in("room-" + roomName).emit('room-disconnect');
                     io.emit('rooms-available', {
                         'totalRoomCount': totalRoomCount,
-                        'fullRooms': fullRooms,
                         'emptyRooms': emptyRooms,
                         'usersInGame': usersInGame.length
                     });
@@ -158,17 +136,13 @@ module.exports = (io, socket, redisDB) => {
                 games: games
             }));
 
-            io.sockets.in("room-" + roomName).emit('room-disconnect', { id: socket.id });
+            io.sockets.in("room-" + roomName).emit('room-disconnect');
             io.emit('rooms-available', {
                 'totalRoomCount': totalRoomCount,
-                'fullRooms': fullRooms,
                 'emptyRooms': emptyRooms,
                 'usersInGame': usersInGame.length
             });
-            
-            
-            // console.log('Disconnection........ SocketID:' + socket.id);
-            // console.log('Jatekban levok: ' + usersInGame);
+
         });
     }
 };

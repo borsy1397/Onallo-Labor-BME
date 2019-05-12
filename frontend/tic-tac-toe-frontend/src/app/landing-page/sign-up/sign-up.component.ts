@@ -29,9 +29,7 @@ export class SignUpComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private spinner: NgxSpinnerService
-  ) {
-
-  }
+  ) {}
 
   ngOnInit() {
     if(this.authService.checkAuth()){

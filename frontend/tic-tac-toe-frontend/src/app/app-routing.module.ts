@@ -39,7 +39,6 @@ const appRoutes: Routes = [
     path: '**',
     component: PageNotFoundComponent
   }
-
 ];
 
 @NgModule({

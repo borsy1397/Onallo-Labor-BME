@@ -57,17 +57,6 @@ export class LoginComponent implements OnInit {
 }
 
 
-// Ha sikerult a bejelentkezes, akkor a ketto tokent el kell tarolni --talan megoldva
-
-      // HEADERBE BERAKNI A TOKENEKET KERESNEL -- talan megoldva
-
-      // Ha mar be van jelentkezve a felhasznalo, akkor nem szabad, hogy megegyszer bejelentkezhessen
-      // Ezt valahol kezelni kell majd
-      // Illetve regisztralni sem szabad, szoval ott is ellenorizni   ----- ez talan megoldva
-
-      // Token interceptor????? --- talan megoldva, vagyis hat refreshtoken meg nincs megcsinalva, meg ketszer kuldi vissza(?)
-
-
       /*import { HttpHeaders } from '@angular/common/http';
 
       const httpOptions = {

@@ -29,7 +29,6 @@ module.exports = (io, socket, redisDB, data) => {
                     usersName: usersInGameUsername
                 }));
 
-                // console.log('Create room! Jelenleg jatekban levok ' + usersInGame);
 
                 socket.join("room-" + username);
 
@@ -39,9 +38,7 @@ module.exports = (io, socket, redisDB, data) => {
                     'emptyRooms': emptyRooms,
                     'usersInGame': usersInGame.length
                 });
-
-                // Ezek igazabol nem is kellenek, csak hogy emitteljunk, az a lenyeg
-                // whoWillStart??
+                
                 io.sockets.in("room-" + username).emit('new-room', {});
 
             }

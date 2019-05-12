@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import * as io from 'socket.io-client';
 import { Observable } from 'rxjs';
 import { Message } from '../../model/Message';
+import { RoomsAvailevable } from 'src/app/model/RoomsAvailevable';
 
 @Injectable({
 	providedIn: 'root'
@@ -18,6 +19,10 @@ export class GameService {
 		this.socket = io('http://localhost:3000', {
 			query: { token: localStorage.getItem('token') }
 		});
+	}
+
+	inGame(): boolean {
+		return !!localStorage.getItem('inGame');
 	}
 
 	gameEnd(): any {
@@ -35,13 +40,6 @@ export class GameService {
 		});
 	}
 
-	sendMove(moveDetails) {
-		if (this.socket != null) {
-			console.log(moveDetails);
-			this.socket.emit('send-move', moveDetails);
-		}
-	}
-
 	receiveMove(): any {
 		return new Observable(observer => {
 			if (this.socket != null) {
@@ -57,21 +55,12 @@ export class GameService {
 		});
 	}
 
-
-	sendMessage(data) {
-		if (this.socket != null) {
-			this.socket.emit('send-message', data);
-		}
-	}
-
-	 receiveMessage(): Observable<Message> {
+	receiveMessage(): Observable<Message> {
 		return new Observable(observer => {
 			if (this.socket != null) {
-
 				this.socket.on('receive-message', (data) => {
 					observer.next(data);
 				});
-
 				return () => {
 					this.socket.disconnect();
 				};
@@ -96,18 +85,9 @@ export class GameService {
 				};
 			}
 		});
-
 	}
 
-	getRoomStats() {
-		return new Promise(resolve => {
-			this.http.get(`http://localhost:3000/games`).subscribe(data => {
-				resolve(data);
-			});
-		});
-	}
-
-	getRoomsAvailable(): any {
+	getRoomsAvailable(): Observable<RoomsAvailevable> {
 		return new Observable(observer => {
 			if (this.socket != null) {
 				this.socket.on('rooms-available', (data) => {
@@ -128,8 +108,6 @@ export class GameService {
 				'roomName': roomName,
 				'username': localStorage.getItem('username')
 			});
-
-			console.log(this.socket.decodedUsername);
 		}
 
 		return new Observable(observer => {
@@ -161,7 +139,7 @@ export class GameService {
 		});
 	}
 
-	playerLeft(): any {
+	playerLeft(): Observable<null> {
 		return new Observable(observer => {
 			if (this.socket != null) {
 				this.socket.on('room-disconnect', (data) => {
@@ -174,147 +152,26 @@ export class GameService {
 				};
 			}
 		});
-
 	}
 
-	disconnect() {
-		if (this.socket != null) {
-			this.socket.disconnect();
-		}
-	}
-
-	inGame(): boolean {
-		return !!localStorage.getItem('inGame');
-	}
-}
-
-
-
-/*
-
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-
-import * as io from 'socket.io-client';
-import { Observable } from 'rxjs';
-import { Message } from '../../model/Message';
-
-@Injectable({
-	providedIn: 'root'
-})
-export class GameService {
-
-	constructor(private http: HttpClient) { }
-
-	socket = null;
-
-	connect() {
-		this.socket = io('http://localhost:3000');
-	}
-
-	sendMessage(data) {
-		this.socket.emit('send-message', data);
-	}
-
-	receiveMessage(): Observable<Message> {
-		const observable = new Observable(observer => {
-			this.socket.on('receive-message', (data) => {
-				observer.next(
-					data
-				);
-			});
-			return () => {
-				this.socket.disconnect();
-			};
-		});
-		return observable;
-		return new Observable(observer => {
-			if (this.socket != null) {
-
-				this.socket.on('receive-message', (data) => {
-					observer.next(data);
-				});
-
-				return () => {
-					this.socket.disconnect();
-				};
-			}
-		});
-	}
-
-	createNewRoom(data): any {
-		if (this.socket != null) {
-			this.socket.emit('create-room', { 'username': data.username });
-		}
-
-		const observable = new Observable(observer => {
-			this.socket.on('new-room', (data) => {
-				observer.next(
-					data
-				);
-			});
-			return () => {
-				this.socket.disconnect();
-			};
-		});
-		return observable;
-	}
-
-	getRoomStats() {
+	getRoomStats(){
 		return new Promise(resolve => {
-			this.http.get(`http://localhost:3000/getGames`).subscribe(data => {
+			this.http.get(`http://localhost:3000/games`).subscribe(data => {
 				resolve(data);
 			});
 		});
 	}
 
-	getRoomsAvailable(): any {
-		const observable = new Observable(observer => {
-			this.socket.on('rooms-available', (data) => {
-				observer.next(
-					data
-				);
-			});
-			return () => {
-				this.socket.disconnect();
-			};
-		});
-		return observable;
+	sendMove(moveDetails) {
+		if (this.socket != null) {
+			this.socket.emit('send-move', moveDetails);
+		}
 	}
 
-	joinNewRoom(roomName): any {
-		this.socket.emit('join-room', {
-			'roomName': roomName,
-			'username': localStorage.getItem('username')
-		});
-	}
-
-	startGame(): any {
-		const observable = new Observable(observer => {
-			this.socket.on('start-game', (data) => {
-				observer.next(
-					data
-				);
-			});
-			return () => {
-				this.socket.disconnect();
-			};
-		});
-		return observable;
-	}
-
-	playerLeft(): any {
-		const observable = new Observable(observer => {
-			this.socket.on('room-disconnect', (data) => {
-				observer.next(
-					data
-				);
-			});
-			return () => {
-				this.socket.disconnect();
-			};
-		});
-		return observable;
+	sendMessage(data) {
+		if (this.socket != null) {
+			this.socket.emit('send-message', data);
+		}
 	}
 
 	disconnect() {
@@ -322,9 +179,4 @@ export class GameService {
 			this.socket.disconnect();
 		}
 	}
-
-	inGame(): boolean {
-		return !!localStorage.getItem('inGame');
-	}
 }
-*/

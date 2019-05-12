@@ -10,40 +10,24 @@ import { User } from 'src/app/model/User';
 })
 export class UserDetailsComponent implements OnInit {
 
-  constructor(private userService: UserService, private route: ActivatedRoute, private router: Router) {
-  }
+  constructor(private userService: UserService, private route: ActivatedRoute, private router: Router) {}
 
   user: User;
-  
 
   ngOnInit() {
     this.getUser();
   }
-  // https://github.com/angular/angular/issues/13831
 
   getUser() {
-    /**
-     * TODO
-     * 
-     * Na, szoval szepen meg kellene majd csinalni.
-     * Van getUserById es van GetUserByUsername. Ezt majd kiokoskodni, hogy mikor melyiket hasznalni
-     * Ha a rank-ról navigál a user a saját accountjára, vagy magára keres rá, akkor nem ez a komponens kell, hanem a profile
-     * Ezt ellenőrizni kell valahogy.
-     * 
-     * A servicokkal kell játszani, mert a usert el kellene tárolni eg yváltozóban, nem a local storageban
-     * gitlabon majd megnézni, hogy ez hogy van/lesz megoldva, és csak a servicet kell majd injektálni, úgy meg el van kérve.
-     */
     const username = this.route.snapshot.paramMap.get('username');
-    // this.userService.getUserById(id).subscribe(response => {
-    //   this.user = response;
-    //   console.log(this.user.games);
-    // });
-    this.userService.getUserByUsername(username).subscribe(response => {
-      this.user = response;
-      console.log(this.user.games);
-    });
+    if (username === localStorage.getItem('username')) {
+      this.router.navigate(['/home/profile']);
+    } else {
+      this.userService.getUserByUsername(username).subscribe(response => {
+        this.user = response;
+      });
+    }
   }
-
 
   joined(date: string) {
     return date.substr(0, 10);

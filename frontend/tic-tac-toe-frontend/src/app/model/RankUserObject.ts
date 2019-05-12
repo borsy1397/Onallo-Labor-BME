@@ -1,5 +1,5 @@
 import { RankUser } from 'src/app/model/RankUser';
-export class RankUserObject {
+export interface RankUserObject {
     users: RankUser[];
     myPosition: number;
 }

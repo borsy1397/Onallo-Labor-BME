@@ -7,7 +7,6 @@ module.exports = (io, socket, redisDB, move) => {
     const whoseMove = socket.decodedUsername;
     const whichGrid = move.whichGrid;
 
-    console.log(whichGrid + " " + whoseMove + " " + " metodus elejen");
 
     Promise.all(['games', 'usersInGame', 'allRooms', 'totalRoomCount'].map(key => redisDB.getAsync(key))).then(values => {
         console.log("Egyaltalan benne vaguynk a promise allban?");
@@ -27,26 +26,16 @@ module.exports = (io, socket, redisDB, move) => {
             if (games[gameIndex].id === roomName) {
                 console.log("Van ilyen jatek?????????,");
                 jatek = games[gameIndex];
-                //console.log('ciklusban jatek: ');
-                //console.log(jatek);
+
                 break;
             }
         }
-        //console.log('Jatekok tomb splice elott:');
-        //console.log("Game index: " + gameIndex);
-        //console.log(games);
 
-
-        //console.log('Jatekok tomb splice utan:');
-        //console.log(games);
-
-        //console.log('Bejottunk a sendmoveba: gameindex es jatek   ' + gameIndex + "     " + jatek)
 
         if (jatek) {
             console.log(whichGrid + " " + whoseMove + " " + " ha tenylegesen ove a lepes");
             if (jatek.whoseMove === whoseMove) {
-                //console.log('elso ifnel:');
-                //console.log(games);
+
                 console.log(whichGrid + " " + whoseMove + " " + " ha tenylegesen ove a lepes");
 
                 const valid = [1, 2, 4, 8, 16, 32, 64, 128, 256];
@@ -65,16 +54,13 @@ module.exports = (io, socket, redisDB, move) => {
 
                     for (i = 0; i < games.length; i++) {
                         if (games[i].id == roomName) {
-                            //console.log(games);
-                            //console.log('-----------Send move')
+
                             games.splice(i, 1);
-                            //console.log(games);
+
                             break;
                         }
                     }
 
-                    //console.log('ciklus utan:');
-                    //console.log(games);
 
                     redisDB.set('games', JSON.stringify({
                         games: games
@@ -98,8 +84,6 @@ module.exports = (io, socket, redisDB, move) => {
                         if ((winningPosition & jatek.scores[indexx]) === winningPosition) {
                             end_game = true;
 
-                            //console.log('gyozelem vizsgalat:');
-                            //console.log(games);
 
                             User.findOne({ username: whoseMove })
                                 .exec()
@@ -115,8 +99,6 @@ module.exports = (io, socket, redisDB, move) => {
                                                 if (!user2) {
                                                     console.log("nincs is ilyen user, lol");
                                                 } else {
-                                                    //console.log('masodik user:');
-                                                    //console.log(games);
 
                                                     let playtime = Math.ceil((Date.now() - jatek.created) / 1000);
 
@@ -131,7 +113,7 @@ module.exports = (io, socket, redisDB, move) => {
                                                     gameResultWin
                                                         .save()
                                                         .then(result => {
-                                                            // console.log(result);
+
                                                         })
                                                         .catch(err => {
                                                             console.log(err);
@@ -148,7 +130,7 @@ module.exports = (io, socket, redisDB, move) => {
                                                     gameResultLose
                                                         .save()
                                                         .then(result => {
-                                                            //console.log(result);
+
                                                         })
                                                         .catch(err => {
                                                             console.log(err);
@@ -157,13 +139,13 @@ module.exports = (io, socket, redisDB, move) => {
 
                                                     user2.games.unshift(gameResultLose);
                                                     user2.save().then(result => {
-                                                        //console.log(result);
+
                                                     });
 
                                                     user.points += 2;
                                                     user.games.unshift(gameResultWin);
                                                     user.save().then(result => {
-                                                        //console.log(result);
+    
                                                     });
 
 
@@ -234,15 +216,14 @@ module.exports = (io, socket, redisDB, move) => {
                             .exec()
                             .then(user => {
                                 if (!user) {
-                                    console.log("nincs is ilyen user, lol");
+
                                 } else {
-                                    console.log('elso user:');
-                                    console.log(games);
+
                                     User.findOne({ username: whoIsNext })
                                         .exec()
                                         .then(user2 => {
                                             if (!user2) {
-                                                console.log("nincs is ilyen user, lol");
+
                                             } else {
 
                                                 let playtime = Math.ceil((Date.now() - jatek.created) / 1000);
@@ -259,7 +240,7 @@ module.exports = (io, socket, redisDB, move) => {
                                                 gameResultDraw1
                                                     .save()
                                                     .then(result => {
-                                                        //console.log(result);
+
                                                     })
                                                     .catch(err => {
                                                         console.log(err);
@@ -294,8 +275,6 @@ module.exports = (io, socket, redisDB, move) => {
                                                     //console.log(result);
                                                 });
 
-
-                                                console.log("VEGE A JATEKNAK")
 
                                                 io.emit('rooms-available', {
                                                     'totalRoomCount': totalRoomCount,

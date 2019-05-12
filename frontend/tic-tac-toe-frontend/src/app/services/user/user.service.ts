@@ -11,13 +11,8 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  // getRank(): Observable<RankUserObject> {
-  //   return this.http.get<RankUserObject>("http://localhost:3000/users");
-  // }
-
-
-  getRank(): Observable<any> {
-    return this.http.get<any>("http://localhost:3000/users");
+  getRank(): Observable<RankUserObject> {
+    return this.http.get<RankUserObject>("http://localhost:3000/users");
   }
 
   getUserById(id: string): Observable<User> {

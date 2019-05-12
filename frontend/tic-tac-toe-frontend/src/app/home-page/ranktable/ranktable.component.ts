@@ -12,8 +12,7 @@ export class RanktableComponent implements OnInit {
   constructor(private userService: UserService) { }
 
 
-  //private users: RankUser[] = [];
-  private users: any;
+  private users: RankUser[] = [];
   private position: number = null;
 
   myName: string = localStorage.getItem('username');
@@ -21,9 +20,7 @@ export class RanktableComponent implements OnInit {
   ngOnInit() {
     this.userService.getRank().subscribe(response => {
       this.users = response.users;
-      console.log(this.users);
       this.position = response.myPosition;
-      console.log(this.position);
     });
   }
 

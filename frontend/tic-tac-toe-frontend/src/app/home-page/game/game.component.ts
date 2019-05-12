@@ -24,13 +24,11 @@ export class GameComponent implements OnInit {
     username: localStorage.getItem('username')
   }
 
-
   ngOnInit() {
 
     if (this.gameService.inGame()) {
       this.inGame2 = "igen";
     }
-
 
     this.authService.checkAuth();
 
@@ -43,9 +41,9 @@ export class GameComponent implements OnInit {
     this.gameService.connect();
 
     this.gameService.getRoomsAvailable().subscribe(response => {
-      this.totalRooms = response['totalRoomCount'];
-      this.emptyRooms = response['emptyRooms'];
-      this.usersInGame = response['usersInGame'];
+      this.totalRooms = response.totalRoomCount;
+      this.emptyRooms = response.emptyRooms;
+      this.usersInGame = response.usersInGame;
     });
   }
 
@@ -53,7 +51,6 @@ export class GameComponent implements OnInit {
   returnToLobby() {
     this.router.navigate(['/home']);
   }
-
 
   createRoom() {
     this.gameService.createNewRoom(this.user).subscribe((response) => {
@@ -63,7 +60,6 @@ export class GameComponent implements OnInit {
   }
 
   joinRoom(roomName) {
-
     this.gameService.joinNewRoom(roomName).subscribe((response) => {
       localStorage.setItem('inGame', 'true');
       this.router.navigate(['/home/play']);

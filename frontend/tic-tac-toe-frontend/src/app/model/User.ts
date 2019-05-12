@@ -1,7 +1,11 @@
-export class User {
+import { Game } from './Game';
+export interface User {
     username: string;
     email: string;
-    games: any;
+    games: Game;
     joined: Date;
     points: number;
+    win: number;
+    draw: number;
+    lost: number;
 }
