@@ -56,10 +56,10 @@ module.exports = (io, socket, redisDB, data) => {
                     'usersInGame': usersInGame.length
                 });
 
-                io.emit('goto-play', {});
+                io.emit('goto-play');
                                
                 io.sockets.in("room-" + roomName).emit('start-game', {
-                    'ellenfel': username,
+                    'enemy': username,
                     'roomName': roomName
                 });
             }

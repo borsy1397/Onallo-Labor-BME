@@ -5,6 +5,9 @@ import * as io from 'socket.io-client';
 import { Observable } from 'rxjs';
 import { Message } from '../../model/Message';
 import { RoomsAvailevable } from 'src/app/model/RoomsAvailevable';
+import { StartGame } from 'src/app/model/StartGame';
+import { GameEnd } from '../../model/GameEnd';
+import { ReceiveMove } from '../../model/ReceiveMove';
 
 @Injectable({
 	providedIn: 'root'
@@ -25,7 +28,7 @@ export class GameService {
 		return !!localStorage.getItem('inGame');
 	}
 
-	gameEnd(): any {
+	gameEnd(): Observable<GameEnd> {
 		return new Observable(observer => {
 			if (this.socket != null) {
 				this.socket.on('game-end', (data) => {
@@ -40,7 +43,7 @@ export class GameService {
 		});
 	}
 
-	receiveMove(): any {
+	receiveMove(): Observable<ReceiveMove> {
 		return new Observable(observer => {
 			if (this.socket != null) {
 				this.socket.on('receive-move', (data) => {
@@ -68,7 +71,7 @@ export class GameService {
 		});
 	}
 
-	createNewRoom(data): any {
+	createNewRoom(data): Observable<null> {
 		if (this.socket != null) {
 			this.socket.emit('create-room', { 'username': data.username });
 		}
@@ -102,7 +105,7 @@ export class GameService {
 		});
 	}
 
-	joinNewRoom(roomName): any {
+	joinNewRoom(roomName): Observable<null> {
 		if (this.socket != null) {
 			this.socket.emit('join-room', {
 				'roomName': roomName,
@@ -124,7 +127,7 @@ export class GameService {
 		});
 	}
 
-	startGame(): any {
+	startGame(): Observable<StartGame> {
 		return new Observable(observer => {
 			if (this.socket != null) {
 				this.socket.on('start-game', (data) => {
@@ -154,7 +157,7 @@ export class GameService {
 		});
 	}
 
-	getRoomStats(){
+	getRoomStats() {
 		return new Promise(resolve => {
 			this.http.get(`http://localhost:3000/games`).subscribe(data => {
 				resolve(data);

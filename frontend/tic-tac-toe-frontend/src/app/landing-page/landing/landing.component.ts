@@ -18,7 +18,7 @@ export class LandingComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit() {
     if (this.authService.checkAuth()) {
@@ -31,5 +31,4 @@ export class LandingComponent implements OnInit {
       this.submitted = true;
     }
   }
-
 }

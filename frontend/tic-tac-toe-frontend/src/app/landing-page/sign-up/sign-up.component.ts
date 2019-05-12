@@ -17,8 +17,7 @@ export class SignUpComponent implements OnInit {
     username: "",
     password: "",
     passwordRe: ""
-  }
-
+  };
   errorMessage = "";
   correct = true;
 

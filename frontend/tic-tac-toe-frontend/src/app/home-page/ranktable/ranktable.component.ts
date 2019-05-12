@@ -11,7 +11,6 @@ export class RanktableComponent implements OnInit {
 
   constructor(private userService: UserService) { }
 
-
   private users: RankUser[] = [];
   private position: number = null;
 

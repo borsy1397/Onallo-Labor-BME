@@ -6,7 +6,8 @@
         <h2><strong style="color: cyan;">{{user.points}}</strong> points</h2>
         <h3>Joined: {{joined(user.joined)}}</h3>
         <p style="text-align: center; padding-top: 15px; font-size: 2rem; font-weight: bold;">
-          <span style="color: #5cb85c;">{{user.win}}</span> | <span style="color: #f0ad4e;">{{user.draw}}</span> | <span style="color: #d9534f;">{{user.lost}}</span></p>
+          <span style="color: #5cb85c;">{{user.win}}</span> | <span style="color: #f0ad4e;">{{user.draw}}</span> | <span
+            style="color: #d9534f;">{{user.lost}}</span></p>
       </div>
       <div class="col-lg-8">
         <div class="container">
@@ -28,7 +29,7 @@
             </div>
           </div>
           <div class="container" style="max-height: 420px; overflow: scroll;
-                  overflow-x: hidden; -ms-overflow-style: none; scrollbar-width: none; ">
+                  overflow-x: hidden; -ms-overflow-style: none; scrollbar-width: none;">
             <ul>
               <li *ngFor="let game of user.games">
                 <div class="row justify-content-between"

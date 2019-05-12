@@ -38,8 +38,8 @@ module.exports = (io, socket, redisDB, data) => {
                     'emptyRooms': emptyRooms,
                     'usersInGame': usersInGame.length
                 });
-                
-                io.sockets.in("room-" + username).emit('new-room', {});
+
+                io.sockets.in("room-" + username).emit('new-room');
 
             }
         });

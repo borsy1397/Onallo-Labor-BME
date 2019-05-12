@@ -41,10 +41,10 @@ export class PlayComponent implements OnInit {
     window.onbeforeunload = () => this.ngOnDestroy();
 
     this.gameService.startGame().subscribe((response) => {
-      this.roomName = response['roomName'];
+      this.roomName = response.roomName;
       this.spinner.hide();
       if (this.myname === this.roomName) {
-        this.enemyName = response['ellenfel'];
+        this.enemyName = response.enemy;
         this.myShape = 'x';
         this.enemyShape = 'o';
         document.querySelector(`#you`).classList.add("whose-turn");
@@ -68,8 +68,7 @@ export class PlayComponent implements OnInit {
     });
 
     this.gameService.receiveMove().subscribe(response => {
-      this.whichGrid = response['whichGrid'];
-
+      this.whichGrid = response.whichGrid;
       if (this.myTurn) {
         this.renderMove(this.whichGrid, this.myShape);
         this.myTurn = false;
@@ -87,18 +86,16 @@ export class PlayComponent implements OnInit {
     });
 
     this.gameService.gameEnd().subscribe(response => {
-      if (response['draw']) {
+      if (response.draw) {
         alert('DRAW!');
       } else {
-        if (response['winner'] == this.enemyName) {
-          alert('You lost :( The winner is: ' + response['winner']);
+        if (response.winner == this.enemyName) {
+          alert('You lost :( The winner is: ' + response.winner);
         } else {
           alert('Congratulations! You are the winner! :)');
         }
-
       }
       this.returnToLobby();
-
     });
 
     this.gameService.playerLeft().subscribe(() => {
@@ -120,7 +117,6 @@ export class PlayComponent implements OnInit {
       });
     }
   }
-
 
   sendMessage() {
     this.message = this.message.trim();

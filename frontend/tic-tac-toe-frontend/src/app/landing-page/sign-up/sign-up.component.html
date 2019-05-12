@@ -1,16 +1,12 @@
 <div class="loginmodal-container" style="padding-top: 10px;">
   <h1>Sign up</h1><br>
   <form (ngSubmit)="onSubmit()">
-
     <input type="text" name="email" id="email" required placeholder="Email" autocomplete="off"
       pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" [(ngModel)]="newUser.email">
-
     <input type="text" name="username" id="username" required placeholder="Username" autocomplete="off" minlength="4"
       [(ngModel)]="newUser.username">
-
     <input type="password" name="password" id="password" required placeholder="Password" autocomplete="off"
       minlength="8" [(ngModel)]="newUser.password">
-
     <input type="password" name="passwordRe" id="passwordRe" required placeholder="Confirmation password"
       autocomplete="off" [(ngModel)]="newUser.passwordRe" minlength="8">
     <input type="submit" name="signUp" class="login loginmodal-submit" value="Sign up">

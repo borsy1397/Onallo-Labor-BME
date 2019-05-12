@@ -24,5 +24,4 @@ export class MainComponent implements OnInit {
     localStorage.clear();
     this.router.navigate(['/login']);
   }
-
 }

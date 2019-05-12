@@ -15,10 +15,9 @@ export class LoginComponent implements OnInit {
   user: LoginUser = {
     username: "",
     password: ""
-  }
+  };
 
   routerLinkSignUp = "/signup";
-
   errorMessage = "";
   correct = true;
 
@@ -27,7 +26,7 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private spinner: NgxSpinnerService
-  ) { }
+  ) {}
 
   ngOnInit() {
     if (this.authService.checkAuth()) {
@@ -42,7 +41,6 @@ export class LoginComponent implements OnInit {
       localStorage.setItem('username', res.username)
 
       this.correct = true;
-
       this.spinner.show();
       setTimeout(() => {
         this.spinner.hide();

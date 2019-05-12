@@ -33,16 +33,11 @@ module.exports = (io, socket, redisDB, move) => {
 
 
         if (jatek) {
-            console.log(whichGrid + " " + whoseMove + " " + " ha tenylegesen ove a lepes");
             if (jatek.whoseMove === whoseMove) {
-
-                console.log(whichGrid + " " + whoseMove + " " + " ha tenylegesen ove a lepes");
-
                 const valid = [1, 2, 4, 8, 16, 32, 64, 128, 256];
                 positionValid = false;
                 valid.forEach((validPosition) => {
                     if (validPosition === whichGrid) {
-                        console.log(whichGrid + " " + whoseMove + " " + " validacio soran, hogy van e ilyen szam");
                         positionValid = true;
                     }
                 });

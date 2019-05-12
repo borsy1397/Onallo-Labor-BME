@@ -16,6 +16,5 @@ export class LoginService {
   login(user: LoginUser) { 
     // nem any-t kapunk vissza, hanem vissza kell kuldeni a bejelentkezett usert.
     return this.http.post<any>("http://localhost:3000/login", user);
-
   }
 }

@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GameService } from 'src/app/services/game/game.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { UserService } from 'src/app/services/user/user.service';
 import { Router } from '@angular/router';
-
-
 
 @Component({
   selector: 'app-game',
@@ -20,10 +17,7 @@ export class GameComponent implements OnInit {
   emptyRooms = <Array<number>>[];
   inGame2: string = null;
 
-  user = {
-    username: localStorage.getItem('username')
-  }
-
+  user: string = localStorage.getItem('username');
   ngOnInit() {
 
     if (this.gameService.inGame()) {
@@ -47,7 +41,6 @@ export class GameComponent implements OnInit {
     });
   }
 
-
   returnToLobby() {
     this.router.navigate(['/home']);
   }
@@ -66,7 +59,4 @@ export class GameComponent implements OnInit {
     });
 
   }
-
-
-
 }
