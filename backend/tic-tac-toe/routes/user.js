@@ -5,6 +5,7 @@ const getAllUsersMW = require('../middlewares/user/getAllUsers');
 const getPositionMW = require('../middlewares/user/getPosition');
 const createUserMW = require('../middlewares/user/createUser');
 const deleteUserMW = require('../middlewares/user/deleteUser');
+const updateUserMW = require('../middlewares/user/updateUser');
 
 
 module.exports = app => {
@@ -27,6 +28,11 @@ module.exports = app => {
     app.delete('/users/:id',
         authorizeMW,
         deleteUserMW
+    );
+
+    app.put('/users/:id',
+        authorizeMW,
+        updateUserMW
     );
 
     // update

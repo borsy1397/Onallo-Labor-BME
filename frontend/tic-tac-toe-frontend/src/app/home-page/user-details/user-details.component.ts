@@ -24,12 +24,9 @@ export class UserDetailsComponent implements OnInit {
       this.router.navigate(['/home/profile']);
     } else {
       this.userService.getUserByUsername(username).subscribe(response => {
-        // ITT MEGOLDANI, HOGYHA nincs ilyen user, akkor hibat dobjon ki
-        if (response) {
           this.user = response;
-        } else {
-          this.router.navigate(['/home/games']);
-        }
+      }, () => {
+        this.router.navigate(['/home/games']);
       });
     }
   }

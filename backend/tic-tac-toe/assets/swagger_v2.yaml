@@ -1,0 +1,364 @@
+swagger: '2.0'
+info:
+  description: "Tic-Tac-Toe-Rest-Api"
+  version: 1.0.0
+  title: Tic-Tac-Toe
+host: "localhost:3000"
+basePath: "/api/v1"
+tags:
+- name: "auth"
+  description: "Authentication related endpoints"
+- name: "user"
+  description: "User API"
+- name: "game"
+  description: "Game API"
+schemes:
+  - https
+  - http
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: "JWT token based authentication in the form: Bearer <ACCESS_TOKEN>"
+consumes:
+  - application/json
+produces:
+  - application/json
+
+paths:
+  /login:
+    post:
+      tags:
+      - "auth"
+      summary: "Log in to the application"
+      operationId: "login"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "User credentials"
+        required: true
+        schema:
+          $ref: "#/definitions/LoginData"
+      responses:
+        200:
+          description: "Successful login"
+          schema:
+            $ref: "#/definitions/LoginResponse"
+        401:
+          description: "Access denied"
+        500:
+          description: "Unexpected"
+  /token:
+    post:
+      tags:
+        - "auth"
+      summary: "Get access token with refresh token"
+      operationId: "token"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Refresh token"
+          required: true
+          schema:
+            $ref: "#/definitions/RefreshToken"
+      responses:
+        200:
+          description: "Successful token refreshing"
+          schema:
+            $ref: "#/definitions/TokenResponse"
+        400:
+          description: "Invalid Refresh Token"
+        500:
+          description: "Unexpected"
+  /games:
+    get:
+      tags:
+      - "game"
+      summary: "Get games"
+      operationId: "getgames"
+      description: This can only be done by the logged in user.
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Game"
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Access forbidden"
+        500:
+          description: "Unexpected error"
+  /users:
+    post:
+      tags:
+      - "user"
+      summary: "Create a new user"
+      operationId: "createuser"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/NewUser"
+      responses:
+        201:
+          description: "OK, user created"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Invalid input"
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Access forbidden"
+        409:
+          description: "Conflict"
+        500:
+          description: "Unexpected error"
+    get:
+      tags:
+      - "user"
+      summary: "Get user list"
+      operationId: "getusers"
+      description: This can only be done by the logged in user.
+      security:
+        - Bearer: []
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/UsersAndPosition"
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Access forbidden"
+        500:
+          description: "Unexpected error"
+  /users/{id}:
+    get:
+      tags:
+      - "user"
+      summary: "Get user by id"
+      operationId: "getUserById"
+      description: This can only be done by the logged in user.
+      security:
+        - Bearer: []
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        401:
+          description: Access denied
+        403:
+          description: "Forbidden"
+        404:
+          description: "User not found"
+        500:
+          description: "Unexpected error"
+    put:
+      tags:
+      - "user"
+      summary: "Update user"
+      operationId: "updateUser"
+      description: This can only be done by the logged in user.
+      security:
+        - Bearer: []
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "id of the user to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated user object"
+        required: true
+        schema:
+          $ref: "#/definitions/UpdateUser"
+      responses:
+        200:
+          description: "ok"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Invalid json"
+        401:
+          description: "Access denied"
+        403:
+          description: "Forbidden"
+        404:
+          description: "User not found"
+        500:
+          description: "Unexpected error"
+    delete:
+      tags:
+      - "user"
+      summary: "Delete user"
+      operationId: "deleteUser"
+      description: This can only be done by the logged in user.
+      security:
+        - Bearer: []
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The id of the user to be deleted"
+        required: true
+        type: "string"
+      responses:
+        204:
+          description: "User deleted"
+        401:
+          description: "Access denied"
+        403:
+          description: "Forbidden"
+  /user/search/{username}:
+    get:
+      tags:
+      - "user"
+      summary: "Get user by username"
+      operationId: "getUserByName"
+      description: This can only be done by the logged in user.
+      security:
+        - Bearer: []
+      parameters:
+      - name: "username"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        401:
+          description: Access denied
+        403:
+          description: "Forbidden"
+        404:
+          description: "User not found"
+        500:
+          description: "Unexpected error"
+definitions:
+  LoginData:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+      password:
+        type: "string"
+
+  LoginResponse:
+    type: "object"
+    properties:
+      tokens:
+        $ref: "#/definitions/TokenResponse"
+      user:
+        $ref: "#/definitions/User"
+
+  TokenResponse:
+    type: "object"
+    properties:
+      accessToken:
+        type: "string"
+      refreshToken:
+        type: "string"
+
+  RefreshToken:
+    type: "object"
+    properties:
+      refreshToken:
+        type: "string"
+
+  Game:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      date:
+        type: string
+        format: date-time
+      players:
+        type: array
+        xml:
+          name: players
+          wrapped: true
+        items:
+          $ref: '#/definitions/User'
+          
+  NewUser:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+      email:
+        type: "string"
+      password:
+        type: "string"
+        
+  UpdateUser:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+      password:
+        type: "string"
+
+  User:
+    type: object
+    properties:
+      id:
+        type: string
+      username:
+        type: string
+      email:
+        type: string
+      joined:
+        type: string
+      points:
+        type: integer
+        format: int64
+      win:
+        type: integer
+        format: int64
+      draw:
+        type: integer
+        format: int64
+      lost:
+        type: integer
+        format: int64
+      games:
+        $ref: '#/definitions/Game'
+        
+  UsersAndPosition:
+    type: "object"
+    properties:
+      position:
+        type: integer
+        format: int64
+      users:
+        $ref: "#/definitions/UsersList"
+        
+  UsersList:
+    type: object
+    properties:
+      id:
+        type: string
+      username:
+        type: string
+      points:
+        type: integer
+        format: int64
