@@ -1,0 +1,31 @@
+version: "2"
+services:
+  app:
+    container_name: app
+    restart: always
+    image: tic-tac-toe_app
+    environment:
+      - REDIS_URL=redis://cache
+      - MONGO_URL=mongodb://mongo
+    ports:
+      - "3000:3000"
+    links:
+      - mongo
+      - redis
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - "27017:27017"
+  redis:
+    image: redis
+    container_name: cache
+    expose:
+      - 6379
+  angular:
+    image: angular-app
+    container_name: angular
+    ports:
+      - "80:80"
+    links:
+      - app
