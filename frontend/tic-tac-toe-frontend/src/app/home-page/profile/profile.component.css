@@ -18,8 +18,8 @@ ul {
 }
 
 ::-webkit-scrollbar {
-    width: 0px;  
-    background: transparent; 
+    width: 0px;
+    background: transparent;
 }
 
 .btn-danger {

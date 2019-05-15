@@ -86,6 +86,8 @@ export class PlayComponent implements OnInit {
     });
 
     this.gameService.gameEnd().subscribe(response => {
+      let renderShape = response.winner == this.enemyName ? this.enemyShape : this.myShape;
+      this.renderMove(this.whichGrid, renderShape);
       if (response.draw) {
         alert('DRAW!');
       } else {

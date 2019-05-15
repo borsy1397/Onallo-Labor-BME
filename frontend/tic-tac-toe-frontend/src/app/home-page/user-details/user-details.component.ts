@@ -24,7 +24,7 @@ export class UserDetailsComponent implements OnInit {
       this.router.navigate(['/home/profile']);
     } else {
       this.userService.getUserByUsername(username).subscribe(response => {
-          this.user = response;
+        this.user = response;
       }, () => {
         this.router.navigate(['/home/games']);
       });

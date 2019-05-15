@@ -12,14 +12,18 @@
 
                 <button class="btn btn-info btn-block" style="font-size: 1.2rem; width: 60%;">Change email</button>
                 <button class="btn btn-info btn-block" style="font-size: 1.2rem; width: 60%;">Change password</button>
-                <p [hidden]="!delete" style="text-align: center; padding-top: 15px; font-size: 2rem; font-weight: bold;">
+                <p [hidden]="!delete"
+                    style="text-align: center; padding-top: 15px; font-size: 2rem; font-weight: bold;">
                     <span style="color: #5cb85c;">{{user.win}}</span> | <span
                         style="color: #f0ad4e;">{{user.draw}}</span> | <span
                         style="color: #d9534f;">{{user.lost}}</span></p>
-                    <button (click)="deleteUser()" [hidden]="delete" class="btn btn-warning" style="font-size: 1.2rem; margin-top: 20px; margin-right: 10px; width: 35%;">Yes</button>
-                    <button (click)="noDelete()" [hidden]="delete"class="btn btn-secondary" style="font-size: 1.2rem; margin-top: 20px; width: 35%;">No</button>
-                    <button (click)="deleteU()" class="btn btn-danger"
-                    style="position: absolute; bottom: 0; font-size: 0.9rem; margin-bottom: 10px;">Delete profile</button>
+                <button (click)="deleteUser()" [hidden]="delete" class="btn btn-warning"
+                    style="font-size: 1.2rem; margin-top: 20px; margin-right: 10px; width: 35%;">Yes</button>
+                <button (click)="noDelete()" [hidden]="delete" class="btn btn-secondary"
+                    style="font-size: 1.2rem; margin-top: 20px; width: 35%;">No</button>
+                <button (click)="deleteU()" class="btn btn-danger"
+                    style="position: absolute; bottom: 0; font-size: 0.9rem; margin-bottom: 10px;">Delete
+                    profile</button>
             </div>
             <div class="col-lg-8">
                 <div class="container">

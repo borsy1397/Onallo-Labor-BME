@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class LandingComponent implements OnInit {
 
-  
+
   routerLinkLogin = "/login";
   routerLinkSignUp = "/signup";
 
@@ -18,16 +18,16 @@ export class LandingComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     if (this.authService.checkAuth()) {
-      this.router.navigate(['/home']); 
+      this.router.navigate(['/home']);
     }
   }
-  
-  hiddenButtons(){
-    if(!this.submitted){
+
+  hiddenButtons() {
+    if (!this.submitted) {
       this.submitted = true;
     }
   }

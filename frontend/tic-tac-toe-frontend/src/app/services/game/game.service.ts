@@ -8,6 +8,7 @@ import { RoomsAvailevable } from 'src/app/model/RoomsAvailevable';
 import { StartGame } from 'src/app/model/StartGame';
 import { GameEnd } from '../../model/GameEnd';
 import { ReceiveMove } from '../../model/ReceiveMove';
+import { AppSettings } from 'src/app/config';
 
 @Injectable({
 	providedIn: 'root'
@@ -19,7 +20,7 @@ export class GameService {
 	socket = null;
 
 	connect() {
-		this.socket = io('http://localhost:3000', {
+		this.socket = io(AppSettings.API_ENDPOINT, {
 			query: { token: localStorage.getItem('token') }
 		});
 	}
@@ -159,7 +160,7 @@ export class GameService {
 
 	getRoomStats() {
 		return new Promise(resolve => {
-			this.http.get(`http://localhost:3000/games`).subscribe(data => {
+			this.http.get(AppSettings.API_ENDPOINT + `/games`).subscribe(data => {
 				resolve(data);
 			});
 		});

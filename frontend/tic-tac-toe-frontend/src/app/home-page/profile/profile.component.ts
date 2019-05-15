@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
 import { User } from 'src/app/model/User';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 
 @Component({
@@ -11,7 +12,7 @@ import { Router } from '@angular/router';
 })
 export class ProfileComponent implements OnInit {
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(private userService: UserService, private authService: AuthService, private router: Router) { }
   user: User = null;
 
   delete: boolean = true;
@@ -35,6 +36,7 @@ export class ProfileComponent implements OnInit {
   deleteUser() {
     this.userService.deleteUserById().subscribe(response => {
       localStorage.clear();
+      this.authService.logout();
       this.router.navigate(['/home/play']);
     });;
   }

@@ -19,7 +19,7 @@ hr {
     overflow: scroll;
     overflow-x: hidden;
     scrollbar-width: none;
-    -ms-overflow-style: none; 
+    -ms-overflow-style: none;
 }
 
 .col {
@@ -84,7 +84,7 @@ span strong {
 
 ::-webkit-scrollbar {
     width: 0px;
-    background: transparent;  
+    background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {

@@ -5,6 +5,7 @@ import { Subject, Observable } from 'rxjs';
 import { User } from 'src/app/model/User';
 import { LoginUser } from '../../model/LoginUser';
 import { CurrentUser } from 'src/app/model/CurrentUser';
+import { AppSettings } from 'src/app/config';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,11 @@ export class LoginService {
   }
 
   login(user: LoginUser) {
-    // nem any-t kapunk vissza, hanem vissza kell kuldeni a bejelentkezett usert.
-    return this.http.post<any>("http://localhost:3000/login", user);
+    return this.http.post<any>(AppSettings.API_ENDPOINT + "/login", user);
   }
+
+  logout() {
+    this.currentUser = null;
+  }
+
 }

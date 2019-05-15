@@ -34,7 +34,6 @@ ul li {
     border-top-right-radius: 20px;
 }
 
-
 .players {
     width: 390px;
     margin: 0 auto;
@@ -121,8 +120,8 @@ td button {
 }
 
 ::-webkit-scrollbar {
-    width: 0px;  
-    background: transparent;  
+    width: 0px;
+    background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -161,28 +160,3 @@ td button {
         margin: 0 auto;
     }
 }
-
-/*
-@media screen and (max-width: 1200px) {
-    td button {
-        width: 110px;
-        height: 110px;
-    }
-    .players {
-        width: 330px;
-        margin: 0 auto;
-    }
-}
-
-
-
-@media screen and (max-width: 766px) {
-    td button {
-        width: 90px;
-        height: 90px;
-    }
-    .players {
-        width: 270px;
-        margin: 0 auto;
-    }
-}*/

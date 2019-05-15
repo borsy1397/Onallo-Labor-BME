@@ -193,10 +193,10 @@ module.exports = (io, socket, redisDB, move) => {
                                 'whichGrid': whichGrid
                             });
 
-
                             io.sockets.in("room-" + roomName).emit('game-end', {
                                 'draw': false,
-                                'winner': whoseMove
+                                'winner': whoseMove,
+                                'whichGrid': whichGrid
                             });
                         }
                     });

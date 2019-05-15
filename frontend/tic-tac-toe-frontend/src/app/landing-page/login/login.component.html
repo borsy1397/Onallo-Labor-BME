@@ -1,8 +1,10 @@
 <div class="loginmodal-container">
   <h1>Login to Your Account</h1><br>
   <form (ngSubmit)="onSubmit()">
-    <input type="text" name="username" id="username" required placeholder="Username" autocomplete="off" [(ngModel)]="user.username">
-    <input type="password" name="pass" id="password" required placeholder="Password" autocomplete="off" [(ngModel)]="user.password">
+    <input type="text" name="username" id="username" required placeholder="Username" autocomplete="off"
+      [(ngModel)]="user.username">
+    <input type="password" name="pass" id="password" required placeholder="Password" autocomplete="off"
+      [(ngModel)]="user.password">
     <input type="submit" name="login" class="login loginmodal-submit" value="Login">
   </form>
   <div [hidden]="correct" class="alert alert-danger text-center">

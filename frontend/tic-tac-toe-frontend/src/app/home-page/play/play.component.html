@@ -46,8 +46,9 @@
               <p (click)="open()">Chat with {{enemyName}}!</p>
             </div>
           </div>
-          <div class="col-md-12" style="height: 84%; overflow: scroll; overflow-x: hidden; scrollbar-width: none; -ms-overflow-style: none; padding-left: 0px; padding-right: 0px;" #scrollMe
-            [scrollTop]="scrollMe.scrollHeight">
+          <div class="col-md-12"
+            style="height: 84%; overflow: scroll; overflow-x: hidden; scrollbar-width: none; -ms-overflow-style: none; padding-left: 0px; padding-right: 0px;"
+            #scrollMe [scrollTop]="scrollMe.scrollHeight">
             <div>
               <ul>
                 <li *ngFor="let message of messages" class="text-left" [class.text-right]="alignMessage(message.kuldo)">
@@ -62,7 +63,8 @@
             <div class="sendMessage">
               <form style="width: 100%;">
                 <input id="message" [(ngModel)]="message" name="message" style="width: 80%;" autocomplete="off" />
-                <button style="width: 20%;" (click)="sendMessage()"><img src="../../../assets/send-button-24.png" style="width: 20px;" alt="Submit"></button>
+                <button style="width: 20%;" (click)="sendMessage()"><img src="../../../assets/send-button-24.png"
+                    style="width: 20px;" alt="Submit"></button>
               </form>
             </div>
           </div>
@@ -76,4 +78,3 @@
   <h2 class="text-center" style="padding-top: 30px; padding-bottom: 10px; color: white;">Waiting for other player</h2>
   <button class="btn btn-success" (click)="returnToLobby()">Back</button>
 </ngx-spinner>
-
